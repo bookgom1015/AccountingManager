@@ -1,0 +1,14 @@
+# ingore all binary files
+/bin
+
+# ignore binary files and subdirectories in 'build/[ProjectName]/bin'
+build/**/bin/**
+build/**/bin/*.*
+
+# ignore object files and subdirectories in 'build/[ProjectName]/obj'
+build/**/obj/**
+build/**/obj/*.*
+
+# ignore assets and subdirectories in 'build/[ProjectName]/Assets'
+build/**/Assets/**
+build/**/Assets/*.*
