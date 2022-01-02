@@ -1,16 +1,17 @@
-﻿<Page x:Class="AccountingManager.Views.MainPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-      xmlns:behaviours="using:Microsoft.Toolkit.Uwp.UI.Behaviors"
-      Style="{StaticResource PageStyle}"
-      xmlns:prismMvvm="using:Prism.Windows.Mvvm"
-      prismMvvm:ViewModelLocator.AutoWireViewModel="True"
-      mc:Ignorable="d"
-      SizeChanged="{x:Bind Path=ViewModel.OnWindowSizeChanged}">
+﻿<Page
+    x:Class="AccountingManager.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviours="using:Microsoft.Toolkit.Uwp.UI.Behaviors"
+    Style="{StaticResource PageStyle}"
+    xmlns:prismMvvm="using:Prism.Windows.Mvvm"
+    prismMvvm:ViewModelLocator.AutoWireViewModel="True"
+    SizeChanged="{x:Bind Path=ViewModel.OnWindowSizeChanged}"
+    mc:Ignorable="d">
     <Page.Resources>
         <SolidColorBrush x:Key="BackgroundColor" Color="#FF202120" />
         <SolidColorBrush x:Key="BorderColor" Color="#FF535353" />
@@ -37,73 +38,54 @@
             <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FF434343" />
             <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FF838383" />
             <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#FF434343" />
+            <!-- TextBox Unfocused -->
             <SolidColorBrush x:Key="TextControlForeground" Color="#FFFFFFFF" />
-            <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="TextControlBackground" Color="#FF2D2D2E" />
-            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FF323233" />
-            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FF1F1F1F" />
             <SolidColorBrush x:Key="TextControlBorderBrush" Color="#FF2D2D2E" />
+            <!-- TextBox Point over -->
+            <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FF323233" />
             <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#FF323233" />
+            <!-- TextBox Focused -->
+            <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FF1F1F1F" />
             <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF404040" />
-            <!-- Point over -->
+            <!-- ListBox Point over -->
             <SolidColorBrush x:Key="SystemControlHighlightListLowBrush" Color="#FF2D2D2E" />
-            <!-- Pressed -->
+            <!-- ListBox Pressed -->
             <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush" Color="#FF29292A" />
-            <!-- Selected & unfocused -->
+            <!-- ListBox Selected & Unfocused -->
             <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush" Color="#FF2D2D2E" />
-            <!-- Selected & point over -->
+            <!-- ListBox Selected & Point over -->
             <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush" Color="#FF29292A" />
-            <!-- Selected & pressed -->
+            <!-- ListBox Selected & Pressed -->
             <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush" Color="#FF29292A" />
             <SolidColorBrush x:Key="SystemControlHighlightAltBaseHighBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#FFFFFFFF" />
+            <!-- CHeckBox Disabled & Foreground -->
+            <SolidColorBrush x:Key="CheckBoxForegroundUncheckedDisabled" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="CheckBoxForegroundCheckedDisabled" Color="#FFFFFFFF" />
+            <!-- CheckBox Diabled & Checked-->
+            <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#FFFFFFFF" />
+            <!-- CheckBox Diabled & Unchecked-->
+            <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#FFFFFFFF" />
         </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="250" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <!-- Grid for menu -->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
-                <RowDefinition Height="60"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <!-- Title text -->
-            <TextBlock Grid.Row="0" HorizontalAlignment="Center" Margin="0, 10, 0, 0" Foreground="{StaticResource FontColor}" FontSize="48" Text="Hello" />
             <!-- Stacㅏ for listing dates -->
-            <StackPanel x:Name="dateStackPanel" Grid.Row="2" Margin="10, 0, 10, 0">
-                <ListBox x:Name="dateListView" ItemsSource="{x:Bind Path=ViewModel.DateList}"
-                         HorizontalContentAlignment="Right" FontSize="28">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Width="30" />
-                                    <TextBlock Text="{Binding Year}" />
-                                </StackPanel>
-                                <ListBox ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Months}">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel>
-                                                <TextBlock Width="30" Height="12" />
-                                                <TextBlock Text="{Binding}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="BorderThickness" Value="0, 2, 0, 2" />
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-            </StackPanel>
+            <Grid x:Name="DateStackPanel" Grid.Row="0">
+                <Frame x:Name="DateNavFrame" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </Grid>
         </Grid>
         <!-- Grid for display -->
-        <Grid Grid.Column="1" Padding="20, 0, 0, 0">
+        <Grid Grid.Column="1" Padding="15, 0, 0, 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80" />
                 <RowDefinition Height="60" />
@@ -117,7 +99,7 @@
                     <ColumnDefinition Width="120" />
                 </Grid.ColumnDefinitions>
                 <!-- TextBox for search -->
-                <TextBox Grid.Column="0"
+                <TextBox x:Name="InputText" Grid.Column="0"
                          Text="{x:Bind Path=ViewModel.Str, Mode=OneWay}"
                          PlaceholderText="검색어를 입력"
                          PlaceholderForeground="#FFCFCFCF"
@@ -134,7 +116,7 @@
                 <StackPanel.Resources>
                     <Style TargetType="Button" x:Key="EditButtons">
                         <Setter Property="Margin" Value="5, 0, 5, 0" />
-                        <Setter Property="Width" Value="30" />
+                        <Setter Property="Width" Value="60" />
                         <Setter Property="Height" Value="30" />
                     </Style>
                     <Style TargetType="Image" x:Key="EditButtonImages">
@@ -143,12 +125,9 @@
                         <Setter Property="Margin" Value="-5, -5, -5, -5" />
                     </Style>
                 </StackPanel.Resources>
-                <Button Style="{StaticResource EditButtons}" Command="{x:Bind Path=ViewModel.ClickedButtonCommand}">
-                    <Image Source="/Assets/white_plus.png" Style="{StaticResource EditButtonImages}" />
-                </Button>
-                <Button Style="{StaticResource EditButtons}" Command="{x:Bind Path=ViewModel.ClickedButtonCommand}">
-                    <Image Source="/Assets/white_minus.png" Style="{StaticResource EditButtonImages}" />
-                </Button>
+                <Button x:Name="AddButton" Style="{StaticResource EditButtons}" Click="AddButton_Click" Content="추가" />
+                <Button x:Name="EditButton" Style="{StaticResource EditButtons}" Click="EditButton_Click" Content="수정" />
+                <Button x:Name="DeleteButton" Style="{StaticResource EditButtons}" Click="DeleteButton_Click" Content="삭제" />
             </StackPanel>
             <!-- Grid for view columns -->
             <Grid Grid.Row="2">
@@ -172,12 +151,13 @@
                     <Style TargetType="Button" x:Key="ViewColumnButton">
                         <Setter Property="Foreground" Value="#FFDEDEDE" />
                         <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
-                        <Setter Property="Command" Value="{x:Bind Path=ViewModel.ClickedButtonCommand}" />
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="VerticalAlignment" Value="Stretch" />
                     </Style>
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind Path=ViewModel.TypeColumnWidth, Mode=TwoWay}"
+                                      MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
                     <ColumnDefinition Width="{x:Bind Path=ViewModel.NameColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
                     <ColumnDefinition Width="{x:Bind Path=ViewModel.DateColumnWidth, Mode=TwoWay}"
@@ -192,66 +172,76 @@
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
                     <ColumnDefinition Width="1*" />                    
                 </Grid.ColumnDefinitions>
-                <!-- For account -->
+                <!-- For type -->
                 <Grid Grid.Column="0">
-                    <Button Style="{StaticResource ViewColumnButton}" Content="거래처" />
+                    <Button x:Name="TypeColumnButton" Style="{StaticResource ViewColumnButton}" Content="매출/매입" Click="TypeColumnButton_Click" />
                 </Grid>
                 <controls:GridSplitter Grid.Column="1"  GripperCursor="Default">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
                 </controls:GridSplitter>
-                <!-- For date -->
+                <!-- For account -->
                 <Grid Grid.Column="1">
-                    <Button Style="{StaticResource ViewColumnButton}" Content="날짜" />
+                    <Button x:Name="NameColumnButton" Style="{StaticResource ViewColumnButton}" Content="거래처"  Click="NameColumnButton_Click" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="2" GripperCursor="Default">
+                <controls:GridSplitter Grid.Column="2"  GripperCursor="Default">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
                 </controls:GridSplitter>
-                <!-- For supply price -->
+                <!-- For date -->
                 <Grid Grid.Column="2">
-                    <Button Style="{StaticResource ViewColumnButton}" Content="공급가격" />
+                    <Button x:Name="DateColumnButton" Style="{StaticResource ViewColumnButton}" Content="날짜" Click="DateColumnButton_Click" />
                 </Grid>
                 <controls:GridSplitter Grid.Column="3" GripperCursor="Default">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
                 </controls:GridSplitter>
-                <!-- For tax amount -->
+                <!-- For supply price -->
                 <Grid Grid.Column="3">
-                    <Button Style="{StaticResource ViewColumnButton}" Content="세액" />
+                    <Button x:Name="PriceColumnButton" Style="{StaticResource ViewColumnButton}" Content="공급가격" Click="PriceColumnButton_Click" />
                 </Grid>
                 <controls:GridSplitter Grid.Column="4" GripperCursor="Default">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
                 </controls:GridSplitter>
-                <!-- For sum -->
+                <!-- For tax amount -->
                 <Grid Grid.Column="4">
-                    <Button Style="{StaticResource ViewColumnButton}" Content="합계" />
+                    <Button x:Name="TaxColumnButton" Style="{StaticResource ViewColumnButton}" Content="세액" Click="TaxColumnButton_Click" />
                 </Grid>
                 <controls:GridSplitter Grid.Column="5" GripperCursor="Default">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
                 </controls:GridSplitter>
-                <!-- For checking deposit -->
+                <!-- For sum -->
                 <Grid Grid.Column="5">
-                    <Button Style="{StaticResource ViewColumnButton}" Content="입금확인" />
+                    <Button x:Name="SumColumnButton" Style="{StaticResource ViewColumnButton}" Content="합계" Click="SumColumnButton_Click" />
                 </Grid>
                 <controls:GridSplitter Grid.Column="6" GripperCursor="Default">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
                 </controls:GridSplitter>
+                <!-- For checking deposit -->
+                <Grid Grid.Column="6">
+                    <Button x:Name="CheckColumnButton" Style="{StaticResource ViewColumnButton}" Content="입금확인" Click="CheckColumnButton_Click" />
+                </Grid>
+                <controls:GridSplitter Grid.Column="7" GripperCursor="Default">
+                    <controls:GridSplitter.RenderTransform>
+                        <TranslateTransform X="-8" />
+                    </controls:GridSplitter.RenderTransform>
+                </controls:GridSplitter>
                 <!-- Blank view columns -->
-                <StackPanel Grid.Column="6">
+                <StackPanel Grid.Column="7">
                     
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="3">
+                <!--
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Bind Path=ViewModel.NameColumnWidth, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Path=ViewModel.DateColumnWidth, Mode=OneWay}" />
@@ -282,6 +272,30 @@
                 <StackPanel Grid.Column="6" Background="#555555">
 
                 </StackPanel>
+                -->
+                <ListBox x:Name="AccountingDataListBox" Loaded="AccountingDataListBox_Loaded">
+                    <!--
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding ClientName}" Width="{Binding ElementName=Root, Path=CWidth}" />
+                                <TextBlock Text="{Binding Date}" Width="100" />
+                                <TextBlock Text="{Binding SupplyPrice}" />
+                                <TextBlock Text="{Binding TaxAmount}" />
+                                <TextBlock Text="{Binding Sum}" />
+                                <CheckBox IsChecked="{Binding DepositConfirm}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    -->
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Margin" Value="0" />
+                            <Setter Property="Padding" Value="0" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
             </Grid>
         </Grid>
     </Grid>

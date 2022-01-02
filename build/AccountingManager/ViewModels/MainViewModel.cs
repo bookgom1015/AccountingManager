@@ -20,8 +20,6 @@ namespace AccountingManager.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public const Int32 CSIDL_PERSONAL   = 0x0005; // My Documents
-
         public MainViewModel()
         {
             LoadSettings();
@@ -29,9 +27,21 @@ namespace AccountingManager.ViewModels
 
             SetWindowSize();
             SetTitleBarColor();
-            GenerateDateMap();
 
             ClickedButtonCommand = new DelegateCommand(OnClickButtonCommand);
+
+            Random rand = new Random();
+
+            AccountingDataList = new List<AccountingData>();
+            for (int i = 0; i < 5; ++i)
+            {
+                int price = rand.Next(0, 99) * 100000;
+                int tax = (int)(price * 0.026);
+                int sum = price + tax;
+                bool isEven = i % 2 == 0;
+
+                AccountingDataList.Add(new AccountingData("Client Name " + i.ToString(), "2021/12/21", price, tax, !isEven, isEven));
+            }
         }
 
         private void LoadSettings()
@@ -43,6 +53,9 @@ namespace AccountingManager.ViewModels
 
             Object heightObj = localSettings.Values["WindowHeight"];
             WindowHeight = heightObj == null ? mDefaultWindowHeight : (double)heightObj;
+
+            Object TypeWidthObj = localSettings.Values["TypeColumnWidth"];
+            TypeColumnWidth = TypeWidthObj == null ? mDefaultColumnWidth : new GridLength((double)TypeWidthObj);
 
             Object NameWidthObj = localSettings.Values["NameColumnWidth"];
             NameColumnWidth = NameWidthObj == null ? mDefaultColumnWidth : new GridLength((double)NameWidthObj);
@@ -68,6 +81,7 @@ namespace AccountingManager.ViewModels
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             localSettings.Values["WindowWidth"] = WindowWidth;
             localSettings.Values["WindowHeight"] = WindowHeight;
+            localSettings.Values["TypeColumnWidth"] = TypeColumnWidth.Value;
             localSettings.Values["NameColumnWidth"] = NameColumnWidth.Value;
             localSettings.Values["DateColumnWidth"] = DateColumnWidth.Value;
             localSettings.Values["PriceColumnWidth"] = PriceColumnWidth.Value;
@@ -101,32 +115,6 @@ namespace AccountingManager.ViewModels
             titleBar.ButtonInactiveBackgroundColor = titleColor;
         }
 
-        private void GenerateDateMap()
-        {
-            DateMap = new Dictionary<int, List<int>>();
-
-            List<int> months_19 = new List<int>();
-            for (int i = 7; i <= 9; ++i)
-                months_19.Add(i);
-            DateMap.Add(2019, months_19);
-
-            List<int> months_20 = new List<int>();
-            for (int i = 4; i <= 6; ++i)
-                months_20.Add(i);
-            DateMap.Add(2020, months_20);
-
-            List<int> months_21 = new List<int>();
-            for (int i = 1; i <= 3; ++i)
-                months_21.Add(i);
-            DateMap.Add(2021, months_21);
-        }
-
-        private async void OnClickButtonCommand()
-        {
-            MessageDialog msgDialog = new MessageDialog("Clicked the button");
-            await msgDialog.ShowAsync();
-        }
-
         public void OnWindowSizeChanged(Object sender, SizeChangedEventArgs e)
         {
             WindowWidth = e.NewSize.Width;
@@ -134,6 +122,11 @@ namespace AccountingManager.ViewModels
         }
 
         public ICommand ClickedButtonCommand { get; set; }
+        private async void OnClickButtonCommand()
+        {
+            MessageDialog msgDialog = new MessageDialog("Clicked the button");
+            await msgDialog.ShowAsync();
+        }
 
         private const double mDefaultWindowWidth = 1024;
         private const double mDefaultWindowHeight = 768;
@@ -147,10 +140,9 @@ namespace AccountingManager.ViewModels
             set => SetProperty(ref mStr, value);
         }
 
-        private double mDefaultMinColumnWidth = 80;
         public double DefaultMinColumnWidth
         {
-            get => mDefaultMinColumnWidth;
+            get => 100;
         }
 
         private double mWindowWidth;
@@ -172,6 +164,13 @@ namespace AccountingManager.ViewModels
         {
             get => mDocumentFilePath;
             set => SetProperty(ref mDocumentFilePath, value);
+        }
+
+        private GridLength mTypeColumnWidth;
+        public GridLength TypeColumnWidth
+        {
+            get => mTypeColumnWidth;
+            set => SetProperty(ref mTypeColumnWidth, value);
         }
 
         private GridLength mNameColumnWidth;
@@ -216,11 +215,20 @@ namespace AccountingManager.ViewModels
             set => SetProperty(ref mCheckColumnWidth, value);
         }
 
-        private Dictionary<int, List<int>> mDateMap;
-        public Dictionary<int, List<int>> DateMap
+        private List<AccountingData> mAccountingDataList;
+        public List<AccountingData> AccountingDataList
         {
-            get => mDateMap;
-            set => SetProperty(ref mDateMap, value);
+            get => mAccountingDataList;
+            set => SetProperty(ref mAccountingDataList, value);
         }
+
+        private bool mColumnOrder = false;
+        public bool ColumnOrder
+        {
+            get => mColumnOrder;
+            set => mColumnOrder = value;
+        }
+
+        public double ColumnWidth = 100;
     }
 }

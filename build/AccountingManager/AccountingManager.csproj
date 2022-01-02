@@ -150,16 +150,32 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\AddDialog.xaml.cs">
+      <DependentUpon>AddDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\AccountingDataControls.cs" />
     <Compile Include="Helpers\HexToColor.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MonthlyNavViewModel.cs" />
+    <Compile Include="ViewModels\YearlyNavViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MonthlyNavPage.xaml.cs">
+      <DependentUpon>MonthlyNavPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\YearlyNavPage.xaml.cs">
+      <DependentUpon>YearlyNavPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Dialogs\AddDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Page.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -184,6 +200,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MonthlyNavPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\YearlyNavPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -194,6 +218,7 @@
     <Compile Include="Helpers\ResourceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\calendar.png" />
     <Content Include="Assets\white_minus.png" />
     <Content Include="Assets\white_plus.png" />
     <Content Include="Properties\Default.rd.xml" />

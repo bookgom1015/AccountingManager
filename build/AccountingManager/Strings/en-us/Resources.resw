@@ -129,4 +129,12 @@
     <value>Main</value>
     <comment>Page title for MainPage</comment>
   </data>
+  <data name="YearlyNav_Title.Text" xml:space="preserve">
+    <value>YearlyNav</value>
+    <comment>Page title for YearlyNavPage</comment>
+  </data>
+  <data name="MonthlyNav_Title.Text" xml:space="preserve">
+    <value>MonthlyNav</value>
+    <comment>Page title for MonthlyNavPage</comment>
+  </data>
 </root>

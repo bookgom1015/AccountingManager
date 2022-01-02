@@ -9,24 +9,24 @@ namespace AccountingManager.Core.Models
         public DateData()
         {
             Year = default;
-            Months = new List<string>();
+            Months = new List<int>();
         }
 
-        public DateData(string year, List<string> months)
+        public DateData(int year, List<int> months)
         {
             Year = year;
             Months = months;
         }
 
-        private string mYear;
-        public string Year
+        private int mYear;
+        public int Year
         {
             get => mYear;
             set => mYear = value;
         }
 
-        private List<string> mMonths;
-        public List<string> Months
+        private List<int> mMonths;
+        public List<int> Months
         {
             get => mMonths;
             set => mMonths = value;
