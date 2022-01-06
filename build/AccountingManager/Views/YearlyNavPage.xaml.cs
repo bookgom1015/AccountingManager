@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AccountingManager.ViewModels;
 
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Animation;
 
 namespace AccountingManager.Views
@@ -15,6 +16,11 @@ namespace AccountingManager.Views
         public YearlyNavPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ViewModel.GenerateDateMap();
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

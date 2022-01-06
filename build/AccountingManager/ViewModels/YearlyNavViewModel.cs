@@ -10,10 +10,9 @@ namespace AccountingManager.ViewModels
     {
         public YearlyNavViewModel()
         {
-            GenerateDateMap();
         }
 
-        private void GenerateDateMap()
+        public void GenerateDateMap()
         {
             DateMap = new Dictionary<int, List<int>>();
 

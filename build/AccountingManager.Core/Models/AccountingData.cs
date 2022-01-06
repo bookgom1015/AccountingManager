@@ -6,11 +6,13 @@ namespace AccountingManager.Core.Models
 {
     public class AccountingData
     {
-        public AccountingData(string clientName, string date, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
+        public AccountingData(int id, string clientName, string date, int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
         {
+            Id = id;
             DataType = dataType;
             ClientName = clientName;
             Date = date;
+            SteelWeight = steelWeight;
             SupplyPrice = supplyPrice;
             TaxAmount = taxAmount;
             DepositConfirm = depositConfirm;
@@ -37,6 +39,13 @@ namespace AccountingManager.Core.Models
             set => mDate = value;
         }
 
+        private int mSteelWeight;
+        public int SteelWeight
+        {
+            get => mSteelWeight;
+            set => mSteelWeight = value;
+        }
+
         private int mSupplyPrice;
         public int SupplyPrice
         {
@@ -56,6 +65,13 @@ namespace AccountingManager.Core.Models
         {
             get => mDepositConfirm;
             set => mDepositConfirm = value;
+        }
+
+        private int mId;
+        public int Id
+        {
+            get => mId;
+            set => mId = value;
         }
     }
 }

@@ -10,9 +10,93 @@
     SecondaryButtonText="Button2"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
-
-    <Grid>
-        <StackPanel x:Name="Panel">
-        </StackPanel>
+    <Grid Width="280" Margin="0, 30, 0, 20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Orientation" Value="Horizontal" />
+                </Style>
+            </Grid.Resources>
+            <Grid Grid.Row="0" Margin="0, 0, 0, 20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="날짜" VerticalAlignment="Center" />
+                    <Grid Grid.Column="1">
+                        <StackPanel x:Name="DatePanel" Orientation="Horizontal" />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Margin="0, 0, 0, 5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="거래처" VerticalAlignment="Center" />
+                    <Grid x:Name="NamePanel" Grid.Column="1" />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2" Margin="0, 0, 0, 5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="철강무게" VerticalAlignment="Center" />
+                    <Grid x:Name="WeightPanel" Grid.Column="1" />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="3" Margin="0, 0, 0, 5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="공급가격" VerticalAlignment="Center" />
+                    <Grid x:Name="PricePanel" Grid.Column="1" />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="4" Margin="0, 0, 0, 20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="세액" VerticalAlignment="Center" />
+                    <Grid x:Name="TaxPanel" Grid.Column="1" />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Margin" Value="0, 0, 10, 0" />
+                        </Style>
+                    </Grid.Resources>
+                    <StackPanel x:Name="TypePanel" Grid.Column="0">
+                        <TextBlock Text="매입/매출" />
+                    </StackPanel>
+                    <StackPanel x:Name="DepositPanel" Grid.Column="1">
+                        <TextBlock Text="입금확인" />
+                    </StackPanel>
+                </Grid>                
+            </Grid>
+        </Grid>
     </Grid>
 </ContentDialog>
