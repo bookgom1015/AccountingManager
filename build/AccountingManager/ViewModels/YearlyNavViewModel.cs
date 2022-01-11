@@ -8,17 +8,8 @@ namespace AccountingManager.ViewModels
 {
     public class YearlyNavViewModel : ViewModelBase
     {
-        public YearlyNavViewModel()
-        {
-        }
+        public YearlyNavViewModel() {}
 
-        private Dictionary<int, List<int>> mDateMap;
-        public Dictionary<int, List<int>> DateMap
-        {
-            get => mDateMap;
-            set => SetProperty(ref mDateMap, value);
-        }
-
-        public Action<string> DataLitView_SelectionChanged { get; set; }
+        public Action<string> YearList_SelectionChanged { get; set; }
     }
 }

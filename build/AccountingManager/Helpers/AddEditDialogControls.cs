@@ -6,40 +6,27 @@ using Windows.UI.Xaml.Controls;
 
 namespace AccountingManager.Helpers
 {
-    public class AccountingDataControls
+    public class AddEditDialogControls
     {
-        public AccountingDataControls()
+        public AddEditDialogControls()
         {
-            InputName = new TextBox();
+            mInputClientName = new TextBox();
 
-            InputWeight = new TextBox();
-            InputWeight.BeforeTextChanging += TextBox_BeforeTextChanging;
+            mInputSteelWeight = new TextBox();
+            mInputSteelWeight.BeforeTextChanging += TextBox_BeforeTextChanging;
 
-            InputPrice = new TextBox();
-            InputPrice.BeforeTextChanging += TextBox_BeforeTextChanging;
+            mInputSupplyPrice = new TextBox();
+            mInputSupplyPrice.BeforeTextChanging += TextBox_BeforeTextChanging;
 
-            InputTax = new TextBox();
-            InputTax.BeforeTextChanging += TextBox_BeforeTextChanging;
-
-            //
-            // Generate ComboBox for entering an year.
-            //
-            InputYear = new ComboBox();
-            for (int i = 2000; i < 2100; ++i)
-                InputYear.Items.Add(i);
+            mInputTaxAmount = new TextBox();
+            mInputTaxAmount.BeforeTextChanging += TextBox_BeforeTextChanging;
 
             DateTime localDate = DateTime.Now;
-
-            // Set SelectedIndex to the current year.
-            string year = localDate.ToString("yy");
-            int yearIdx;
-            int.TryParse(year, out yearIdx);
-            InputYear.SelectedIndex = yearIdx;
 
             //
             // Generate ComboBox for entering a month.
             //
-            InputMonth = new ComboBox();
+            mInputMonth = new ComboBox();
             for (int i = 1; i <= 12; ++i)
                 InputMonth.Items.Add(i);
 
@@ -47,13 +34,13 @@ namespace AccountingManager.Helpers
             string monthText = localDate.ToString("MM");
             int monthIdx;
             int.TryParse(monthText, out monthIdx);            
-            InputMonth.SelectedIndex = monthIdx - 1;
-            InputMonth.SelectionChanged += ComboBox_SelectionChanged;
+            mInputMonth.SelectedIndex = monthIdx - 1;
+            mInputMonth.SelectionChanged += ComboBox_SelectionChanged;
 
             //
             // Generate ...
             //
-            MonthList = new List<List<int>>();
+            mMonthList = new List<List<int>>();
 
             for (int month = 1; month <= 12; ++month)
             {
@@ -97,7 +84,7 @@ namespace AccountingManager.Helpers
             //
             // Generate ComboBox for entering a day.
             //
-            InputDay = new ComboBox();
+            mInputDay = new ComboBox();
             {
                 List<int> dayList = MonthList[monthIdx - 1];
                 InputDay.ItemsSource = dayList;
@@ -109,12 +96,12 @@ namespace AccountingManager.Helpers
             int.TryParse(dayText, out dayIdx);            
             InputDay.SelectedIndex = dayIdx - 1;
 
-            InputType = new ComboBox();
-            InputType.Items.Add("매입");
-            InputType.Items.Add("매출");
-            InputType.SelectedIndex = 0;
+            mInputDataType = new ComboBox();
+            mInputDataType.Items.Add("매입");
+            mInputDataType.Items.Add("매출");
+            mInputDataType.SelectedIndex = 0;
             
-            InputConfirm = new CheckBox();
+            mInputDepositConfirm = new CheckBox();
         }
 
         //* Only input digits.
@@ -139,74 +126,31 @@ namespace AccountingManager.Helpers
 
         }
 
-        private TextBox mInputName;
-        public TextBox InputName
-        {
-            get => mInputName;
-            set => mInputName = value;
-        }
+        private TextBox mInputClientName;
+        public TextBox InputClientName { get => mInputClientName; }
 
-        private TextBox mInputWeight;
-        public TextBox InputWeight
-        {
-            get => mInputWeight;
-            set => mInputWeight = value;
-        }
+        private TextBox mInputSteelWeight;
+        public TextBox InputSteelWeight { get => mInputSteelWeight; }
 
-        private TextBox mInputPrice;
-        public TextBox InputPrice
-        {
-            get => mInputPrice;
-            set => mInputPrice = value;
-        }
+        private TextBox mInputSupplyPrice;
+        public TextBox InputSupplyPrice { get => mInputSupplyPrice; }
 
-        private TextBox mInputTax;
-        public TextBox InputTax
-        {
-            get => mInputTax;
-            set => mInputTax = value;
-        }
-
-        private ComboBox mInputYear;
-        public ComboBox InputYear
-        {
-            get => mInputYear;
-            set => mInputYear = value;
-        }
+        private TextBox mInputTaxAmount;
+        public TextBox InputTaxAmount { get => mInputTaxAmount; }
 
         private ComboBox mInputMonth;
-        public ComboBox InputMonth
-        {
-            get => mInputMonth;
-            set => mInputMonth = value;
-        }
+        public ComboBox InputMonth { get => mInputMonth; }
 
         private ComboBox mInputDay;
-        public ComboBox InputDay
-        {
-            get => mInputDay;
-            set => mInputDay = value;
-        }
+        public ComboBox InputDay { get => mInputDay; }
 
-        private ComboBox mInputType;
-        public ComboBox InputType
-        {
-            get => mInputType;
-            set => mInputType = value;
-        }
+        private ComboBox mInputDataType;
+        public ComboBox InputDataType { get => mInputDataType; }
 
-        private CheckBox mInputConfirm;
-        public CheckBox InputConfirm
-        {
-            get => mInputConfirm;
-            set => mInputConfirm = value;
-        }
+        private CheckBox mInputDepositConfirm;
+        public CheckBox InputDepositConfirm { get => mInputDepositConfirm; }
 
         private List<List<int>> mMonthList;
-        public List<List<int>> MonthList
-        {
-            get => mMonthList;
-            set => mMonthList = value;
-        }
+        public List<List<int>> MonthList { get => mMonthList; }
     }
 }

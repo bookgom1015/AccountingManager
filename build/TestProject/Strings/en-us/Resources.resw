@@ -118,39 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>AccountingManager</value>
+    <value>TestProject</value>
     <comment>Application display name</comment>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>AccountingManager</value>
+    <value>TestProject</value>
     <comment>Application description</comment>
   </data>
   <data name="Main_Title.Text" xml:space="preserve">
     <value>Main</value>
     <comment>Page title for MainPage</comment>
-  </data>
-  <data name="YearlyNav_Title.Text" xml:space="preserve">
-    <value>YearlyNav</value>
-    <comment>Page title for YearlyNavPage</comment>
-  </data>
-  <data name="MonthlyNav_Title.Text" xml:space="preserve">
-    <value>MonthlyNav</value>
-    <comment>Page title for MonthlyNavPage</comment>
-  </data>
-  <data name="DateNav_Title.Text" xml:space="preserve">
-    <value>DateNav</value>
-    <comment>Page title for DateNavPage</comment>
-  </data>
-  <data name="AccountingDataList_Title.Text" xml:space="preserve">
-    <value>AccountingDataList</value>
-    <comment>Page title for AccountingDataListPage</comment>
-  </data>
-  <data name="ViewSelection_Title.Text" xml:space="preserve">
-    <value>ViewSelection</value>
-    <comment>Page title for ViewSelectionPage</comment>
-  </data>
-  <data name="DetailAccountingDataList_Title.Text" xml:space="preserve">
-    <value>DetailAccountingDataList</value>
-    <comment>Page title for DetailAccountingDataListPage</comment>
   </data>
 </root>

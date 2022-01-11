@@ -7,49 +7,13 @@
     Style="{StaticResource PageStyle}"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
-    mc:Ignorable="d">
-    <Page.Resources>
-        <SolidColorBrush x:Key="BackgroundColor" Color="#FFF2F2F2" />
-        <Style TargetType="Grid">
-            <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
-        </Style>
-        <Style TargetType="StackPanel">
-            <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
-        </Style>
-        <Style TargetType="ListBox">
-            <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
-        </Style>
-    </Page.Resources>
-    <Grid x:Name="ContentArea" Width="250">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="10" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="1*" />
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="1" Margin="15, 0, 0, 0">
-                <StackPanel Orientation="Horizontal" >
-                    <Image Source="/Assets/calendar_black.png" Width="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <TextBlock Text="연도" Margin="5, 0, 0, 0" FontSize="22" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="2">
-                <ListBox Grid.Row="0" ItemsSource="{x:Bind Path=ViewModel.DateMap}" SelectionChanged="ListBox_SelectionChanged"
-                         FontSize="22" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Key}" Margin="25, 0, 0, 0" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="BorderThickness" Value="0, 2, 0, 2" />
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-            </Grid>
-        </Grid>
+    mc:Ignorable="d"
+    Background="Transparent">
+    <Grid x:Name="ContentArea"
+          Width="250">
+        <ListBox x:Name="YearListBox"
+                 SelectionChanged="YearListBox_SelectionChanged"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 Background="Transparent" />
     </Grid>
 </Page>

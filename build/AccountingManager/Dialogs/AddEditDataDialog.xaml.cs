@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Windows.UI;
+﻿using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -12,44 +9,42 @@ using AccountingManager.Helpers;
 
 namespace AccountingManager.Dialogs
 {
-    public sealed partial class AddDialog : ContentDialog
+    public sealed partial class AddEditDataDialog : ContentDialog
     {
-        public AddDialog(AccountingDataControls controls)
+        public AddEditDataDialog(AddEditDialogControls controls)
         {
             this.InitializeComponent();
 
             SolidColorBrush red = new SolidColorBrush(Colors.Red);
 
-            controls.InputType.MinWidth = 0;
-            controls.InputType.Margin = new Thickness(0);
-            controls.InputType.VerticalAlignment = VerticalAlignment.Center;
+            controls.InputDataType.MinWidth = 0;
+            controls.InputDataType.Margin = new Thickness(0);
+            controls.InputDataType.VerticalAlignment = VerticalAlignment.Center;
 
-            controls.InputName.PlaceholderForeground = red;
-            controls.InputWeight.PlaceholderForeground = red;
-            controls.InputPrice.PlaceholderForeground = red;
-            controls.InputTax.PlaceholderForeground = red;
+            controls.InputClientName.PlaceholderForeground = red;
+            controls.InputSteelWeight.PlaceholderForeground = red;
+            controls.InputSupplyPrice.PlaceholderForeground = red;
+            controls.InputTaxAmount.PlaceholderForeground = red;
 
-            controls.InputConfirm.MinWidth = 0;
-            controls.InputConfirm.Margin = new Thickness(0);
-            controls.InputConfirm.VerticalAlignment = VerticalAlignment.Center;
+            controls.InputDepositConfirm.MinWidth = 0;
+            controls.InputDepositConfirm.Margin = new Thickness(0);
+            controls.InputDepositConfirm.VerticalAlignment = VerticalAlignment.Center;
 
-            controls.InputYear.Margin = new Thickness(0, 0, 5, 0);
             controls.InputMonth.Margin = new Thickness(0, 0, 5, 0);
 
-            mInputName = controls.InputName;
-            mInputWeight = controls.InputWeight;
-            mInputPrice = controls.InputPrice;
-            mInputTax = controls.InputTax;
+            mInputName = controls.InputClientName;
+            mInputWeight = controls.InputSteelWeight;
+            mInputPrice = controls.InputSupplyPrice;
+            mInputTax = controls.InputTaxAmount;
 
-            NamePanel.Children.Add(controls.InputName);
-            WeightPanel.Children.Add(controls.InputWeight);
-            PricePanel.Children.Add(controls.InputPrice);
-            TaxPanel.Children.Add(controls.InputTax);
-            DatePanel.Children.Add(controls.InputYear);
-            DatePanel.Children.Add(controls.InputMonth);
-            DatePanel.Children.Add(controls.InputDay);
-            TypePanel.Children.Add(controls.InputType);
-            DepositPanel.Children.Add(controls.InputConfirm);
+            NamePanel.Children.Add(controls.InputClientName);
+            WeightPanel.Children.Add(controls.InputSteelWeight);
+            PricePanel.Children.Add(controls.InputSupplyPrice);
+            TaxPanel.Children.Add(controls.InputTaxAmount);
+            MonthPanel.Children.Add(controls.InputMonth);
+            DayPanel.Children.Add(controls.InputDay);
+            TypePanel.Children.Add(controls.InputDataType);
+            DepositPanel.Children.Add(controls.InputDepositConfirm);
         }
 
         private void CancelReturn(ContentDialogButtonClickEventArgs args, TextBox textBox, string msg)

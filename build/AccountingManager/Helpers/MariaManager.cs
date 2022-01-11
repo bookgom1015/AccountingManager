@@ -402,7 +402,7 @@ namespace AccountingManager.Helpers
 
         private string TableParameters
         {
-            get => "id INT, client_name VARCHAR(60), date VARCHAR(10), steel_weight INT, supply_price INT, tax_amount INT, data_type BOOLEAN, deposit_confirm BOOLEAN, deleted BOOLEAN";
+            get => "id INT, client_name VARCHAR(60), date VARCHAR(5), steel_weight INT, supply_price INT, tax_amount INT, data_type BOOLEAN, deposit_confirm BOOLEAN, deleted BOOLEAN";
         }
 
         private string TableFields
