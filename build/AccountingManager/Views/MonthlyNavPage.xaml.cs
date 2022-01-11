@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using AccountingManager.ViewModels;
-
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+
+using AccountingManager.ViewModels;
+using AccountingManager.Helpers;
 
 namespace AccountingManager.Views
 {
@@ -32,7 +33,7 @@ namespace AccountingManager.Views
             string year = pair.Key.ToString();
 
             TextBlock yearTextBlock = new TextBlock();
-            yearTextBlock.Margin = new Thickness(10, 0, 0, 0);
+            yearTextBlock.Margin = new Thickness(25, 0, 0, 0);
             yearTextBlock.FontSize = 22;
             yearTextBlock.Text = year;
 
@@ -41,7 +42,7 @@ namespace AccountingManager.Views
             foreach (int month in pair.Value)
             {
                 TextBlock dateTextBlock = new TextBlock();
-                dateTextBlock.Margin = new Thickness(25, 0, 0, 0);
+                dateTextBlock.Margin = new Thickness(40, 0, 0, 0);
                 dateTextBlock.FontSize = 18;
                 dateTextBlock.Text = year + "/" + month.ToString("D2");
 
@@ -51,8 +52,13 @@ namespace AccountingManager.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is KeyValuePair<int, List<int>>)
-                GenerateDateList((KeyValuePair<int, List<int>>)e.Parameter);
+            if (e.Parameter is MonthlyNavPageParams)
+            {
+                MonthlyNavPageParams navParams = e.Parameter as MonthlyNavPageParams;
+
+                ViewModel.DataLitView_SelectionChanged = navParams.DataLitView_SelectionChanged;
+                GenerateDateList(navParams.Pair);
+            }
 
             base.OnNavigatedTo(e);
         }
@@ -60,6 +66,20 @@ namespace AccountingManager.Views
         private void BackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             TryGoBack(this.Frame);
+        }
+
+        private void DateListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel.DataLitView_SelectionChanged != null)
+            {
+                ListBox listBox = sender as ListBox;
+                if (listBox == null) return;
+
+                if (!(listBox.SelectedItem is TextBlock)) return;
+                TextBlock textBlock = listBox.SelectedItem as TextBlock;
+
+                ViewModel.DataLitView_SelectionChanged(textBlock.Text);
+            }
         }
     }
 }

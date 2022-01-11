@@ -6,6 +6,18 @@ namespace AccountingManager.Core.Models
 {
     public class AccountingData
     {
+        public enum ChangedData
+        {
+            ENone           = 1 << 0,
+            EClientName     = 1 << 1,
+            EDate           = 1 << 2,
+            ESteelWeight    = 1 << 3,
+            ESupplyPrice    = 1 << 4,
+            ETaxAmount      = 1 << 5,
+            EDataType       = 1 << 6,
+            EDepositConfirm = 1 << 7
+        }
+
         public AccountingData(int id, string clientName, string date, int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
         {
             Id = id;

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using AccountingManager.ViewModels;
-
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Animation;
+
+using AccountingManager.ViewModels;
+using AccountingManager.Helpers;
 
 namespace AccountingManager.Views
 {
@@ -20,7 +21,15 @@ namespace AccountingManager.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            ViewModel.GenerateDateMap();
+            if (e.Parameter is YearlyNavPageParams)
+            {
+                YearlyNavPageParams navParams = e.Parameter as YearlyNavPageParams;
+                ViewModel.DateMap = navParams.DateMap;
+
+                ViewModel.DataLitView_SelectionChanged = navParams.DataLitView_SelectionChanged;
+            }            
+
+            base.OnNavigatedTo(e);
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -31,7 +40,11 @@ namespace AccountingManager.Views
             if (!(listBox.SelectedItem is KeyValuePair<int, List<int>>)) return;
             KeyValuePair<int, List<int>> pair = (KeyValuePair<int, List<int>>)listBox.SelectedItem;
 
-            this.Frame.Navigate(typeof(MonthlyNavPage), pair, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
+            MonthlyNavPageParams navParams = new MonthlyNavPageParams();
+            navParams.Pair = pair;
+            navParams.DataLitView_SelectionChanged = ViewModel.DataLitView_SelectionChanged;
+
+            this.Frame.Navigate(typeof(MonthlyNavPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
         }
     }
 }

@@ -9,8 +9,7 @@
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
     <Page.Resources>
-        <SolidColorBrush x:Key="BackgroundColor" Color="#FF202120" />
-        <SolidColorBrush x:Key="FontColor" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="BackgroundColor" Color="#FFF2F2F2" />
         <Style TargetType="Grid">
             <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
         </Style>
@@ -18,12 +17,11 @@
             <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
         </Style>
         <Style TargetType="ListBox">
-            <Setter Property="Foreground" Value="{StaticResource FontColor}" />
             <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
         </Style>
     </Page.Resources>
     <Grid x:Name="ContentArea" Width="250">
-        <Grid Margin="15, 0, 15, 0">
+        <Grid Margin="0, 0, 0, 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="10" />
                 <RowDefinition Height="60" />
@@ -32,28 +30,28 @@
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="40" />
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
+                <Grid Grid.Column="0" Margin="15, 0, 0, 0">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Assets/calendar.png" Width="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                        <TextBlock Text="날짜 선택" FontSize="22" Foreground="{StaticResource FontColor}"
-                                   VerticalAlignment="Center" Margin="5, 0, 0, 0" />
+                        <Image Source="/Assets/calendar_black.png" Width="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock Text="날짜 선택" FontSize="22" VerticalAlignment="Center" Margin="5, 0, 0, 0" />
                     </StackPanel>
                 </Grid>
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="2">
                     <Button x:Name="BackButton"
-                            Click="BackButton_Click" ToolTipService.ToolTip="Back" Style="{StaticResource NavigationBackButtonNormalStyle}"
-                            IsEnabled="{x:Bind Frame.CanGoBack, Mode=OneWay}" Foreground="{StaticResource FontColor}"
+                            Click="BackButton_Click" ToolTipService.ToolTip="Back"
+                            Style="{StaticResource NavigationBackButtonNormalStyle}"
+                            IsEnabled="{x:Bind Frame.CanGoBack, Mode=OneWay}"
                             Width="40" Height="{Binding RelativeSource={RelativeSource Self}, Path=Width}" />
                 </Grid>
             </Grid>
             <Grid Grid.Row="2">
-                <ListBox x:Name="DateListBox" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox x:Name="DateListBox" SelectionChanged="DateListBox_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="BorderThickness" Value="0, 2, 0, 2" />
-                            <Setter Property="Margin" Value="0, 0, 25, 0" />
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>

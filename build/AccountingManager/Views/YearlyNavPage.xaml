@@ -9,8 +9,7 @@
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
     <Page.Resources>
-        <SolidColorBrush x:Key="BackgroundColor" Color="#FF202120" />
-        <SolidColorBrush x:Key="FontColor" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="BackgroundColor" Color="#FFF2F2F2" />
         <Style TargetType="Grid">
             <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
         </Style>
@@ -18,21 +17,20 @@
             <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
         </Style>
         <Style TargetType="ListBox">
-            <Setter Property="Foreground" Value="{StaticResource FontColor}" />
             <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
         </Style>
     </Page.Resources>
     <Grid x:Name="ContentArea" Width="250">
-        <Grid Margin="15, 0, 15, 0">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="10" />
                 <RowDefinition Height="60" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Margin="15, 0, 0, 0">
                 <StackPanel Orientation="Horizontal" >
-                    <Image Source="/Assets/calendar.png" Width="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <TextBlock Text="연도" Foreground="{StaticResource FontColor}" Margin="5, 0, 0, 0" FontSize="22" VerticalAlignment="Center"/>
+                    <Image Source="/Assets/calendar_black.png" Width="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <TextBlock Text="연도" Margin="5, 0, 0, 0" FontSize="22" VerticalAlignment="Center"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="2">
@@ -41,14 +39,13 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Key}" Margin="10, 0, 0, 0" />
+                                <TextBlock Text="{Binding Key}" Margin="25, 0, 0, 0" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="BorderThickness" Value="0, 2, 0, 2" />
-                            <Setter Property="Margin" Value="0, 0, 15, 0" />
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>

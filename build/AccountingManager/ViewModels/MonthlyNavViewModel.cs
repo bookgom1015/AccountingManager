@@ -10,5 +10,7 @@ namespace AccountingManager.ViewModels
         public MonthlyNavViewModel()
         {
         }
+
+        public Action<string> DataLitView_SelectionChanged { get; set; }
     }
 }

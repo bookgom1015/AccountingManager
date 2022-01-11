@@ -70,6 +70,46 @@ namespace AccountingManager.Dialogs
         {
         }
 
+        private void IncreaseAmount(TextBox inTextBox, int inAmount)
+        {
+            int price;
+            int.TryParse(inTextBox.Text, out price);
+
+            price += inAmount;
+
+            inTextBox.Text = price.ToString();
+        }
+
+        private void PriceHudred_Click(object sender, RoutedEventArgs e)
+        {
+            IncreaseAmount(mInputPrice, 1000000);
+        }
+
+        private void PriceTen_Click(object sender, RoutedEventArgs e)
+        {
+            IncreaseAmount(mInputPrice, 100000);
+        }
+
+        private void PriceOne_Click(object sender, RoutedEventArgs e)
+        {
+            IncreaseAmount(mInputPrice, 10000);
+        }
+
+        private void TaxHundred_Click(object sender, RoutedEventArgs e)
+        {
+            IncreaseAmount(mInputTax, 1000000);
+        }
+
+        private void TaxTen_Click(object sender, RoutedEventArgs e)
+        {
+            IncreaseAmount(mInputTax, 100000);
+        }
+
+        private void TaxOne_Click(object sender, RoutedEventArgs e)
+        {
+            IncreaseAmount(mInputTax, 10000);
+        }
+
         private TextBox mInputName;
         private TextBox mInputWeight;
         private TextBox mInputPrice;

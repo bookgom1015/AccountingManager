@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Input;
-
-using Windows.Foundation;
-using Windows.Graphics.Display;
 using Windows.Storage;
-using Windows.UI;
-using Windows.UI.Core.Preview;
-using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
-using Prism.Commands;
 using Prism.Windows.Mvvm;
 
 using AccountingManager.Core.Models;
@@ -21,26 +12,22 @@ namespace AccountingManager.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel()
+        public MainViewModel() {}
+
+        public void Initialize()
         {
-            LoadSettings();
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += CleanUp;
-
-            SetWindowSize();
-            SetTitleBarColor();
-
-            ClickedButtonCommand = new DelegateCommand(OnClickButtonCommand);
-
             AccountingDataList = new List<AccountingData>();
-            Orders = new ColumnOrders();
+            mOrders = new ColumnOrders();
+            mSqlManager = new MariaManager();
 
-            SqlManager = new MariaManager();
+            LoadSettings();
         }
 
-        private void CleanUp(Object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+        public void CleanUp()
         {
             SaveSettings();
-            SqlManager.DisconnnectFromDB();
+
+            mSqlManager.DisconnnectFromDB();
         }
 
         private void LoadSettings()
@@ -50,37 +37,37 @@ namespace AccountingManager.ViewModels
             //
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
-            Object widthObj = localSettings.Values["WindowWidth"];
-            WindowWidth = widthObj == null ? DefaultWindowWidth : (double)widthObj;
+            Object windowWidthObj = localSettings.Values["WindowWidth"];
+            WindowWidth = windowWidthObj == null ? DefaultWindowWidth : (double)windowWidthObj;
 
-            Object heightObj = localSettings.Values["WindowHeight"];
-            WindowHeight = heightObj == null ? DefaultWindowHeight : (double)heightObj;
+            Object windowHeightObj = localSettings.Values["WindowHeight"];
+            WindowHeight = windowHeightObj == null ? DefaultWindowHeight : (double)windowHeightObj;
 
             GridLength width = new GridLength(DefaultColumnWidth);
 
-            Object TypeWidthObj = localSettings.Values["TypeColumnWidth"];
-            TypeColumnWidth = TypeWidthObj == null ? width : new GridLength((double)TypeWidthObj);
+            Object typeWidthObj = localSettings.Values["TypeColumnWidth"];
+            TypeColumnWidth = typeWidthObj == null ? width : new GridLength((double)typeWidthObj);
 
-            Object NameWidthObj = localSettings.Values["NameColumnWidth"];
-            NameColumnWidth = NameWidthObj == null ? width : new GridLength((double)NameWidthObj);
+            Object nameWidthObj = localSettings.Values["NameColumnWidth"];
+            NameColumnWidth = nameWidthObj == null ? width : new GridLength((double)nameWidthObj);
 
-            Object DateWidthObj = localSettings.Values["DateColumnWidth"];
-            DateColumnWidth = DateWidthObj == null ? width : new GridLength((double)DateWidthObj);
+            Object dateWidthObj = localSettings.Values["DateColumnWidth"];
+            DateColumnWidth = dateWidthObj == null ? width : new GridLength((double)dateWidthObj);
 
-            Object WeigthWidthObj = localSettings.Values["WeightColumnWidth"];
-            WeightColumnWidth = WeigthWidthObj == null ? width : new GridLength((double)WeigthWidthObj);
+            Object weightWidthObj = localSettings.Values["WeightColumnWidth"];
+            WeightColumnWidth = weightWidthObj == null ? width : new GridLength((double)weightWidthObj);
 
-            Object PriceWidthObj = localSettings.Values["PriceColumnWidth"];
-            PriceColumnWidth = PriceWidthObj == null ? width : new GridLength((double)PriceWidthObj);
+            Object priceWidthObj = localSettings.Values["PriceColumnWidth"];
+            PriceColumnWidth = priceWidthObj == null ? width : new GridLength((double)priceWidthObj);
 
-            Object TaxWidthObj = localSettings.Values["TaxColumnWidth"];
-            TaxColumnWidth = TaxWidthObj == null ? width : new GridLength((double)TaxWidthObj);
+            Object taxWidthObj = localSettings.Values["TaxColumnWidth"];
+            TaxColumnWidth = taxWidthObj == null ? width : new GridLength((double)taxWidthObj);
 
-            Object SumWidthObj = localSettings.Values["SumColumnWidth"];
-            SumColumnWidth = SumWidthObj == null ? width : new GridLength((double)SumWidthObj);
+            Object sumWidthObj = localSettings.Values["SumColumnWidth"];
+            SumColumnWidth = sumWidthObj == null ? width : new GridLength((double)sumWidthObj);
 
-            Object CheckWidthObj = localSettings.Values["CheckColumnWidth"];
-            CheckColumnWidth = CheckWidthObj == null ? width : new GridLength((double)CheckWidthObj);
+            Object checkWidthObj = localSettings.Values["CheckColumnWidth"];
+            CheckColumnWidth = checkWidthObj == null ? width : new GridLength((double)checkWidthObj);
         }
 
         private void SaveSettings()
@@ -98,35 +85,8 @@ namespace AccountingManager.ViewModels
             localSettings.Values["CheckColumnWidth"] = CheckColumnWidth.Value;
         }
 
-        private void SetWindowSize()
-        {
-            // For compatibility with Windows content size options.
-            double scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
-
-            ApplicationView.PreferredLaunchViewSize = new Size(WindowWidth * scaleFactor, WindowHeight * scaleFactor);
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500, 500));
-        }
-
-        private void SetTitleBarColor()
-        {
-            // Extract bytes from hex code.
-            Color titleColor = Helpers.HexToColor.Convet("#FF202120");
-
-            //
-            // Set title bar and system menu buttons color.
-            //
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.BackgroundColor = titleColor;
-            titleBar.ButtonBackgroundColor = titleColor;
-
-            titleBar.InactiveBackgroundColor = titleColor;
-            titleBar.ButtonInactiveBackgroundColor = titleColor;
-        }
-
         public bool FindAccountingData(int id, out AccountingData ret)
         {
-            ret = null;
             foreach (AccountingData data in AccountingDataList)
             {
                 if (data.Id == id)
@@ -135,12 +95,14 @@ namespace AccountingManager.ViewModels
                     return true;
                 }
             }
+
+            ret = null;
             return false;
         }
 
-        public void AddAccountingData(string clientName, string date, int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
+        public void AddAccountingData(int inId, string inClientName, string inDate, int inSteelWeight = 0, int inSupplyPrice = 0, int inTaxAmount = 0, bool inDataType = false, bool inDepositConfirm = false)
         {
-            AccountingData data = new AccountingData(NextId++, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
+            AccountingData data = new AccountingData(inId, inClientName, inDate, inSteelWeight, inSupplyPrice, inTaxAmount, inDataType, inDepositConfirm);
             AccountingDataList.Add(data);
         }        
 
@@ -150,10 +112,16 @@ namespace AccountingManager.ViewModels
             {
                 if (data.Id == id)
                 {
-                    AccountingDataList.Remove(data);
+                    if (!AccountingDataList.Remove(data))
+                    {
+                        Logger.Logln("AccountingDataList.Remove failed");
+                        return false;
+                    }
+
                     return true;
                 }
             }
+
             return false;
         }
                 
@@ -163,11 +131,44 @@ namespace AccountingManager.ViewModels
             WindowHeight = e.NewSize.Height;
         }
 
-        public ICommand ClickedButtonCommand { get; set; }
-        private async void OnClickButtonCommand()
+        private ColumnOrders mOrders;
+        public ColumnOrders Orders
         {
-            MessageDialog msgDialog = new MessageDialog("Clicked the button");
-            await msgDialog.ShowAsync();
+            get => mOrders;
+        }
+
+        private MariaManager mSqlManager;
+        public MariaManager SqlManager
+        {
+            get => mSqlManager;
+        }
+
+        private List<AccountingData> mAccountingDataList;
+        public List<AccountingData> AccountingDataList
+        {
+            get => mAccountingDataList;
+            set => SetProperty(ref mAccountingDataList, value);
+        }
+
+        private Comparison<AccountingData> mAccountingDataComparision = Comparisions.CompareDate;
+        public Comparison<AccountingData> AccountingDataComparision
+        {
+            get => mAccountingDataComparision;
+            set => mAccountingDataComparision = value;
+        }
+
+        private int mNextId;
+        public int NextId
+        {
+            get => mNextId;
+            set => mNextId = value;
+        }
+
+        private int mSelectedYear = -1;
+        public int SelectedYear
+        {
+            get => mSelectedYear;
+            set => mSelectedYear = value;
         }
 
         public double DefaultWindowWidth
@@ -267,46 +268,13 @@ namespace AccountingManager.ViewModels
             set => SetProperty(ref mCheckColumnWidth, value);
         }
 
-        private List<AccountingData> mAccountingDataList;
-        public List<AccountingData> AccountingDataList
-        {
-            get => mAccountingDataList;
-            set => SetProperty(ref mAccountingDataList, value);
-        }
-
-        private ColumnOrders mOrders;
-        public ColumnOrders Orders
-        {
-            get => mOrders;
-            set => mOrders = value;
-        }
-
-        private Comparison<AccountingData> mAccountingDataComparision = Comparisions.CompareName;
-        public Comparison<AccountingData> AccountingDataComparision
-        {
-            get => mAccountingDataComparision;
-            set => mAccountingDataComparision = value;
-        }
-
-        private string mDisplayedStr;
-        public string DisplayedStr
-        {
-            get => mDisplayedStr;
-            set => mDisplayedStr = value;
-        }
-
-        private int mNextId = 0;
-        public int NextId
-        {
-            get => mNextId;
-            set => mNextId = value;
-        }
-
-        private MariaManager mSqlManager;
-        public MariaManager SqlManager
-        {
-            get => mSqlManager;
-            set => mSqlManager = value;
-        }
+        public int DataTypeTextBlockColumn { get => 0; }
+        public int ClientNameTextBlockColumn { get => 1; }
+        public int DateTextBlockColumn { get => 2; }
+        public int SteelWeightTextBlockColumn { get => 3; }
+        public int SupplyPriceTextBlockColumn { get => 4; }
+        public int TaxAmountTextBlockColumn { get => 5; }
+        public int SumTextBlockColumn { get => 6; }
+        public int DepositConfirmBlockColumn { get => 7; }
     }
 }

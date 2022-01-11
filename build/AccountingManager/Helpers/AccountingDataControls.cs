@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Windows.UI.Xaml.Controls;
@@ -28,10 +29,9 @@ namespace AccountingManager.Helpers
                 InputYear.Items.Add(i);
 
             DateTime localDate = DateTime.Now;
-            
-            string year = localDate.ToString("yy");
 
             // Set SelectedIndex to the current year.
+            string year = localDate.ToString("yy");
             int yearIdx;
             int.TryParse(year, out yearIdx);
             InputYear.SelectedIndex = yearIdx;
@@ -42,52 +42,71 @@ namespace AccountingManager.Helpers
             InputMonth = new ComboBox();
             for (int i = 1; i <= 12; ++i)
                 InputMonth.Items.Add(i);
-            
-            string month = localDate.ToString("MM");
 
             // Set SelectedIndex to the current month.
+            string monthText = localDate.ToString("MM");
             int monthIdx;
-            int.TryParse(month, out monthIdx);            
+            int.TryParse(monthText, out monthIdx);            
             InputMonth.SelectedIndex = monthIdx - 1;
+            InputMonth.SelectionChanged += ComboBox_SelectionChanged;
+
+            //
+            // Generate ...
+            //
+            MonthList = new List<List<int>>();
+
+            for (int month = 1; month <= 12; ++month)
+            {
+                int endDay;
+
+                if (month == 2)
+                {
+                    endDay = 28;
+                }
+                else if (month < 8)
+                {
+                    if (month % 2 == 0)
+                    {
+                        endDay = 30;
+                    }
+                    else
+                    {
+                        endDay = 31;
+                    }
+                }
+                else
+                {
+                    if (month % 2 == 0)
+                    {
+                        endDay = 31;
+                    }
+                    else
+                    {
+                        endDay = 30;
+                    }
+                }
+
+                List<int> dayList = new List<int>();
+
+                for (int i = 1; i <= endDay; ++i)
+                    dayList.Add(i);
+
+                MonthList.Add(dayList);
+            }
 
             //
             // Generate ComboBox for entering a day.
             //
             InputDay = new ComboBox();
-            int endDay;
-            if (monthIdx < 8)
             {
-                if (monthIdx % 2 == 0)
-                {
-                    endDay = 30;
-                }
-                else
-                {
-                    endDay = 31;
-                }
+                List<int> dayList = MonthList[monthIdx - 1];
+                InputDay.ItemsSource = dayList;
             }
-            else
-            {
-                if (monthIdx % 2 == 0)
-                {
-                    endDay = 31;
-                }
-                else
-                {
-                    endDay = 30;
-                }
-            }
-            
-            for (int i = 1; i <= endDay; ++i)
-            {
-                InputDay.Items.Add(i);
-            }
-            
-            string day = localDate.ToString("dd");
 
             // Set SelectedIndex to the current day.
+            string dayText = localDate.ToString("dd");
             int dayIdx;
-            int.TryParse(day, out dayIdx);            
+            int.TryParse(dayText, out dayIdx);            
             InputDay.SelectedIndex = dayIdx - 1;
 
             InputType = new ComboBox();
@@ -102,6 +121,22 @@ namespace AccountingManager.Helpers
         private void TextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(sender is ComboBox)) return;
+
+            ComboBox comboBox = sender as ComboBox;
+            int monthIndex = comboBox.SelectedIndex;
+
+            List<int> dayList = MonthList[monthIndex];
+            int prevIndex = InputDay.SelectedIndex;
+            int count = dayList.Count;
+
+            InputDay.ItemsSource = dayList;
+            InputDay.SelectedIndex = prevIndex >= count ? count -1 : prevIndex;
+
         }
 
         private TextBox mInputName;
@@ -165,6 +200,13 @@ namespace AccountingManager.Helpers
         {
             get => mInputConfirm;
             set => mInputConfirm = value;
+        }
+
+        private List<List<int>> mMonthList;
+        public List<List<int>> MonthList
+        {
+            get => mMonthList;
+            set => mMonthList = value;
         }
     }
 }

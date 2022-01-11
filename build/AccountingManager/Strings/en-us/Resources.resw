@@ -137,4 +137,8 @@
     <value>MonthlyNav</value>
     <comment>Page title for MonthlyNavPage</comment>
   </data>
+  <data name="DateNav_Title.Text" xml:space="preserve">
+    <value>DateNav</value>
+    <comment>Page title for DateNavPage</comment>
+  </data>
 </root>
