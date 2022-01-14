@@ -156,10 +156,9 @@ namespace AccountingManager.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is DetailAccountingDataListPageParams)
+            DetailAccountingDataListPageParams navParams = e.Parameter as DetailAccountingDataListPageParams;
+            if (navParams != null)
             {
-                DetailAccountingDataListPageParams navParams = e.Parameter as DetailAccountingDataListPageParams;
-
                 ViewModel.AccountingDataList_SelectionChagned = navParams.AccountingDataList_SelectionChagned;
 
                 GenerateAccountingDataListBox(navParams);
@@ -170,10 +169,7 @@ namespace AccountingManager.Views
 
         private void AccountingDataListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!(sender is ListBox)) return;
             ListBox listBox = sender as ListBox;
-
-            if (!(listBox.SelectedItem is Grid)) return;
             Grid grid = listBox.SelectedItem as Grid;
 
             string idText = grid.Name;

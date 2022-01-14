@@ -33,7 +33,8 @@ namespace AccountingManager.Helpers
             // Set SelectedIndex to the current month.
             string monthText = localDate.ToString("MM");
             int monthIdx;
-            int.TryParse(monthText, out monthIdx);            
+            int.TryParse(monthText, out monthIdx);
+            
             mInputMonth.SelectedIndex = monthIdx - 1;
             mInputMonth.SelectionChanged += ComboBox_SelectionChanged;
 
@@ -93,9 +94,13 @@ namespace AccountingManager.Helpers
             // Set SelectedIndex to the current day.
             string dayText = localDate.ToString("dd");
             int dayIdx;
-            int.TryParse(dayText, out dayIdx);            
+            int.TryParse(dayText, out dayIdx);
+            
             InputDay.SelectedIndex = dayIdx - 1;
 
+            //
+            //
+            //
             mInputDataType = new ComboBox();
             mInputDataType.Items.Add("매입");
             mInputDataType.Items.Add("매출");
@@ -112,9 +117,8 @@ namespace AccountingManager.Helpers
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!(sender is ComboBox)) return;
-
             ComboBox comboBox = sender as ComboBox;
+
             int monthIndex = comboBox.SelectedIndex;
 
             List<int> dayList = MonthList[monthIndex];

@@ -1,8 +1,9 @@
 ﻿using System;
 using Windows.Storage;
-using Windows.UI.Xaml;
 
 using Prism.Windows.Mvvm;
+
+using AccountingManager.Helpers;
 
 namespace AccountingManager.ViewModels
 {
@@ -13,6 +14,8 @@ namespace AccountingManager.ViewModels
         public void Initialize()
         {
             LoadSettings();
+
+            mSqlManager = new MariaManager();
         }
 
         public void CleanUp()
@@ -40,11 +43,11 @@ namespace AccountingManager.ViewModels
             localSettings.Values["WindowWidth"] = WindowWidth;
             localSettings.Values["WindowHeight"] = WindowHeight;
         }
-                
-        public void OnWindowSizeChanged(Object sender, SizeChangedEventArgs e)
+
+        private MariaManager mSqlManager = null;
+        public MariaManager SqlManager
         {
-            WindowWidth = e.NewSize.Width;
-            WindowHeight = e.NewSize.Height;
+            get => mSqlManager;
         }
 
         public double DefaultWindowWidth { get => 1024; }

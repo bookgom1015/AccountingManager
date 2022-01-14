@@ -1,15 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using AccountingManager.ViewModels;
-
-using Windows.UI.Core.Preview;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Animation;
 
 using AccountingManager.Helpers;
+using AccountingManager.ViewModels;
 
 namespace AccountingManager.Views
 {
@@ -20,44 +15,24 @@ namespace AccountingManager.Views
         public ViewSelectionPage()
         {
             InitializeComponent();
-
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += CleanUp;
-        }
-
-        private async void Initialize()
-        {
-            bool connectionResult = await ViewModel.SqlManager.ConnectToDBAsync("192.168.0.4", 4885, "kbg", "@mDB901901@");
-            if (!connectionResult)
-            {
-                await Logger.ShowAlertDialog("DB 연결 실패");
-                return;
-            }
-
-            bool useResult = await ViewModel.SqlManager.UseDatabaseAsync("Test");
-            if (!useResult)
-            {
-                await Logger.ShowAlertDialog("DB 참조 실패");
-                return;
-            }
-
-            ViewModel.Connected = true;
-        }
-
-        private void CleanUp(Object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
-        {
-            ViewModel.SqlManager.DisconnnectFromDB();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Initialize();
+            ViewSelectionPageParams navParams = e.Parameter as ViewSelectionPageParams;
+            if (navParams != null)
+            {
+                ViewModel.SqlManager = navParams.SqlManager;
+            }
 
             base.OnNavigatedTo(e);
         }
 
         private void AccountingDataViewButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AccountingDataListPage), ViewModel.SqlManager, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+            AccountingDataListPageParams navParams = new AccountingDataListPageParams(ViewModel.SqlManager);
+
+            this.Frame.Navigate(typeof(AccountingDataListPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
         }
 
         private void AccountsReceivableViewButton_Click(object sender, RoutedEventArgs e)

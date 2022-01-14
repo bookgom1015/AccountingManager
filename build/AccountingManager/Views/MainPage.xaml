@@ -24,7 +24,6 @@
                     <Button x:Name="BackButton"
                             Style="{StaticResource NavigationBackButtonNormalStyle}"
                             IsEnabled="{x:Bind ContentFrame.CanGoBack, Mode=OneWay}"
-                            Margin="5, 0, 0, 0"
                             Width="48" Height="33"
                             Click="BackButton_Click" />
                 </Grid>

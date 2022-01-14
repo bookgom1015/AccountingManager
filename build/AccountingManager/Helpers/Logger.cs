@@ -13,8 +13,6 @@ namespace AccountingManager.Helpers
 {
     public class Logger
     {
-
-
         public static async Task StaticInit()
         {
             DateTime localDate = DateTime.Now;

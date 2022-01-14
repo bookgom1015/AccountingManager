@@ -36,18 +36,33 @@ namespace AccountingManager.Views
 
             ViewModel.Initialize();
 
+            await initTask;
+
             //
             // After intialization.
             //
+            Task<bool> connectionTask = ViewModel.SqlManager.ConnectToDBAsync("bookgom.synology.me", 4885, "kbg", "@mDB901901@");
+
             SetWindowSize();
             SetTitleBar();
 
-            await initTask;
+            bool connectionResult = await connectionTask;
+            if (!connectionResult)
+            {
+                await Logger.ShowAlertDialog("DB 연결 실패");
+                return;
+            }
+
+            bool useResult = await ViewModel.SqlManager.UseDatabaseAsync("Test");
+            if (!useResult) await Logger.ShowAlertDialog("DB 참조 실패");
         }
 
         private void CleanUp(Object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
         {
             ViewModel.CleanUp();
+
+            if (ViewModel.SqlManager != null)
+                ViewModel.SqlManager.DisconnnectFromDB();
         }
 
         private void SetWindowSize()
@@ -81,7 +96,7 @@ namespace AccountingManager.Views
 
         private bool TryGoBack(Frame frame)
         {
-            if (!frame.CanGoBack) return false;
+            if (frame == null || !frame.CanGoBack) return false;
 
             frame.GoBack();
 
@@ -90,9 +105,9 @@ namespace AccountingManager.Views
 
         public void CustomTitleBarLayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
-            if (!(sender is CoreApplicationViewTitleBar)) return;
-
             CoreApplicationViewTitleBar titleBar = sender as CoreApplicationViewTitleBar;
+            if (titleBar == null) return;
+
             // Nothing to do right now...
         }
 
@@ -100,7 +115,9 @@ namespace AccountingManager.Views
         {
             await Initialize();
 
-            ContentFrame.Navigate(typeof(ViewSelectionPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+            ViewSelectionPageParams navParams = new ViewSelectionPageParams(ViewModel.SqlManager);
+
+            ContentFrame.Navigate(typeof(ViewSelectionPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
         }
 
         private void RootPage_SizeChanged(object sender, SizeChangedEventArgs e)

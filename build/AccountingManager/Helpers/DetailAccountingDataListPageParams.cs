@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Windows.UI.Xaml;
-
 using AccountingManager.Core.Models;
 using AccountingManager.ViewModels;
 
@@ -11,27 +9,24 @@ namespace AccountingManager.Helpers
 {
     public class DetailAccountingDataListPageParams
     {
-        private bool mReversed;
-        public bool Reversed
+        public DetailAccountingDataListPageParams(bool inReversed, List<AccountingData> inDataList, AccountingDataListViewModel inViewModel, Action<int, string, string, int, int, int, bool, bool> inAction)
         {
-            get => mReversed;
-            set => mReversed = value;
+            mReversed = inReversed;
+            mAccountingDataList = inDataList;
+            mParentViewModel = inViewModel;
+            mAccountingDataList_SelectionChagned = inAction;
         }
+
+        bool mReversed;
+        public bool Reversed { get => mReversed; }
 
         private List<AccountingData> mAccountingDataList;
-        public List<AccountingData> AccountingDataList
-        {
-            get => mAccountingDataList;
-            set => mAccountingDataList = value;
-        }
+        public List<AccountingData> AccountingDataList { get => mAccountingDataList; }
 
         private AccountingDataListViewModel mParentViewModel;
-        public AccountingDataListViewModel ParentViewModel
-        {
-            get => mParentViewModel;
-            set => mParentViewModel = value;
-        }
+        public AccountingDataListViewModel ParentViewModel { get => mParentViewModel; }
 
-        public Action<int, string, string, int, int, int, bool, bool> AccountingDataList_SelectionChagned { get; set; }
+        private Action<int, string, string, int, int, int, bool, bool> mAccountingDataList_SelectionChagned;
+        public Action<int, string, string, int, int, int, bool, bool> AccountingDataList_SelectionChagned { get => mAccountingDataList_SelectionChagned; }
     }
 }

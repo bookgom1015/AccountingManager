@@ -6,7 +6,7 @@ namespace AccountingManager.Core.Models
 {
     public class AccountingData
     {
-        public enum ChangedData
+        public enum QueryKeys
         {
             ENone           = 1 << 0,
             EClientName     = 1 << 1,
@@ -18,72 +18,36 @@ namespace AccountingManager.Core.Models
             EDepositConfirm = 1 << 7
         }
 
-        public AccountingData(int id, string clientName, string date, int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
+        public class QueryValues
         {
-            Id = id;
-            DataType = dataType;
-            ClientName = clientName;
-            Date = date;
-            SteelWeight = steelWeight;
-            SupplyPrice = supplyPrice;
-            TaxAmount = taxAmount;
-            DepositConfirm = depositConfirm;
+            public string   ClientName      { get; set; }
+            public string   Date            { get; set; }
+            public int      SteelWeight     { get; set; }
+            public int      SupplyPrice     { get; set; }
+            public int      TaxAmount       { get; set; }
+            public bool     DataType        { get; set; }
+            public bool     DepositConfirm  { get; set; }
         }
 
-        private bool mDataType;
-        public bool DataType
+        public AccountingData(int id = -1, string clientName = "", string date = "", int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
         {
-            get => mDataType;
-            set => mDataType = value;
+            Id              = id;
+            DataType        = dataType;
+            ClientName      = clientName;
+            Date            = date;
+            SteelWeight     = steelWeight;
+            SupplyPrice     = supplyPrice;
+            TaxAmount       = taxAmount;
+            DepositConfirm  = depositConfirm;
         }
 
-        private string mClientName;
-        public string ClientName
-        {
-            get => mClientName;
-            set => mClientName = value;
-        }
-
-        private string mDate;
-        public string Date
-        {
-            get => mDate;
-            set => mDate = value;
-        }
-
-        private int mSteelWeight;
-        public int SteelWeight
-        {
-            get => mSteelWeight;
-            set => mSteelWeight = value;
-        }
-
-        private int mSupplyPrice;
-        public int SupplyPrice
-        {
-            get => mSupplyPrice;
-            set => mSupplyPrice = value;
-        }
-
-        private int mTaxAmount;
-        public int TaxAmount
-        {
-            get => mTaxAmount;
-            set => mTaxAmount = value;
-        }
-
-        private bool mDepositConfirm;
-        public bool DepositConfirm
-        {
-            get => mDepositConfirm;
-            set => mDepositConfirm = value;
-        }
-
-        private int mId;
-        public int Id
-        {
-            get => mId;
-            set => mId = value;
-        }
+        public int      Id              { get; set; }
+        public string   ClientName      { get; set; }
+        public string   Date            { get; set; }
+        public int      SteelWeight     { get; set; }
+        public int      SupplyPrice     { get; set; }
+        public int      TaxAmount       { get; set; }
+        public bool     DataType        { get; set; }
+        public bool     DepositConfirm  { get; set; }
     }
 }

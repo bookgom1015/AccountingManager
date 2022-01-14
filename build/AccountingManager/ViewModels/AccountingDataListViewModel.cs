@@ -18,7 +18,7 @@ namespace AccountingManager.ViewModels
         {
             LoadSettings();
 
-            mSelectedData = new AccountingData(-1, "", "");
+            mSelectedData = new AccountingData();
         }
 
         public void CleanUp()
@@ -31,33 +31,33 @@ namespace AccountingManager.ViewModels
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             
             Object dataTypeWidthObj = localSettings.Values["DataTypeColumnWidth"];
-            DataTypeColumnWidth = dataTypeWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)dataTypeWidthObj);
+            DataTypeColumnWidth = new GridLength(dataTypeWidthObj == null ? DefaultColumnWidth : (double)dataTypeWidthObj);
 
             Object clientNameWidthObj = localSettings.Values["ClientNameColumnWidth"];
-            ClientNameColumnWidth = clientNameWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)clientNameWidthObj);
+            ClientNameColumnWidth = new GridLength(clientNameWidthObj == null ? DefaultColumnWidth : (double)clientNameWidthObj);
 
             Object dateWidthObj = localSettings.Values["DateColumnWidth"];
-            DateColumnWidth = dateWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)dateWidthObj);
+            DateColumnWidth = new GridLength(dateWidthObj == null ? DefaultColumnWidth : (double)dateWidthObj);
 
             Object steelWeightWidthObj = localSettings.Values["SteelWeightColumnWidth"];
-            SteelWeightColumnWidth = steelWeightWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)steelWeightWidthObj);
+            SteelWeightColumnWidth = new GridLength(steelWeightWidthObj == null ? DefaultColumnWidth : (double)steelWeightWidthObj);
 
             Object supplyPriceWidthObj = localSettings.Values["SupplyPriceColumnWidth"];
-            SupplyPriceColumnWidth = supplyPriceWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)supplyPriceWidthObj);
+            SupplyPriceColumnWidth = new GridLength(supplyPriceWidthObj == null ? DefaultColumnWidth : (double)supplyPriceWidthObj);
 
             Object taxAmountWidthObj = localSettings.Values["TaxAmountColumnWidth"];
-            TaxAmountColumnWidth = taxAmountWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)taxAmountWidthObj);
+            TaxAmountColumnWidth = new GridLength(taxAmountWidthObj == null ? DefaultColumnWidth : (double)taxAmountWidthObj);
 
             Object sumWidthObj = localSettings.Values["SumColumnWidth"];
-            SumColumnWidth = sumWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)sumWidthObj);
+            SumColumnWidth = new GridLength(sumWidthObj == null ? DefaultColumnWidth : (double)sumWidthObj);
 
             Object depositConfirmWidthObj = localSettings.Values["DepositConfirmColumnWidth"];
-            DepositConfirmColumnWidth = depositConfirmWidthObj == null ? new GridLength(DefaultColumnWidth) : new GridLength((double)depositConfirmWidthObj);
+            DepositConfirmColumnWidth = new GridLength(depositConfirmWidthObj == null ? DefaultColumnWidth : (double)depositConfirmWidthObj);
         }
 
         private void SaveSettings()
         {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values["DataTypeColumnWidth"] = DataTypeColumnWidth.Value;
             localSettings.Values["ClientNameColumnWidth"] = ClientNameColumnWidth.Value;
             localSettings.Values["DateColumnWidth"] = DateColumnWidth.Value;
@@ -68,12 +68,7 @@ namespace AccountingManager.ViewModels
             localSettings.Values["DepositConfirmColumnWidth"] = DepositConfirmColumnWidth.Value;
         }
 
-        private MariaManager mSqlManager;
-        public MariaManager SqlManager
-        {
-            get => mSqlManager;
-            set => mSqlManager = value;
-        }
+        public MariaManager SqlManager { get; set; }
 
         private double DefaultColumnWidth { get => 110; }
         public double DefaultMinColumnWidth { get => 100; }
@@ -134,68 +129,16 @@ namespace AccountingManager.ViewModels
             set => SetProperty(ref mDepositConfirmColumnWidth, value);
         }
 
-        private bool mDataTypeOrder;
-        public bool DataTypeOrder
-        {
-            get => mDataTypeOrder;
-            set => mDataTypeOrder = value;
-        }
+        public bool DataTypeOrder { get; set; }
+        public bool ClientNameOrder { get; set; }
+        public bool DateOrder { get; set; }
+        public bool SteelWeightOrder { get; set; }
+        public bool SupplyPriceOrder { get; set; }
+        public bool TaxAmountOrder { get; set; }
+        public bool SumOrder { get; set; }
+        public bool DepositConfirmOrder { get; set; }
 
-        private bool mClientNameOrder;
-        public bool ClientNameOrder
-        {
-            get => mClientNameOrder;
-            set => mClientNameOrder = value;
-        }
-
-        private bool mDateOrder;
-        public bool DateOrder
-        {
-            get => mDateOrder;
-            set => mDateOrder = value;
-        }
-
-        private bool mSteelWeightOrder;
-        public bool SteelWeightOrder
-        {
-            get => mSteelWeightOrder;
-            set => mSteelWeightOrder = value;
-        }
-
-        private bool mSupplyPriceOrder;
-        public bool SupplyPriceOrder
-        {
-            get => mSupplyPriceOrder;
-            set => mSupplyPriceOrder = value;
-        }
-
-        private bool mTaxAmountOrder;
-        public bool TaxAmountOrder
-        {
-            get => mTaxAmountOrder;
-            set => mTaxAmountOrder = value;
-        }
-
-        private bool mSumOrder;
-        public bool SumOrder
-        {
-            get => mSumOrder;
-            set => mSumOrder = value;
-        }
-
-        private bool mDepositConfirmOrder;
-        public bool DepositConfirmOrder
-        {
-            get => mDepositConfirmOrder;
-            set => mDepositConfirmOrder = value;
-        }
-
-        private string mSelectedYearText;
-        public string SelectedYearText
-        {
-            get => mSelectedYearText;
-            set => mSelectedYearText = value;
-        }
+        public string SelectedYearText { get; set; }
 
         private bool mYearSelected = false;
         public bool YearSelected

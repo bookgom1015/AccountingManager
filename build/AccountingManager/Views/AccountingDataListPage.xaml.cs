@@ -22,67 +22,18 @@ namespace AccountingManager.Views
             InitializeComponent();
         }
 
-        private async void NavigateToYearlyNavPage()
-        {
-            List<String> tableNameList = new List<string>();
-
-            bool gettingNamesResult = await ViewModel.SqlManager.GetTableNamesLikeAsync("Test", "year%", tableNameList);
-            if (gettingNamesResult)
-            {
-                YearlyNavPageParams navParams = new YearlyNavPageParams();
-                navParams.YearList_SelectionChanged = this.YearList_SelectionChanged;
-
-                foreach (string tableName in tableNameList)
-                {
-                    string yearText = tableName.Substring(5, 4);
-
-                    int year;
-                    int.TryParse(yearText, out year);
-
-                    navParams.YearList.Add(year);
-                }
-
-                YearlyNavFrame.Navigate(typeof(YearlyNavPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
-            }
-        }
-
-        private void NavigateToAccountingDetailDataListPageNoParams()
-        {
-            ViewModel.YearSelected = false;
-            ViewModel.SelectedData.Id = -1;
-
-            DetailListFrame.Navigate(typeof(DetailAccountingDataListPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
-        }
-
-        private async Task NavigateToAccountingDetailDataListPage(string inYearText)
-        {
-            ViewModel.SelectedData.Id = -1;
-
-            string talbeName = "year_" + inYearText;
-            List<AccountingData> dataList = new List<AccountingData>();
-
-            bool gettingResult = await ViewModel.SqlManager.GetDataAsync(talbeName, dataList);
-            if (!gettingResult)
-            {
-                await Logger.ShowAlertDialog("DB 데이터 불러오기 실패");
-                return;
-            }
-
-            DetailAccountingDataListPageParams navParams = new DetailAccountingDataListPageParams();
-            navParams.AccountingDataList = dataList;
-            navParams.ParentViewModel = ViewModel;
-            navParams.AccountingDataList_SelectionChagned = this.AccountingDataList_SelecitonChanged;
-
-            DetailListFrame.Navigate(typeof(DetailAccountingDataListPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
-        }
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            // Initialization must be called first
             ViewModel.Initialize();
 
-            if (e.Parameter is MariaManager)
+            //
+            // After intialization.
+            //
+            AccountingDataListPageParams navParams = e.Parameter as AccountingDataListPageParams;
+            if (navParams != null)
             {
-                ViewModel.SqlManager = e.Parameter as MariaManager;
+                ViewModel.SqlManager = navParams.SqlManager;
 
                 NavigateToYearlyNavPage();
             }
@@ -97,20 +48,78 @@ namespace AccountingManager.Views
             base.OnNavigatedFrom(e);
         }
 
+        private async void NavigateToYearlyNavPage()
+        {
+            List<String> tableNameList = new List<string>();
+
+            bool gettingNamesResult = await ViewModel.SqlManager.GetTableNamesLikeAsync("Test", "year%", tableNameList);
+            if (gettingNamesResult)
+            {
+                List<int> yearList = new List<int>();
+
+                foreach (string tableName in tableNameList)
+                {
+                    string yearText = tableName.Substring(5, 4);
+
+                    int year;
+                    int.TryParse(yearText, out year);
+
+                    yearList.Add(year);
+                }
+
+                YearlyNavPageParams navParams = new YearlyNavPageParams(yearList, this.YearList_SelectionChanged);
+
+                YearlyNavFrame.Navigate(typeof(YearlyNavPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+            }
+        }
+
+        private void NavigateToAccountingDetailDataListPageWithNoParams()
+        {
+            InputTextBox.Text = "";
+            ViewModel.YearSelected = false;
+            ViewModel.SelectedData.Id = -1;
+
+            DetailListFrame.Navigate(typeof(DetailAccountingDataListPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+        }
+
+        private async Task NavigateToAccountingDetailDataListPageUsingYear()
+        {
+            InputTextBox.Text = "";
+            ViewModel.SelectedData.Id = -1;
+
+            string talbeName = "year_" + ViewModel.SelectedYearText;
+            List<AccountingData> dataList = new List<AccountingData>();
+
+            bool gettingResult = await ViewModel.SqlManager.GetAccountingDataAsync(talbeName, AccountingData.QueryKeys.ENone, null, dataList);
+            if (!gettingResult)
+            {
+                await Logger.ShowAlertDialog("DB 데이터 불러오기 실패");
+                return;
+            }
+
+            DetailAccountingDataListPageParams navParams = new DetailAccountingDataListPageParams(false, dataList, ViewModel, this.AccountingDataList_SelecitonChanged);
+
+            DetailListFrame.Navigate(typeof(DetailAccountingDataListPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+        }
+
+        private void NavigateToAccountingDetailDataListPageUsingDataList(List<AccountingData> inDataList)
+        {
+            DetailAccountingDataListPageParams navParams = new DetailAccountingDataListPageParams(false, inDataList, ViewModel, this.AccountingDataList_SelecitonChanged);
+
+            DetailListFrame.Navigate(typeof(DetailAccountingDataListPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+        }
+
         public async void YearList_SelectionChanged(string inYearText)
         {
-            InputText.Text = inYearText;
+            ViewModel.SelectedYearText = inYearText;
 
-            await NavigateToAccountingDetailDataListPage(inYearText);
+            await NavigateToAccountingDetailDataListPageUsingYear();
 
             ViewModel.YearSelected = true;
-            ViewModel.SelectedYearText = inYearText;
         }
 
         public void AccountingDataList_SelecitonChanged(int inId, string inClientName, string inDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
         {
-            InputText.Text = inId + " " + inClientName + " " + inDate;
-
             ViewModel.SelectedData.Id = inId;
             ViewModel.SelectedData.ClientName = inClientName;
             ViewModel.SelectedData.Date = inDate;
@@ -121,28 +130,19 @@ namespace AccountingManager.Views
             ViewModel.SelectedData.DepositConfirm = inDepositConfirm;
         }
 
-        public async Task AddDataToDB(string inTableName, int inId, string inClientName, string inDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
-        {
-            bool containResult = await ViewModel.SqlManager.DatabaseContainsAsync("Test", inTableName);
-            if (!containResult)
-            {
-                bool creationResult = await ViewModel.SqlManager.CreateTableAsync(inTableName);
-                if (!creationResult)
-                {
-                    await Logger.ShowAlertDialog("테이블 생성 실패");
-                    return;
-                }
-            }
-
-            bool insertionResult = await ViewModel.SqlManager.InsertDataAsync(inTableName, inId, inClientName, inDate, inSteelWeight, inSupplyPrice, inTaxAmount, inDataType, inDepositConfirm);
-            if (!insertionResult) await Logger.ShowAlertDialog("자료 생성 실패");
-        }
-
-        public async Task EditDataInDB(AccountingData.ChangedData inChangedData)
+        public async Task AddDataToDB(int inId, string inClientName, string inDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
         {
             string tableName = "year_" + ViewModel.SelectedYearText;
 
-            bool updateResult = await ViewModel.SqlManager.UpdateDataAsync(tableName, ViewModel.SelectedData, inChangedData);
+            bool insertionResult = await ViewModel.SqlManager.InsertDataAsync(tableName, inId, inClientName, inDate, inSteelWeight, inSupplyPrice, inTaxAmount, inDataType, inDepositConfirm);
+            if (!insertionResult) await Logger.ShowAlertDialog("자료 생성 실패");
+        }
+
+        public async Task EditDataInDB(AccountingData.QueryKeys inQueryKeys)
+        {
+            string tableName = "year_" + ViewModel.SelectedYearText;
+
+            bool updateResult = await ViewModel.SqlManager.UpdateDataAsync(tableName, ViewModel.SelectedData, inQueryKeys);
             if (!updateResult) await Logger.ShowAlertDialog("자료 수정 실패");
         }
 
@@ -217,13 +217,13 @@ namespace AccountingManager.Views
                 bool exists = await ViewModel.SqlManager.DatabaseContainsAsync("Test", tableName);
                 if (exists)
                 {
-                    await Logger.ShowAlertDialog("이미 존재하고 있는 연도입니다.");
+                    await Logger.ShowAlertDialog("중복된 연도입니다.");
                     return;
                 }
                 
                 Task creationTask =  ViewModel.SqlManager.CreateTableAsync(tableName);
 
-                NavigateToAccountingDetailDataListPageNoParams();
+                NavigateToAccountingDetailDataListPageWithNoParams();
 
                 await creationTask;
 
@@ -237,9 +237,9 @@ namespace AccountingManager.Views
             AddEditDialogControls controls = new AddEditDialogControls();
 
             AddEditDataDialog dialog = new AddEditDataDialog(controls);
-            dialog.Title = "매출입 입력";
-            dialog.PrimaryButtonText = "입력";
-            dialog.SecondaryButtonText = "취소";
+            dialog.Title                = "매출입 입력";
+            dialog.PrimaryButtonText    = "입력";
+            dialog.SecondaryButtonText  = "취소";
 
             ContentDialogResult result = await dialog.ShowAsync();
 
@@ -269,12 +269,12 @@ namespace AccountingManager.Views
 
                 int nextId = 0;
 
-                bool notEmpty = await ViewModel.SqlManager.TableNotEmptyAsync(tableName);
-                if (notEmpty) nextId = await ViewModel.SqlManager.GetLastIdInTableAsync(tableName) + 1;
+                bool exists = await ViewModel.SqlManager.TableContainsAsync(tableName, AccountingData.QueryKeys.ENone, null);
+                if (exists) nextId = await ViewModel.SqlManager.GetLastIdInTableAsync(tableName) + 1;
 
-                await AddDataToDB(tableName, nextId, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
+                await AddDataToDB(nextId, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
 
-                await NavigateToAccountingDetailDataListPage(ViewModel.SelectedYearText);
+                await NavigateToAccountingDetailDataListPageUsingYear();
             }
         }
 
@@ -299,22 +299,22 @@ namespace AccountingManager.Views
             // Generate the controls that is diplayed in the ContentDialog.
             //
             AddEditDialogControls controls = new AddEditDialogControls();
-            controls.InputClientName.Text = ViewModel.SelectedData.ClientName;
-            controls.InputDay.SelectedIndex = day - 1;
-            controls.InputMonth.SelectedIndex = month - 1;
-            controls.InputSteelWeight.Text = ViewModel.SelectedData.SteelWeight.ToString();
-            controls.InputSupplyPrice.Text = ViewModel.SelectedData.SupplyPrice.ToString();
-            controls.InputTaxAmount.Text = ViewModel.SelectedData.TaxAmount.ToString();
-            controls.InputDataType.SelectedIndex = ViewModel.SelectedData.DataType ? 0 : 1;
-            controls.InputDepositConfirm.IsChecked = ViewModel.SelectedData.DepositConfirm;
+            controls.InputClientName.Text           = ViewModel.SelectedData.ClientName;
+            controls.InputDay.SelectedIndex         = day - 1;
+            controls.InputMonth.SelectedIndex       = month - 1;
+            controls.InputSteelWeight.Text          = ViewModel.SelectedData.SteelWeight.ToString();
+            controls.InputSupplyPrice.Text          = ViewModel.SelectedData.SupplyPrice.ToString();
+            controls.InputTaxAmount.Text            = ViewModel.SelectedData.TaxAmount.ToString();
+            controls.InputDataType.SelectedIndex    = ViewModel.SelectedData.DataType ? 0 : 1;
+            controls.InputDepositConfirm.IsChecked  = ViewModel.SelectedData.DepositConfirm;
 
             //
             // Pop up ContentDialog.
             //
             AddEditDataDialog dialog = new AddEditDataDialog(controls);
-            dialog.Title = "매출입 수정";
-            dialog.PrimaryButtonText = "수정";
-            dialog.SecondaryButtonText = "취소";
+            dialog.Title                = "매출입 수정";
+            dialog.PrimaryButtonText    = "수정";
+            dialog.SecondaryButtonText  = "취소";
 
             ContentDialogResult result = await dialog.ShowAsync();
 
@@ -347,47 +347,47 @@ namespace AccountingManager.Views
                 //
                 // Specify the changed data.
                 //
-                AccountingData.ChangedData changedData = AccountingData.ChangedData.ENone;
+                AccountingData.QueryKeys queryKeys = AccountingData.QueryKeys.ENone;
 
                 if (ViewModel.SelectedData.ClientName != controls.InputClientName.Text)
                 {
-                    changedData |= AccountingData.ChangedData.EClientName;
+                    queryKeys |= AccountingData.QueryKeys.EClientName;
                     ViewModel.SelectedData.ClientName = controls.InputClientName.Text;
                 }
                 if (ViewModel.SelectedData.Date != date)
                 {
-                    changedData |= AccountingData.ChangedData.EDate;
+                    queryKeys |= AccountingData.QueryKeys.EDate;
                     ViewModel.SelectedData.Date = date;
                 }
                 if (ViewModel.SelectedData.SteelWeight != steelWeight)
                 {
-                    changedData |= AccountingData.ChangedData.ESteelWeight;
+                    queryKeys |= AccountingData.QueryKeys.ESteelWeight;
                     ViewModel.SelectedData.SteelWeight = steelWeight;
                 }
                 if (ViewModel.SelectedData.SupplyPrice != supplyPrice)
                 {
-                    changedData |= AccountingData.ChangedData.ESupplyPrice;
+                    queryKeys |= AccountingData.QueryKeys.ESupplyPrice;
                     ViewModel.SelectedData.SupplyPrice = supplyPrice;
                 }
                 if (ViewModel.SelectedData.TaxAmount != taxAmount)
                 {
-                    changedData |= AccountingData.ChangedData.ETaxAmount;
+                    queryKeys |= AccountingData.QueryKeys.ETaxAmount;
                     ViewModel.SelectedData.TaxAmount = taxAmount;
                 }
                 if (ViewModel.SelectedData.DataType != dataType)
                 {
-                    changedData |= AccountingData.ChangedData.EDataType;
+                    queryKeys |= AccountingData.QueryKeys.EDataType;
                     ViewModel.SelectedData.DataType = dataType;
                 }
                 if (ViewModel.SelectedData.DepositConfirm != confirmed)
                 {
-                    changedData |= AccountingData.ChangedData.EDepositConfirm;
+                    queryKeys |= AccountingData.QueryKeys.EDepositConfirm;
                     ViewModel.SelectedData.DepositConfirm = confirmed;
                 }
 
-                await EditDataInDB(changedData);
+                await EditDataInDB(queryKeys);
 
-                await NavigateToAccountingDetailDataListPage(ViewModel.SelectedYearText);
+                await NavigateToAccountingDetailDataListPageUsingYear();
             }
         }
 
@@ -401,7 +401,38 @@ namespace AccountingManager.Views
 
             await DeleteDataInDB();
 
-            await NavigateToAccountingDetailDataListPage(ViewModel.SelectedYearText);
+            await NavigateToAccountingDetailDataListPageUsingYear();
+        }
+
+        private async void SearchButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (InputTextBox.Text.Length < 1)
+            {
+                await Logger.ShowAlertDialog("검색어를 입력해주십시오.");
+                return;
+            }
+
+            string tableName = "year_" + ViewModel.SelectedYearText;
+
+            AccountingData.QueryValues values = new AccountingData.QueryValues();
+            values.ClientName = InputTextBox.Text;
+
+            bool contains = await ViewModel.SqlManager.TableContainsAsync(tableName, AccountingData.QueryKeys.EClientName, values);
+            if (!contains)
+            {
+                await Logger.ShowAlertDialog("검색된 결과가 없습니다.");
+                return;
+            }
+
+            List<AccountingData> dataList = new List<AccountingData>();
+            bool gettingResult = await ViewModel.SqlManager.GetAccountingDataAsync(tableName, AccountingData.QueryKeys.EClientName, values, dataList);
+            if (!gettingResult)
+            {
+                await Logger.ShowAlertDialog("DB 데이터 불러오기 실패");
+                return;
+            }
+
+            NavigateToAccountingDetailDataListPageUsingDataList(dataList);
         }
     }
 }

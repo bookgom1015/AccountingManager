@@ -176,16 +176,6 @@ namespace AccountingManager.Helpers
             return false;
         }
 
-        public async Task<bool> CreateTableAsync(string inTableName)
-        {
-            string createCommandText = "CREATE TABLE " + inTableName + "(" + TableParameters + ") ENGINE=" + StorageEngine + ";";
-
-            bool creationResult = await ExecuteNonQueryAsync(createCommandText);
-            if (!creationResult) return false;
-
-            return true;
-        }
-
         public async Task<bool> GetTableNamesLikeAsync(string inDatabaseName, string inLike, List<string> outTableNameList, [CallerMemberName] string inMemberName = "", [CallerFilePath] string inFilePath = "", [CallerLineNumber] int inLineNumber = 0)
         {
             string showCommandText = "SHOW TABLES LIKE \'" + inLike + "\';";
@@ -212,6 +202,198 @@ namespace AccountingManager.Helpers
             catch (Exception e)
             {
                 await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; Exception: " + e.Message + "; Command: \'" + showCommandText + "\' failed;");
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> CreateTableAsync(string inTableName)
+        {
+            string createCommandText = "CREATE TABLE " + inTableName + "(" + TableParameters + ") ENGINE=" + StorageEngine + ";";
+
+            bool creationResult = await ExecuteNonQueryAsync(createCommandText);
+            if (!creationResult) return false;
+
+            return true;
+        }
+
+        public async Task<bool> TableContainsAsync(string inTableName, AccountingData.QueryKeys inQueryKeys, AccountingData.QueryValues inQueryValues, [CallerMemberName] string inMemberName = "", [CallerFilePath] string inFilePath = "", [CallerLineNumber] int inLineNumber = 0)
+        {
+            StringBuilder selectCommandBuilder = new StringBuilder();
+
+            selectCommandBuilder.Append("SELECT ");
+
+            StringBuilder existsBuilder = new StringBuilder();
+            existsBuilder.Append("EXISTS (SELECT 1 FROM ");
+            existsBuilder.Append(inTableName);
+            existsBuilder.Append(" WHERE deleted=0 AND");
+
+            if ((inQueryKeys & AccountingData.QueryKeys.EClientName) != 0)
+            {
+                existsBuilder.Append(" client_name LIKE \'%");
+                existsBuilder.Append(inQueryValues.ClientName);
+                existsBuilder.Append("%\' AND"); ;
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.EDate) != 0)
+            {
+                existsBuilder.Append(" date=\'");
+                existsBuilder.Append(inQueryValues.Date);
+                existsBuilder.Append("\' AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.ESteelWeight) != 0)
+            {
+                existsBuilder.Append(" steel_weight=");
+                existsBuilder.Append(inQueryValues.SteelWeight);
+                existsBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.ESupplyPrice) != 0)
+            {
+                existsBuilder.Append(" supply_price=");
+                existsBuilder.Append(inQueryValues.SupplyPrice);
+                existsBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.ETaxAmount) != 0)
+            {
+                existsBuilder.Append(" tax_amount=");
+                existsBuilder.Append(inQueryValues.TaxAmount);
+                existsBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.EDataType) != 0)
+            {
+                existsBuilder.Append(" data_type=");
+                existsBuilder.Append(inQueryValues.DataType ? 1 : 0);
+                existsBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.EDepositConfirm) != 0)
+            {
+                existsBuilder.Append(" deposit_confirm=");
+                existsBuilder.Append(inQueryValues.DepositConfirm ? 1 : 0);
+                existsBuilder.Append(" AND");
+            }
+
+            existsBuilder.Remove(existsBuilder.Length - 4, 4);
+            existsBuilder.Append(")");
+
+            string existsCommandText = existsBuilder.ToString();
+
+            selectCommandBuilder.Append(existsCommandText);
+            selectCommandBuilder.Append(";");
+
+            string selectCommandText = selectCommandBuilder.ToString();
+
+            try
+            {
+                MySqlCommand selectCommand = new MySqlCommand(selectCommandText, mSqlConnection);
+                DbDataReader dataInTable = await selectCommand.ExecuteReaderAsync();
+
+                dataInTable.Read();
+
+                int exists = (int)(long)dataInTable[existsCommandText];
+
+                dataInTable.Close();
+
+                if (exists == 1) return true;
+            }
+            catch (MySqlException e)
+            {
+                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; MySqlException: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
+            }
+            catch (Exception e)
+            {
+                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; Exception: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
+            }
+
+            return false;
+        }
+
+        public async Task<bool> GetAccountingDataAsync(string inTableName, AccountingData.QueryKeys inQueryKeys, AccountingData.QueryValues inQueryValues, List<AccountingData> outDataList, [CallerMemberName] string inMemberName = "", [CallerFilePath] string inFilePath = "", [CallerLineNumber] int inLineNumber = 0)
+        {
+            StringBuilder commandBuilder = new StringBuilder();
+
+            commandBuilder.Append("SELECT * FROM ");
+            commandBuilder.Append(inTableName);
+            commandBuilder.Append(" WHERE deleted=0 AND");
+
+            if ((inQueryKeys & AccountingData.QueryKeys.EClientName) != 0)
+            {
+                commandBuilder.Append(" client_name LIKE \'%");
+                commandBuilder.Append(inQueryValues.ClientName);
+                commandBuilder.Append("%\' AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.EDate) != 0)
+            {
+                commandBuilder.Append(" date=\'");
+                commandBuilder.Append(inQueryValues.Date);
+                commandBuilder.Append("\' AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.ESteelWeight) != 0)
+            {
+                commandBuilder.Append(" steel_weight=");
+                commandBuilder.Append(inQueryValues.SteelWeight);
+                commandBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.ESupplyPrice) != 0)
+            {
+                commandBuilder.Append(" supply_price=");
+                commandBuilder.Append(inQueryValues.SupplyPrice);
+                commandBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.ETaxAmount) != 0)
+            {
+                commandBuilder.Append(" tax_amount=");
+                commandBuilder.Append(inQueryValues.TaxAmount);
+                commandBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.EDataType) != 0)
+            {
+                commandBuilder.Append(" data_type=");
+                commandBuilder.Append(inQueryValues.DataType ? 1 : 0);
+                commandBuilder.Append(" AND");
+            }
+            if ((inQueryKeys & AccountingData.QueryKeys.EDepositConfirm) != 0)
+            {
+                commandBuilder.Append(" deposit_confirm=");
+                commandBuilder.Append(inQueryValues.DepositConfirm ? 1 : 0);
+                commandBuilder.Append(" AND");
+            }
+
+            commandBuilder.Remove(commandBuilder.Length - 4, 4);
+            commandBuilder.Append(";");
+
+            string selectCommandText = commandBuilder.ToString();
+
+            try
+            {
+                MySqlCommand selectCommand = new MySqlCommand(selectCommandText, mSqlConnection);
+                DbDataReader dataInTable = await selectCommand.ExecuteReaderAsync();
+
+                while (dataInTable.Read())
+                {
+                    int id = (int)dataInTable["id"];
+                    string clientName = dataInTable["client_name"] as string;
+                    string date = dataInTable["date"] as string;
+                    int steelWeight = (int)dataInTable["steel_weight"];
+                    int supplyPrice = (int)dataInTable["supply_price"];
+                    int taxAmount = (int)dataInTable["tax_amount"];
+                    bool dataType = (bool)dataInTable["data_type"];
+                    bool depositConfirm = (bool)dataInTable["deposit_confirm"];
+
+                    AccountingData data = new AccountingData(id, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
+
+                    outDataList.Add(data);
+                }
+
+                dataInTable.Close();
+            }
+            catch (MySqlException e)
+            {
+                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; MySqlException: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
+                return false;
+            }
+            catch (Exception e)
+            {
+                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; Exception: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
                 return false;
             }
 
@@ -245,76 +427,6 @@ namespace AccountingManager.Helpers
             }
 
             return -1;
-        }
-
-        public async Task<bool> TableNotEmptyAsync(string inTableName, [CallerMemberName] string inMemberName = "", [CallerFilePath] string inFilePath = "", [CallerLineNumber] int inLineNumber = 0)
-        {
-            string selectCommandText = "SELECT EXISTS (SELECT 1 FROM " + inTableName + " WHERE deleted=0);";
-
-            try
-            {
-                MySqlCommand selectCommand = new MySqlCommand(selectCommandText, mSqlConnection);
-                DbDataReader dataInTable = await selectCommand.ExecuteReaderAsync();
-
-                dataInTable.Read();
-
-                int exists = (int)(long)dataInTable["EXISTS (SELECT 1 FROM " + inTableName + " WHERE deleted=0)"];
-
-                dataInTable.Close();
-
-                if (exists == 1) return true;
-            }
-            catch (MySqlException e)
-            {
-                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; MySqlException: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
-            }
-            catch (Exception e)
-            {
-                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; Exception: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
-            }
-
-            return false;
-        }
-        
-        public async Task<bool> GetDataAsync(string inTableame, List<AccountingData> refDataList, [CallerMemberName] string inMemberName = "", [CallerFilePath] string inFilePath = "", [CallerLineNumber] int inLineNumber = 0)
-        {
-            string selectCommandText = "SELECT * FROM " + inTableame + " WHERE deleted = 0;";
-
-            try
-            {
-                MySqlCommand selectCommand = new MySqlCommand(selectCommandText, mSqlConnection);
-                DbDataReader dataInTable = await selectCommand.ExecuteReaderAsync();
-                
-                while (dataInTable.Read())
-                {
-                    int id = (int)dataInTable["id"];
-                    string clientName = dataInTable["client_name"] as string;
-                    string date = dataInTable["date"] as string;
-                    int steelWeight = (int)dataInTable["steel_weight"];
-                    int supplyPrice = (int)dataInTable["supply_price"];
-                    int taxAmount = (int)dataInTable["tax_amount"];
-                    bool dataType = (bool)dataInTable["data_type"];
-                    bool depositConfirm = (bool)dataInTable["deposit_confirm"];
-
-                    AccountingData data = new AccountingData(id, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
-
-                    refDataList.Add(data);
-                }
-
-                dataInTable.Close();
-            }
-            catch (MySqlException e)
-            {
-                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; MySqlException: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
-                return false;
-            }
-            catch (Exception e)
-            {
-                await Logger.Logln("File Path: " + inFilePath + "; Line Number: " + inLineNumber + "; Exception: " + e.Message + "; Command: \'" + selectCommandText + "\' failed;");
-                return false;
-            }
-
-            return true;
         }
 
         public async Task<bool> GetDistinctDateDataAsync(string inTableName, List<string> outDateList, [CallerMemberName] string inMemberName = "", [CallerFilePath] string inFilePath = "", [CallerLineNumber] int inLineNumber = 0)
@@ -363,7 +475,7 @@ namespace AccountingManager.Helpers
             return true;
         }
 
-        public async Task<bool> UpdateDataAsync(string inTableName, AccountingData inData, AccountingData.ChangedData inChangedData)
+        public async Task<bool> UpdateDataAsync(string inTableName, AccountingData inData, AccountingData.QueryKeys inQueryKeys)
         {
             StringBuilder updateCommandBuilder = new StringBuilder();
             updateCommandBuilder.Append("UPDATE " + inTableName + " SET ");
@@ -371,13 +483,13 @@ namespace AccountingManager.Helpers
             int dataType = inData.DataType ? 1 : 0;
             int depositConfirm = inData.DepositConfirm ? 1 : 0;
 
-            if ((inChangedData & AccountingData.ChangedData.EClientName) != 0) updateCommandBuilder.Append("client_name=\'" + inData.ClientName + "\', ");
-            if ((inChangedData & AccountingData.ChangedData.EDate) != 0) updateCommandBuilder.Append("date=\'" + inData.Date + "\', ");
-            if ((inChangedData & AccountingData.ChangedData.ESteelWeight) != 0) updateCommandBuilder.Append("steel_weight=" + inData.SteelWeight + ", ");
-            if ((inChangedData & AccountingData.ChangedData.ESupplyPrice) != 0) updateCommandBuilder.Append("supply_price=" + inData.SupplyPrice + ", ");
-            if ((inChangedData & AccountingData.ChangedData.ETaxAmount) != 0) updateCommandBuilder.Append("tax_amount=" + inData.TaxAmount + ", ");
-            if ((inChangedData & AccountingData.ChangedData.EDataType) != 0) updateCommandBuilder.Append("data_type=" + dataType + ", ");
-            if ((inChangedData & AccountingData.ChangedData.EDepositConfirm) != 0) updateCommandBuilder.Append("deposit_confirm=" + depositConfirm + ", ");
+            if ((inQueryKeys & AccountingData.QueryKeys.EClientName) != 0) updateCommandBuilder.Append("client_name=\'" + inData.ClientName + "\', ");
+            if ((inQueryKeys & AccountingData.QueryKeys.EDate) != 0) updateCommandBuilder.Append("date=\'" + inData.Date + "\', ");
+            if ((inQueryKeys & AccountingData.QueryKeys.ESteelWeight) != 0) updateCommandBuilder.Append("steel_weight=" + inData.SteelWeight + ", ");
+            if ((inQueryKeys & AccountingData.QueryKeys.ESupplyPrice) != 0) updateCommandBuilder.Append("supply_price=" + inData.SupplyPrice + ", ");
+            if ((inQueryKeys & AccountingData.QueryKeys.ETaxAmount) != 0) updateCommandBuilder.Append("tax_amount=" + inData.TaxAmount + ", ");
+            if ((inQueryKeys & AccountingData.QueryKeys.EDataType) != 0) updateCommandBuilder.Append("data_type=" + dataType + ", ");
+            if ((inQueryKeys & AccountingData.QueryKeys.EDepositConfirm) != 0) updateCommandBuilder.Append("deposit_confirm=" + depositConfirm + ", ");
 
             updateCommandBuilder.Remove(updateCommandBuilder.Length - 2, 2);
             updateCommandBuilder.Append(" WHERE id=" + inData.Id + ";");

@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Windows.UI.Xaml.Controls;
-
 namespace AccountingManager.Helpers
 {
     public class YearlyNavPageParams
     {
-        public YearlyNavPageParams()
+        public YearlyNavPageParams(List<int> inList, Action<string> inAction)
         {
-            mYearList = new List<int>();
+            mYearList = inList;
+            mYearList_SelectionChanged = inAction;
         }
 
         private List<int> mYearList;
-        public List<int> YearList
-        {
-            get => mYearList;
-        }
+        public List<int> YearList { get => mYearList; }
 
-        public Action<string> YearList_SelectionChanged { get; set; }
+        private Action<string> mYearList_SelectionChanged;
+        public Action<string> YearList_SelectionChanged { get => mYearList_SelectionChanged; }
     }
 }
