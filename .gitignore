@@ -1,14 +1,18 @@
-# ingore all binary files
-/bin
 
 # ignore binary files and subdirectories in 'build/[ProjectName]/bin'
-build/**/bin/**
-build/**/bin/*.*
+vs2017/build/**/bin/**
+vs2017/build/**/bin/*.*
+vs2019/build/**/bin/**
+vs2019/build/**/bin/*.*
 
 # ignore object files and subdirectories in 'build/[ProjectName]/obj'
-build/**/obj/**
-build/**/obj/*.*
+vs2017/build/**/obj/**
+vs2017/build/**/obj/*.*
+vs2019/build/**/obj/**
+vs2019/build/**/obj/*.*
 
 # ignore assets and subdirectories in 'build/[ProjectName]/Assets'
-build/**/Assets/**
-build/**/Assets/*.*
+vs2017/build/**/Assets/**
+vs2017/build/**/Assets/*.*
+vs2019/build/**/Assets/**
+vs2019/build/**/Assets/*.*

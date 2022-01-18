@@ -1,0 +1,6 @@
+MainPackage=F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager\bin\x86\Release\AccountingManager_1.0.6.0_x86.msix
+SymbolPackage=F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager\obj\x86\Release\Symbols\AccountingManager_1.0.6.0_x86.appxsym
+ResourcePack=F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager\bin\x86\Release\AccountingManager_1.0.6.0_scale-100.msix
+ResourcePack=F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager\bin\x86\Release\AccountingManager_1.0.6.0_scale-125.msix
+ResourcePack=F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager\bin\x86\Release\AccountingManager_1.0.6.0_scale-150.msix
+ResourcePack=F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager\bin\x86\Release\AccountingManager_1.0.6.0_scale-400.msix
