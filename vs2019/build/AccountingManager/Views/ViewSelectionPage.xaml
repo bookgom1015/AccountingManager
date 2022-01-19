@@ -94,52 +94,32 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="60" />
                         </Grid.RowDefinitions>
-                        <BitmapIcon Height="160"
-                                    Foreground="White"
-                                    UriSource="ms-appx:///Assets/black_note.png" />
-                        <TextBlock Grid.Row="1"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="24" Text="매출입"
-                                   Foreground="White" />
+                        <BitmapIcon Height="160" Foreground="White" UriSource="ms-appx:///Assets/black_note.png" />
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="매출입" />
                     </Grid>
                 </Button>
             </Grid>
             <Grid Grid.Column="1">
-                <Button x:Name="AccountsReceivableViewButton"
-                        Style="{StaticResource SimpleButton}"
-                        Click="AccountsReceivableViewButton_Click"
-                        IsEnabled="False">
+                <Button x:Name="AccountsReceivableViewButton" Style="{StaticResource SimpleButton}" Click="AccountsReceivableViewButton_Click" IsEnabled="False">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="60" />
                         </Grid.RowDefinitions>
                         <Image Grid.Row="0" Source="/Assets/LockScreenLogo.scale-200.png" />
-                        <TextBlock Grid.Row="1"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="24" Text="미수금"
-                                   Foreground="White" />
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="미수금" />
                     </Grid>
                 </Button>
             </Grid>
             <Grid Grid.Column="2">
-                <Button x:Name="SalesRankViewButton"
-                        Style="{StaticResource SimpleButton}"
-                        Click="SalesRankViewButton_Click"
-                        IsEnabled="False">
+                <Button x:Name="SalesRankViewButton" Style="{StaticResource SimpleButton}" Click="SalesRankViewButton_Click" IsEnabled="False">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="60" />
                         </Grid.RowDefinitions>
                         <Image Grid.Row="0" Source="/Assets/LockScreenLogo.scale-200.png" />
-                        <TextBlock Grid.Row="1"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="24" Text="거래량"
-                                   Foreground="White" />
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="거래량" />
                     </Grid>
                 </Button>
             </Grid>

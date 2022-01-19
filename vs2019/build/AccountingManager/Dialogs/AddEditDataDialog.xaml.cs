@@ -15,6 +15,9 @@ namespace AccountingManager.Dialogs
         {
             this.InitializeComponent();
 
+            // Diable scaling.
+            Windows.UI.ViewManagement.ApplicationViewScaling.TrySetDisableLayoutScaling(true);
+
             SolidColorBrush red = new SolidColorBrush(Colors.Red);
 
             controls.InputDataType.MinWidth = 0;

@@ -10,6 +10,7 @@
     mc:Ignorable="d"
     Background="Transparent">
     <Page.Resources>
+        <!-- Simple anim list box item -->
         <Style x:Key="SimpleAnimListBoxItem" TargetType="ListBoxItem">
             <Setter Property="Foreground" Value="{ThemeResource ListBoxForegroundThemeBrush}" />
             <Setter Property="Background" Value="Transparent" />
@@ -66,9 +67,7 @@
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
-                                    <VisualState x:Name="Selected">
-
-                                    </VisualState>
+                                    <VisualState x:Name="Selected" />
                                     <VisualState x:Name="SelectedUnfocused">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ListBoxItemTranslateTransform"

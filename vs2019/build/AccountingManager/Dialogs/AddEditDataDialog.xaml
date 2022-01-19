@@ -11,7 +11,7 @@
     SecondaryButtonText="Button2"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
-    <Grid MinWidth="300" MinHeight="220" Margin="0, 30, 0, 20">
+    <Grid Margin="0, 30, 0, 20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
@@ -27,6 +27,12 @@
                 <Style TargetType="StackPanel">
                     <Setter Property="Orientation" Value="Horizontal" />
                 </Style>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="46" />
+                    <Setter Property="Height" Value="24" />
+                    <Setter Property="FontSize" Value="10" />
+                    <Setter Property="Padding" Value="0" />
+                </Style>
             </Grid.Resources>
             <Grid Grid.Row="0" Margin="0, 0, 0, 5">
                 <Grid>
@@ -34,33 +40,27 @@
                         <ColumnDefinition Width="85" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="날짜" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="날짜" />
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="115" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0" x:Name="MonthPanel" />
-                            <TextBlock Grid.Column="1"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Text="월" />
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="월" />
                         </Grid>
-                        <Grid Grid.Column="1" Margin="15, 0, 0, 0">
+                        <Grid Grid.Column="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0" x:Name="DayPanel" />
-                            <TextBlock Grid.Column="1"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Text="일" />
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="일" />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -71,7 +71,7 @@
                         <ColumnDefinition Width="85" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="거래처" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="거래처" />
                     <Grid x:Name="NamePanel" Grid.Column="1" />
                 </Grid>
             </Grid>
@@ -81,7 +81,7 @@
                         <ColumnDefinition Width="85" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="철강무게(kg)" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="철강무게"  />
                     <Grid x:Name="WeightPanel" Grid.Column="1" />
                 </Grid>
             </Grid>
@@ -91,15 +91,15 @@
                         <ColumnDefinition Width="85" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="공급가격" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,0,0" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"  Text="공급가격" />
                     <Grid x:Name="PricePanel" Grid.Column="1" />
                 </Grid>
             </Grid>
-            <Grid Grid.Row="4" Margin="0, 0, 0, 5">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Grid.Column="0" x:Name="PriceHudred" Click="PriceHudred_Click" Height="26" FontSize="10" Content="+100만" Margin="0, 0, 5, 0" />
-                    <Button Grid.Column="1" x:Name="PriceTen" Click="PriceTen_Click" Height="26" FontSize="10" Content="+10만" Margin="0, 0, 5, 0" />
-                    <Button Grid.Column="2" x:Name="PriceOne" Click="PriceOne_Click" Height="26" FontSize="10" Content="+1만" />
+            <Grid Grid.Row="4" Margin="0, 0, 0, 8">
+                <StackPanel HorizontalAlignment="Right">
+                    <Button Grid.Column="0" Margin="0, 0, 8, 0" x:Name="PriceHudred" Click="PriceHudred_Click" Content="+100만" />
+                    <Button Grid.Column="1" Margin="0, 0, 8, 0" x:Name="PriceTen"    Click="PriceTen_Click"    Content="+10만" />
+                    <Button Grid.Column="2" Margin="0, 0, 0, 0" x:Name="PriceOne"    Click="PriceOne_Click"    Content="+1만" />
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="5" Margin="0, 0, 0, 5">
@@ -108,35 +108,34 @@
                         <ColumnDefinition Width="85" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="세액" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="세액" />
                     <Grid x:Name="TaxPanel" Grid.Column="1" />
                 </Grid>
             </Grid>
-            <Grid Grid.Row="6" Margin="0, 0, 0, 20">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Grid.Column="0" x:Name="TaxHundred" Click="TaxHundred_Click" Height="26" FontSize="10" Content="+100만" Margin="0, 0, 5, 0" />
-                    <Button Grid.Column="1" x:Name="TaxTen" Click="TaxTen_Click" Height="26" FontSize="10" Content="+10만" Margin="0, 0, 5, 0" />
-                    <Button Grid.Column="2" x:Name="TaxOne" Click="TaxOne_Click" Height="26" FontSize="10" Content="+1만" />
+            <Grid Grid.Row="6" Margin="0, 0, 0, 8">
+                <StackPanel HorizontalAlignment="Right">
+                    <Button Grid.Column="0" Margin="0, 0, 8, 0" x:Name="TaxHundred" Click="TaxHundred_Click" Content="+100만" />
+                    <Button Grid.Column="1" Margin="0, 0, 8, 0" x:Name="TaxTen"     Click="TaxTen_Click"     Content="+10만" />
+                    <Button Grid.Column="2" Margin="0, 0, 0, 0" x:Name="TaxOne"     Click="TaxOne_Click"     Content="+1만" />
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="7">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*" />
-                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="85" />
+                        <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Margin" Value="0, 0, 10, 0" />
-                        </Style>
-                    </Grid.Resources>
-                    <StackPanel x:Name="TypePanel" Grid.Column="0">
-                        <TextBlock Text="매입/매출" />
-                    </StackPanel>
-                    <StackPanel x:Name="DepositPanel" Grid.Column="1">
-                        <TextBlock Text="입금확인" />
-                    </StackPanel>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="매입/매출" />
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel x:Name="TypePanel" Grid.Column="0" />
+                        <StackPanel x:Name="DepositPanel" Grid.Column="1">
+                            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="입금확인" />
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

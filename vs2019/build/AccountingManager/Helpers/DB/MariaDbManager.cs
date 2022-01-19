@@ -16,7 +16,7 @@ namespace AccountingManager.Helpers
         public async Task<bool> ConnectToDBAsync(string address, Int16 port, string uid, string pwd)
         {
             string connectionCommand = string.Format("Server={0};Port={1};Uid={2};Pwd={3}", address, port, uid, pwd);
-
+            
             try
             {
                 mSqlConnection = new MySqlConnection(connectionCommand);
