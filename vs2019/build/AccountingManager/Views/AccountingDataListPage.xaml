@@ -628,22 +628,19 @@
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
                     <ColumnDefinition Width="{x:Bind Path=ViewModel.DepositConfirmColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
+                    <ColumnDefinition Width="{x:Bind Path=ViewModel.DepositDateColumnWidth, Mode=TwoWay}"
+                                      MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
-                    <Style TargetType="controls:GridSplitter">
-                        <Setter Property="HorizontalAlignment" Value="Left" />
-                        <Setter Property="ResizeDirection" Value="Columns" />
-                        <Setter Property="ResizeBehavior" Value="BasedOnAlignment" />
-                        <Setter Property="CursorBehavior" Value="ChangeOnSplitterHover" />
+                    <Style x:Key="SimpleGridSplitter" TargetType="controls:GridSplitter">
                         <Setter Property="IsTabStop" Value="False" />
-                        <Setter Property="Width" Value="16" />
-                        <Setter Property="Template">
+                        <Setter Property="Template">                            
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <Grid>
-                                        <Rectangle Fill="{StaticResource WindowBackgroundBrush}" Width="2" />
-                                    </Grid>
+                                    <Grid x:Name="RootGrid">
+                                        <Rectangle Fill="Transparent" Width="{TemplateBinding Width}" />
+                                    </Grid>                                    
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -658,11 +655,6 @@
                             Content="매입/매출"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="1" GripperCursor="Default">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
                 <!-- Column button for client name -->
                 <Grid Grid.Column="1">
                     <Button x:Name="ClientNameColumnButton"
@@ -672,11 +664,18 @@
                             Content="거래처"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="2"  GripperCursor="Default">
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="1"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
+                </controls:GridSplitter>                
                 <!-- Column button for date -->
                 <Grid Grid.Column="2">
                     <Button x:Name="DateColumnButton"
@@ -686,7 +685,14 @@
                             Content="날짜"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="3"  GripperCursor="Default">
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="2"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
@@ -697,10 +703,17 @@
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="SteelWeightColumnButton_Click"
-                            Content="철강무게"
+                            Content="중량(t)"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="4"  GripperCursor="Default">
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="3"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
@@ -714,7 +727,14 @@
                             Content="공급가격"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="5"  GripperCursor="Default">
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="4"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
@@ -728,7 +748,14 @@
                             Content="세액"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="6"  GripperCursor="Default">
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="5"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
@@ -742,7 +769,14 @@
                             Content="합계"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="7"  GripperCursor="Default">
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="6"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
@@ -756,13 +790,53 @@
                             Content="입금확인"
                             IsTabStop="False" />
                 </Grid>
-                <controls:GridSplitter Grid.Column="8"  GripperCursor="Default">
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="7"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
+                    <controls:GridSplitter.RenderTransform>
+                        <TranslateTransform X="-8" />
+                    </controls:GridSplitter.RenderTransform>
+                </controls:GridSplitter>
+                <!-- Column button for deposit date -->
+                <Grid Grid.Column="8">
+                    <Button x:Name="DepositDateColumnButton"
+                            Style="{StaticResource SimpleWhiteBorderButton}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Click="DepositDateColumnButton_Click"
+                            Content="입급날짜"
+                            IsTabStop="False" />
+                </Grid>
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="8"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
                     <controls:GridSplitter.RenderTransform>
                         <TranslateTransform X="-8" />
                     </controls:GridSplitter.RenderTransform>
                 </controls:GridSplitter>
                 <!-- Blank column -->
-                <Grid Grid.Column="8" />
+                <Grid Grid.Column="9" />
+                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                       Grid.Column="9"
+                                       Width="8"
+                                       HorizontalAlignment="Left"
+                                       GripperCursor="Default"
+                                       ResizeDirection="Columns"
+                                       ResizeBehavior="BasedOnAlignment"
+                                       CursorBehavior="ChangeOnSplitterHover">
+                    <controls:GridSplitter.RenderTransform>
+                        <TranslateTransform X="-8" />
+                    </controls:GridSplitter.RenderTransform>
+                </controls:GridSplitter>
             </Grid>
             <Grid Grid.Row="3">
                 <Frame x:Name="DetailListFrame" />

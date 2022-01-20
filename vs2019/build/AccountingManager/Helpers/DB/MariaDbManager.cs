@@ -388,8 +388,9 @@ namespace AccountingManager.Helpers
                     int taxAmount = (int)dataInTable["tax_amount"];
                     bool dataType = (bool)dataInTable["data_type"];
                     bool depositConfirm = (bool)dataInTable["deposit_confirm"];
+                    string depositDate = dataInTable["deposit_date"] as string;
 
-                    AccountingData data = new AccountingData(id, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
+                    AccountingData data = new AccountingData(id, clientName, date, depositDate, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
 
                     outDataList.Add(data);
                 }
@@ -471,11 +472,11 @@ namespace AccountingManager.Helpers
             return true;
         }
 
-        public async Task<bool> InsertDataAsync(string inTableName, int inId, string inClientName, string inDate, int inWeight, int inPrice, int inTax, bool inDataType, bool inConfirm)
+        public async Task<bool> InsertDataAsync(string inTableName, int inId, string inClientName, string inDate, string inDepositDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
         {
             int intDataType = inDataType ? 1 : 0;
-            int intConfirm = inConfirm ? 1 : 0;
-            string values = inId + ", \'" + inClientName + "\', \'" + inDate + "\', " + inWeight + ", " + inPrice + ", " + inTax + ", " + intDataType + ", " + intConfirm + ", 0";
+            int intConfirm = inDepositConfirm ? 1 : 0;
+            string values = inId + ", \'" + inClientName + "\', \'" + inDate + "\', " + inSteelWeight + ", " + inSupplyPrice + ", " + inTaxAmount + ", " + intDataType + ", " + intConfirm + ", \'" + inDepositDate + "\', 0";
 
             string insertCommandText = "INSERT INTO " + inTableName + "(" + TableFields + ") VALUES (" + values + ");";
 
@@ -500,6 +501,7 @@ namespace AccountingManager.Helpers
             if ((inQueryKeys & AccountingData.QueryKeys.ETaxAmount) != 0) updateCommandBuilder.Append("tax_amount=" + inData.TaxAmount + ", ");
             if ((inQueryKeys & AccountingData.QueryKeys.EDataType) != 0) updateCommandBuilder.Append("data_type=" + dataType + ", ");
             if ((inQueryKeys & AccountingData.QueryKeys.EDepositConfirm) != 0) updateCommandBuilder.Append("deposit_confirm=" + depositConfirm + ", ");
+            if ((inQueryKeys & AccountingData.QueryKeys.EDepositDate) != 0) updateCommandBuilder.Append("deposit_date=\'" + inData.DepositDate + "\', ");
 
             updateCommandBuilder.Remove(updateCommandBuilder.Length - 2, 2);
             updateCommandBuilder.Append(" WHERE id=" + inData.Id + ";");
@@ -524,12 +526,12 @@ namespace AccountingManager.Helpers
 
         private string TableParameters
         {
-            get => "id INT, client_name VARCHAR(60), date VARCHAR(5), steel_weight INT, supply_price INT, tax_amount INT, data_type BOOLEAN, deposit_confirm BOOLEAN, deleted BOOLEAN";
+            get => "id INT, client_name VARCHAR(60), date VARCHAR(5), steel_weight INT, supply_price INT, tax_amount INT, data_type BOOLEAN, deposit_confirm BOOLEAN, deposit_date VARCHAR(8), deleted BOOLEAN";
         }
 
         private string TableFields
         {
-            get => "id, client_name, date, steel_weight, supply_price, tax_amount, data_type, deposit_confirm, deleted";
+            get => "id, client_name, date, steel_weight, supply_price, tax_amount, data_type, deposit_confirm, deposit_date, deleted";
         }
 
         private string StorageEngine

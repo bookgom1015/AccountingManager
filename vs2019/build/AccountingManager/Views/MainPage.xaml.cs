@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Graphics.Display;
 using Windows.UI;
-using Windows.UI.Core.Preview;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -24,45 +24,30 @@ namespace AccountingManager.Views
         {
             InitializeComponent();
 
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += CleanUp;
+            Application.Current.LeavingBackground += OnLeavingBackground;
+            Application.Current.EnteredBackground += OnEnteredBackground;
         }
 
-        private async Task Initialize()
+        private void OnLeavingBackground(Object sender, LeavingBackgroundEventArgs e)
         {
-            //
-            // Initialization must be called first.
-            //
-            Task initTask = Logger.StaticInit();
-
-            ViewModel.Initialize();
-
-            await initTask;
-
-            //
-            // After intialization.
-            //
-            Task<bool> connectionTask = ViewModel.SqlManager.ConnectToDBAsync(ViewModel.HostName, ViewModel.Port, ViewModel.UserId, ViewModel.Password);
-
+            ViewModel.LoadSettings();
             SetWindowSize();
             SetTitleBar();
-
-            bool connectionResult = await connectionTask;
-            if (!connectionResult)
-            {
-                await Logger.ShowAlertDialog("DB 연결 실패");
-                return;
-            }
-
-            bool useResult = await ViewModel.SqlManager.UseDatabaseAsync(ViewModel.DatabaseName);
-            if (!useResult) await Logger.ShowAlertDialog("DB 참조 실패");
         }
 
-        private void CleanUp(Object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+        private void OnEnteredBackground(Object sender, EnteredBackgroundEventArgs e)
         {
-            ViewModel.CleanUp();
+            Deferral deferral = e.GetDeferral();
 
-            if (ViewModel.SqlManager != null)
+            ViewModel.SaveSettings();
+
+            if (ViewModel.IsConnected)
+            {
                 ViewModel.SqlManager.DisconnnectFromDB();
+                ViewModel.IsConnected = false;
+            }
+
+            deferral.Complete();
         }
 
         private void SetWindowSize()
@@ -109,6 +94,28 @@ namespace AccountingManager.Views
             if (titleBar == null) return;
 
             // Nothing to do right now...
+        }
+
+        private async Task Initialize()
+        {
+            //
+            // Initialization must be called first.
+            //
+            await Logger.StaticInit();
+
+            //
+            // After intialization.
+            //
+            bool connectionResult = await ViewModel.SqlManager.ConnectToDBAsync(ViewModel.HostName, ViewModel.Port, ViewModel.UserId, ViewModel.Password);
+            if (!connectionResult)
+            {
+                await Logger.ShowAlertDialog("DB 연결 실패");
+                return;
+            }
+            ViewModel.IsConnected = true;
+
+            bool useResult = await ViewModel.SqlManager.UseDatabaseAsync(ViewModel.DatabaseName);
+            if (!useResult) await Logger.ShowAlertDialog("DB 참조 실패");
         }
 
         private async void RootPage_Loaded(object sender, RoutedEventArgs e)

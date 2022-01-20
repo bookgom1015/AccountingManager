@@ -5,14 +5,15 @@ namespace AccountingManager.Core.Models
     {
         public enum QueryKeys
         {
-            ENone = 1 << 0,
-            EClientName = 1 << 1,
-            EDate = 1 << 2,
-            ESteelWeight = 1 << 3,
-            ESupplyPrice = 1 << 4,
-            ETaxAmount = 1 << 5,
-            EDataType = 1 << 6,
-            EDepositConfirm = 1 << 7
+            ENone           = 1 << 0,
+            EClientName     = 1 << 1,
+            EDate           = 1 << 2,
+            ESteelWeight    = 1 << 3,
+            ESupplyPrice    = 1 << 4,
+            ETaxAmount      = 1 << 5,
+            EDataType       = 1 << 6,
+            EDepositConfirm = 1 << 7,
+            EDepositDate    = 1 << 8
         }
 
         public class QueryValues
@@ -26,12 +27,13 @@ namespace AccountingManager.Core.Models
             public bool DepositConfirm { get; set; }
         }
 
-        public AccountingData(int id = -1, string clientName = "", string date = "", int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
+        public AccountingData(int id = -1, string clientName = "", string date = "", string depositDate = "", int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
         {
             Id = id;
             DataType = dataType;
             ClientName = clientName;
             Date = date;
+            DepositDate = depositDate;
             SteelWeight = steelWeight;
             SupplyPrice = supplyPrice;
             TaxAmount = taxAmount;
@@ -46,5 +48,6 @@ namespace AccountingManager.Core.Models
         public int TaxAmount { get; set; }
         public bool DataType { get; set; }
         public bool DepositConfirm { get; set; }
+        public string DepositDate { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Windows.UI;
+﻿using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -23,52 +20,45 @@ namespace AccountingManager.Views
             InitializeComponent();
         }
 
-        private Binding CreateBinding(object source, string path, BindingMode mode, UpdateSourceTrigger trigger)
-        {
-            Binding binding = new Binding();
-            binding.Source = source;
-            binding.Path = new PropertyPath(path);
-            binding.Mode = mode;
-            binding.UpdateSourceTrigger = trigger;
-
-            return binding;
-        }
-
         private void GenerateAccountingDataListBox(DetailAccountingDataListPageParams inNavParams)
         {
             foreach (AccountingData data in inNavParams.ParentViewModel.AccountingDataList)
             {
                 ColumnDefinition typeCol = new ColumnDefinition();
-                Binding typeColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "DataTypeColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding typeColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "DataTypeColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(typeCol, ColumnDefinition.WidthProperty, typeColWidthBinding);
 
                 ColumnDefinition nameCol = new ColumnDefinition();
-                Binding nameColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "ClientNameColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding nameColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "ClientNameColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(nameCol, ColumnDefinition.WidthProperty, nameColWidthBinding);
 
                 ColumnDefinition dateCol = new ColumnDefinition();
-                Binding dateColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "DateColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding dateColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "DateColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(dateCol, ColumnDefinition.WidthProperty, dateColWidthBinding);
 
                 ColumnDefinition weightCol = new ColumnDefinition();
-                Binding weightColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "SteelWeightColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding weightColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "SteelWeightColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(weightCol, ColumnDefinition.WidthProperty, weightColWidthBinding);
 
                 ColumnDefinition priceCol = new ColumnDefinition();
-                Binding priceColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "SupplyPriceColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding priceColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "SupplyPriceColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(priceCol, ColumnDefinition.WidthProperty, priceColWidthBinding);
 
                 ColumnDefinition taxCol = new ColumnDefinition();
-                Binding taxColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "TaxAmountColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding taxColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "TaxAmountColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(taxCol, ColumnDefinition.WidthProperty, taxColWidthBinding);
 
                 ColumnDefinition sumCol = new ColumnDefinition();
-                Binding sumColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "SumColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding sumColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "SumColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(sumCol, ColumnDefinition.WidthProperty, sumColWidthBinding);
 
                 ColumnDefinition checkCol = new ColumnDefinition();
-                Binding checkColWidthBinding = CreateBinding(inNavParams.ParentViewModel, "DepositConfirmColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                Binding checkColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "DepositConfirmColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(checkCol, ColumnDefinition.WidthProperty, checkColWidthBinding);
+
+                ColumnDefinition depositDateCol = new ColumnDefinition();
+                Binding depositDateColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "DepositDateColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
+                BindingOperations.SetBinding(depositDateCol, ColumnDefinition.WidthProperty, depositDateColWidthBinding);
 
                 Grid grid = new Grid();
                 grid.Name = data.Id.ToString();
@@ -80,9 +70,11 @@ namespace AccountingManager.Views
                 grid.ColumnDefinitions.Add(taxCol);
                 grid.ColumnDefinitions.Add(sumCol);
                 grid.ColumnDefinitions.Add(checkCol);
+                grid.ColumnDefinitions.Add(depositDateCol);
                 grid.Background = new SolidColorBrush(Colors.Transparent);
 
                 Thickness textBlockMargin = new Thickness(15, 0, 0, 0);
+                Thickness integerTextBlockMargin = new Thickness(0, 0, 15, 0);
 
                 TextBlock typeTextBlock = new TextBlock();
                 typeTextBlock.HorizontalAlignment = HorizontalAlignment.Center;
@@ -100,24 +92,28 @@ namespace AccountingManager.Views
                 dateTextBlock.Text = data.Date;
 
                 TextBlock weightTextBlock = new TextBlock();
+                weightTextBlock.HorizontalAlignment = HorizontalAlignment.Right;
                 weightTextBlock.VerticalAlignment = VerticalAlignment.Center;
-                weightTextBlock.Margin = textBlockMargin;
-                weightTextBlock.Text = string.Format("{0:#,###}", data.SteelWeight);
+                weightTextBlock.Margin = integerTextBlockMargin;
+                weightTextBlock.Text = string.Format("{0:#,##0}", data.SteelWeight);
 
                 TextBlock priceTextBlock = new TextBlock();
+                priceTextBlock.HorizontalAlignment = HorizontalAlignment.Right;
                 priceTextBlock.VerticalAlignment = VerticalAlignment.Center;
-                priceTextBlock.Margin = textBlockMargin;
-                priceTextBlock.Text = string.Format("{0:#,###}", data.SupplyPrice);
+                priceTextBlock.Margin = integerTextBlockMargin;
+                priceTextBlock.Text = string.Format("{0:#,##0}", data.SupplyPrice);
 
                 TextBlock taxTextBlock = new TextBlock();
+                taxTextBlock.HorizontalAlignment = HorizontalAlignment.Right;
                 taxTextBlock.VerticalAlignment = VerticalAlignment.Center;
-                taxTextBlock.Margin = textBlockMargin;
-                taxTextBlock.Text = string.Format("{0:#,###}", data.TaxAmount);
+                taxTextBlock.Margin = integerTextBlockMargin;
+                taxTextBlock.Text = string.Format("{0:#,##0}", data.TaxAmount);
 
                 TextBlock sumTextBlock = new TextBlock();
+                sumTextBlock.HorizontalAlignment = HorizontalAlignment.Right;
                 sumTextBlock.VerticalAlignment = VerticalAlignment.Center;
-                sumTextBlock.Margin = textBlockMargin;
-                sumTextBlock.Text = string.Format("{0:#,###}", data.SupplyPrice + data.TaxAmount);
+                sumTextBlock.Margin = integerTextBlockMargin;
+                sumTextBlock.Text = string.Format("{0:#,##0}", data.SupplyPrice + data.TaxAmount);
 
                 CheckBox checkBox = new CheckBox();
                 checkBox.MinWidth = 0;
@@ -130,6 +126,11 @@ namespace AccountingManager.Views
                 checkBox.IsEnabled = false;
                 checkBox.Content = data.DepositConfirm ? "  확인됨" : "";
 
+                TextBlock depositDateTextBlock = new TextBlock();
+                depositDateTextBlock.VerticalAlignment = VerticalAlignment.Center;
+                depositDateTextBlock.Margin = textBlockMargin;
+                depositDateTextBlock.Text = data.DepositDate;
+
                 grid.Children.Add(typeTextBlock);
                 grid.Children.Add(nameTextBlock);
                 grid.Children.Add(dateTextBlock);
@@ -138,6 +139,7 @@ namespace AccountingManager.Views
                 grid.Children.Add(taxTextBlock);
                 grid.Children.Add(sumTextBlock);
                 grid.Children.Add(checkBox);
+                grid.Children.Add(depositDateTextBlock);
 
                 Grid.SetColumn(typeTextBlock, 0);
                 Grid.SetColumn(nameTextBlock, 1);
@@ -147,6 +149,7 @@ namespace AccountingManager.Views
                 Grid.SetColumn(taxTextBlock, 5);
                 Grid.SetColumn(sumTextBlock, 6);
                 Grid.SetColumn(checkBox, 7);
+                Grid.SetColumn(depositDateTextBlock, 8);
 
                 AccountingDataListBox.Items.Add(grid);
             }
@@ -202,7 +205,10 @@ namespace AccountingManager.Views
             CheckBox checkBox = grid.Children[7] as CheckBox;
             bool depositConfirm = (bool)checkBox.IsChecked;
 
-            ViewModel.AccountingDataList_SelectionChagned(id, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
+            TextBlock depositDateTextBlock = grid.Children[8] as TextBlock;
+            string depositDateText = depositDateTextBlock.Text;
+
+            ViewModel.AccountingDataList_SelectionChagned(id, clientName, date, depositDateText, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
         }
     }
 }

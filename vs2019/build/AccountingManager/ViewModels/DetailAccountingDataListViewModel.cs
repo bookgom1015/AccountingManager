@@ -8,6 +8,6 @@ namespace AccountingManager.ViewModels
     {
         public DetailAccountingDataListViewModel() { }
 
-        public Action<int, string, string, int, int, int, bool, bool> AccountingDataList_SelectionChagned { get; set; }
+        public Action<int, string, string, string, int, int, int, bool, bool> AccountingDataList_SelectionChagned { get; set; }
     }
 }

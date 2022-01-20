@@ -163,6 +163,7 @@
     <Compile Include="Dialogs\OkCancelDialog.xaml.cs">
       <DependentUpon>OkCancelDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BindingHelper.cs" />
     <Compile Include="Helpers\Controls\AddEditDialogControls.cs" />
     <Compile Include="Helpers\Controls\AddYearDialogControls.cs" />
     <Compile Include="Helpers\Params\AccountingDataListPageParams.cs" />

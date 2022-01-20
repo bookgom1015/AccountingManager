@@ -220,5 +220,41 @@ namespace AccountingManager.Helpers
             else if (a.DepositConfirm && !b.DepositConfirm) return -1;
             else return 1;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int InlineCompareDepositDate(AccountingData a, AccountingData b)
+        {
+            int dateCompResult = string.Compare(a.Date, b.Date);
+
+            if (dateCompResult == 0)
+            {
+                int nameCompResult = string.Compare(a.ClientName, b.ClientName);
+
+                if (nameCompResult == 0)
+                {
+                    if (a.SteelWeight == b.SteelWeight) return 0;
+                    else if (a.SteelWeight > b.SteelWeight) return 1;
+                    else return -1;
+                }
+                else return nameCompResult;
+            }
+            else return dateCompResult;
+        }
+
+        public static int CompareDepositDate(AccountingData a, AccountingData b)
+        {
+            int depDateCompResult = string.Compare(a.DepositDate, b.DepositDate);
+
+            if (depDateCompResult == 0) return InlineCompareDepositDate(a, b);
+            else return depDateCompResult;
+        }
+
+        public static int CompareDepositDateReverse(AccountingData a, AccountingData b)
+        {
+            int depDateCompResult = string.Compare(b.DepositDate, a.DepositDate);
+
+            if (depDateCompResult == 0) return InlineCompareDepositDate(a, b);
+            else return depDateCompResult;
+        }
     }
 }

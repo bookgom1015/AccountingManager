@@ -15,9 +15,6 @@ namespace AccountingManager.Dialogs
         {
             this.InitializeComponent();
 
-            // Diable scaling.
-            Windows.UI.ViewManagement.ApplicationViewScaling.TrySetDisableLayoutScaling(true);
-
             SolidColorBrush red = new SolidColorBrush(Colors.Red);
 
             controls.InputDataType.MinWidth = 0;
@@ -48,6 +45,9 @@ namespace AccountingManager.Dialogs
             DayPanel.Children.Add(controls.InputDay);
             TypePanel.Children.Add(controls.InputDataType);
             DepositPanel.Children.Add(controls.InputDepositConfirm);
+            DepositDatePanel.Children.Add(controls.InputDepositYear);
+            DepositDatePanel.Children.Add(controls.InputDepositMonth);
+            DepositDatePanel.Children.Add(controls.InputDepositDay);
         }
 
         private void CancelReturn(ContentDialogButtonClickEventArgs args, TextBox textBox, string msg)
@@ -59,7 +59,7 @@ namespace AccountingManager.Dialogs
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             if (mInputName.Text.Length == 0) CancelReturn(args, mInputName, "* 거래처명을 입력해주십시오.");
-            else if (mInputWeight.Text.Length == 0) CancelReturn(args, mInputWeight, "* 철강무게를 입력해주십시오.");
+            else if (mInputWeight.Text.Length == 0) CancelReturn(args, mInputWeight, "* 중량을 입력해주십시오.");
             else if (mInputPrice.Text.Length == 0) CancelReturn(args, mInputPrice, "* 공급가격을 입력해주십시오.");
             else if (mInputTax.Text.Length == 0) CancelReturn(args, mInputTax, "* 세액을 입력해주십시오.");
         }

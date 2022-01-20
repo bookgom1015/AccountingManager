@@ -57,6 +57,9 @@ namespace AccountingManager.ViewModels
 
             Object depositConfirmWidthObj = localSettings.Values["DepositConfirmColumnWidth"];
             DepositConfirmColumnWidth = new GridLength(depositConfirmWidthObj == null ? DefaultColumnWidth : (double)depositConfirmWidthObj);
+
+            Object depositDateWidthObj = localSettings.Values["DepositDateColumnWidth"];
+            DepositDateColumnWidth = new GridLength(depositDateWidthObj == null ? DefaultColumnWidth : (double)depositDateWidthObj);
         }
 
         private void SaveSettings()
@@ -70,6 +73,7 @@ namespace AccountingManager.ViewModels
             localSettings.Values["TaxAmountColumnWidth"] = TaxAmountColumnWidth.Value;
             localSettings.Values["SumColumnWidth"] = SumColumnWidth.Value;
             localSettings.Values["DepositConfirmColumnWidth"] = DepositConfirmColumnWidth.Value;
+            localSettings.Values["DepositDateColumnWidth"] = DepositDateColumnWidth.Value;
         }
 
         public MariaDbManager SqlManager { get; set; }
@@ -133,6 +137,13 @@ namespace AccountingManager.ViewModels
         {
             get => mDepositConfirmColumnWidth;
             set => SetProperty(ref mDepositConfirmColumnWidth, value);
+        }
+
+        private GridLength mDepositDateColumnWidth;
+        public GridLength DepositDateColumnWidth
+        {
+            get => mDepositDateColumnWidth;
+            set => SetProperty(ref mDepositDateColumnWidth, value);
         }
 
         public List<AccountingData> AccountingDataList { get; set; }

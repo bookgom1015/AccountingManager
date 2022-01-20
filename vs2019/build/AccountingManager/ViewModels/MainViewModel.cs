@@ -12,21 +12,11 @@ namespace AccountingManager.ViewModels
     {
         public MainViewModel()
         {
-        }
-
-        public void Initialize()
-        {
-            LoadSettings();
-
             mSqlManager = new MariaDbManager();
+            IsConnected = false;
         }
 
-        public void CleanUp()
-        {
-            SaveSettings();
-        }
-
-        private void LoadSettings()
+        public void LoadSettings()
         {
             //
             // Load local settings for application.
@@ -37,10 +27,10 @@ namespace AccountingManager.ViewModels
             WindowWidth = windowWidthObj == null ? DefaultWindowWidth : (double)windowWidthObj;
 
             Object windowHeightObj = localSettings.Values["WindowHeight"];
-            WindowHeight = windowHeightObj == null ? DefaultWindowHeight : (double)windowHeightObj; ;
+            WindowHeight = windowHeightObj == null ? DefaultWindowHeight : (double)windowHeightObj;
         }
 
-        private void SaveSettings()
+        public void SaveSettings()
         {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values["WindowWidth"] = WindowWidth;
@@ -52,6 +42,8 @@ namespace AccountingManager.ViewModels
         {
             get => mSqlManager;
         }
+
+        public bool IsConnected { get; set; }
 
         public double DefaultWindowWidth { get => 1024; }
         public double DefaultWindowHeight { get => 768; }

@@ -25,10 +25,10 @@ namespace AccountingManager.Views
         {
             InitializeComponent();
 
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += CleanUp;
+            Application.Current.Suspending += CleanUp;
         }
 
-        private void CleanUp(Object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+        private void CleanUp(Object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
             ViewModel.CleanUp();
         }
@@ -187,11 +187,12 @@ namespace AccountingManager.Views
             ViewModel.YearSelected = true;
         }
 
-        public void AccountingDataList_SelecitonChanged(int inId, string inClientName, string inDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
+        public void AccountingDataList_SelecitonChanged(int inId, string inClientName, string inDate, string inDepositDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
         {
             ViewModel.SelectedData.Id = inId;
             ViewModel.SelectedData.ClientName = inClientName;
             ViewModel.SelectedData.Date = inDate;
+            ViewModel.SelectedData.DepositDate = inDepositDate;
             ViewModel.SelectedData.SteelWeight = inSteelWeight;
             ViewModel.SelectedData.SupplyPrice = inSupplyPrice;
             ViewModel.SelectedData.TaxAmount = inTaxAmount;
@@ -199,11 +200,11 @@ namespace AccountingManager.Views
             ViewModel.SelectedData.DepositConfirm = inDepositConfirm;
         }
 
-        public async Task AddDataToDB(int inId, string inClientName, string inDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
+        public async Task AddDataToDB(int inId, string inClientName, string inDate, string inDepositDate, int inSteelWeight, int inSupplyPrice, int inTaxAmount, bool inDataType, bool inDepositConfirm)
         {
             string tableName = "year_" + ViewModel.SelectedYearText;
 
-            bool insertionResult = await ViewModel.SqlManager.InsertDataAsync(tableName, inId, inClientName, inDate, inSteelWeight, inSupplyPrice, inTaxAmount, inDataType, inDepositConfirm);
+            bool insertionResult = await ViewModel.SqlManager.InsertDataAsync(tableName, inId, inClientName, inDate, inDepositDate, inSteelWeight, inSupplyPrice, inTaxAmount, inDataType, inDepositConfirm);
             if (!insertionResult) await Logger.ShowAlertDialog("자료 생성 실패");
         }
 
@@ -295,6 +296,15 @@ namespace AccountingManager.Views
             await NavigateToAccountingDetailDataListPage();
         }
 
+        private async void DepositDateColumnButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.CurrentComparision == Comparisions.CompareDepositDate) ViewModel.CurrentComparision = Comparisions.CompareDepositDateReverse;
+            else if (ViewModel.CurrentComparision == Comparisions.CompareDepositDateReverse) ViewModel.CurrentComparision = Comparisions.CompareDepositDate;
+            else ViewModel.CurrentComparision = Comparisions.CompareDepositDate;
+
+            await NavigateToAccountingDetailDataListPage();
+        }
+
         private async void AddYearButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // Generate controls used by AddYearDialog.
@@ -366,6 +376,16 @@ namespace AccountingManager.Views
                 bool dataType = controls.InputDataType.SelectedIndex == 0 ? true : false;
                 bool depositConfirm = (bool)controls.InputDepositConfirm.IsChecked;
 
+                string depositDate = "";
+                if (depositConfirm)
+                {
+                    int depositYear = (int)controls.InputDepositYear.SelectedItem;
+                    int depositMonth = (int)controls.InputDepositMonth.SelectedItem;
+                    int depositDay = (int)controls.InputDepositDay.SelectedItem;
+
+                    depositDate = string.Format("{0}/{1:D2}/{2:D2}", depositYear, depositMonth, depositDay);
+                }                
+
                 string tableName = "year_" + ViewModel.SelectedYearText;
 
                 int nextId = 0;
@@ -373,7 +393,7 @@ namespace AccountingManager.Views
                 bool exists = await ViewModel.SqlManager.TableContainsAsync(tableName, AccountingData.QueryKeys.ENone, null);
                 if (exists) nextId = await ViewModel.SqlManager.GetLastIdInTableAsync(tableName) + 1;
 
-                await AddDataToDB(nextId, clientName, date, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
+                await AddDataToDB(nextId, clientName, date, depositDate, steelWeight, supplyPrice, taxAmount, dataType, depositConfirm);
 
                 await NavigateToAccountingDetailDataListPageUsingYear();
             }
@@ -408,7 +428,27 @@ namespace AccountingManager.Views
             controls.InputTaxAmount.Text = ViewModel.SelectedData.TaxAmount.ToString();
             controls.InputDataType.SelectedIndex = ViewModel.SelectedData.DataType ? 0 : 1;
             controls.InputDepositConfirm.IsChecked = ViewModel.SelectedData.DepositConfirm;
+            
+            if (ViewModel.SelectedData.DepositConfirm && ViewModel.SelectedData.DepositDate.Length != 0)
+            {
+                string depositYearText = ViewModel.SelectedData.DepositDate.Substring(0, 4);
+                string depositMonthText = ViewModel.SelectedData.DepositDate.Substring(5, 2);
+                string depositDayText = ViewModel.SelectedData.DepositDate.Substring(8, 2);
 
+                int depositYear;
+                int.TryParse(depositYearText, out depositYear);
+
+                int depositMonth;
+                int.TryParse(depositMonthText, out depositMonth);
+
+                int depositDay;
+                int.TryParse(depositDayText, out depositDay);
+
+                controls.InputDepositYear.SelectedIndex = depositYear - 2000;
+                controls.InputDepositMonth.SelectedIndex = depositMonth - 1;
+                controls.InputDepositDay.SelectedIndex = depositDay - 1;
+            }
+            
             //
             // Pop up ContentDialog.
             //
@@ -416,9 +456,9 @@ namespace AccountingManager.Views
             dialog.Title = "매출입 수정";
             dialog.PrimaryButtonText = "수정";
             dialog.SecondaryButtonText = "취소";
-
+            
             ContentDialogResult result = await dialog.ShowAsync();
-
+            
             // Handled when the edit button is clicked.
             if (result == ContentDialogResult.Primary)
             {
@@ -426,30 +466,38 @@ namespace AccountingManager.Views
                 // Configure date after extract month, and day.
                 //
                 month = (int)controls.InputMonth.SelectedItem;
-                day = (int)controls.InputDay.SelectedItem;
-
+                day = (int)controls.InputDay.SelectedItem;            
                 string date = string.Format("{0:D2}", month) + "/" + string.Format("{0:D2}", day);
-
+            
                 //
                 // Parse the text in TextBox to an integer.
                 //
                 int steelWeight;
                 int.TryParse(controls.InputSteelWeight.Text, out steelWeight);
-
+            
                 int supplyPrice;
                 int.TryParse(controls.InputSupplyPrice.Text, out supplyPrice);
-
+            
                 int taxAmount;
                 int.TryParse(controls.InputTaxAmount.Text, out taxAmount);
-
+            
                 bool dataType = controls.InputDataType.SelectedIndex == 0 ? true : false;
                 bool confirmed = (bool)controls.InputDepositConfirm.IsChecked;
+
+                string depositDate = "";
+                if (confirmed)
+                {
+                    int depositYear = (int)controls.InputDepositYear.SelectedItem;
+                    int depositMonth = (int)controls.InputDepositMonth.SelectedItem;
+                    int depositDay = (int)controls.InputDepositDay.SelectedItem;
+                    depositDate = string.Format("{0}/{1:D2}/{2:D2}", depositYear, depositMonth, depositDay);
+                }
 
                 //
                 // Specify the changed data.
                 //
                 AccountingData.QueryKeys queryKeys = AccountingData.QueryKeys.ENone;
-
+            
                 if (ViewModel.SelectedData.ClientName != controls.InputClientName.Text)
                 {
                     queryKeys |= AccountingData.QueryKeys.EClientName;
@@ -485,9 +533,14 @@ namespace AccountingManager.Views
                     queryKeys |= AccountingData.QueryKeys.EDepositConfirm;
                     ViewModel.SelectedData.DepositConfirm = confirmed;
                 }
-
+                if (ViewModel.SelectedData.DepositDate != depositDate)
+                {
+                    queryKeys |= AccountingData.QueryKeys.EDepositDate;
+                    ViewModel.SelectedData.DepositDate = depositDate;
+                }
+            
                 await EditDataInDB(queryKeys);
-
+            
                 await NavigateToAccountingDetailDataListPageUsingYear();
             }
         }
