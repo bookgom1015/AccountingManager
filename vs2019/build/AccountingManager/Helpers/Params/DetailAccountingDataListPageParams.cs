@@ -2,12 +2,9 @@
 
 using AccountingManager.ViewModels;
 
-namespace AccountingManager.Helpers
-{
-    public class DetailAccountingDataListPageParams
-    {
-        public DetailAccountingDataListPageParams(AccountingDataListViewModel inViewModel, Action<int, string, string, string, int, int, int, bool, bool> inAction)
-        {
+namespace AccountingManager.Helpers {
+    public class DetailAccountingDataListPageParams {
+        public DetailAccountingDataListPageParams(AccountingDataListViewModel inViewModel, Action<int, string, string, string, int, int, int, bool, bool> inAction) {
             mParentViewModel = inViewModel;
             mAccountingDataList_SelectionChagned = inAction;
         }

@@ -1,11 +1,8 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace AccountingManager.Dialogs
-{
-    public sealed partial class AlertDialog : ContentDialog
-    {
-        public AlertDialog(string text, int fontSize = 0)
-        {
+namespace AccountingManager.Dialogs {
+    public sealed partial class AlertDialog : ContentDialog {
+        public AlertDialog(string text, int fontSize = 0) {
             this.InitializeComponent();
 
             NoticeBoard.Text = text;

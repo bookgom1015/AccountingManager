@@ -1,0 +1,17 @@
+﻿<ContentDialog
+    x:Class="AccountingManager.Renew.Dialogs.DeleteDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AccountingManager.Renew.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="자료 삭제"
+    PrimaryButtonText="삭제"
+    SecondaryButtonText="취소"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    <Grid>
+        <TextBlock VerticalAlignment="Center" Text="정말로 삭제하시겠습니까?" />
+    </Grid>
+</ContentDialog>

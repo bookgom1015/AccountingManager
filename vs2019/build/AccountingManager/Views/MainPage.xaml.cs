@@ -14,35 +14,31 @@ using Windows.UI.Xaml.Media.Animation;
 using AccountingManager.Helpers;
 using AccountingManager.ViewModels;
 
-namespace AccountingManager.Views
-{
-    public sealed partial class MainPage : Page
-    {
+namespace AccountingManager.Views {
+    public sealed partial class MainPage : Page {
         private MainViewModel ViewModel => DataContext as MainViewModel;
 
-        public MainPage()
-        {
+        public MainPage() {
             InitializeComponent();
 
             Application.Current.LeavingBackground += OnLeavingBackground;
             Application.Current.EnteredBackground += OnEnteredBackground;
         }
 
-        private void OnLeavingBackground(Object sender, LeavingBackgroundEventArgs e)
-        {
+        private async void OnLeavingBackground(Object sender, LeavingBackgroundEventArgs e) {
+            await Initialize();
+
             ViewModel.LoadSettings();
             SetWindowSize();
             SetTitleBar();
         }
 
-        private void OnEnteredBackground(Object sender, EnteredBackgroundEventArgs e)
-        {
+        private void OnEnteredBackground(Object sender, EnteredBackgroundEventArgs e) {
             Deferral deferral = e.GetDeferral();
 
             ViewModel.SaveSettings();
 
-            if (ViewModel.IsConnected)
-            {
+            if (ViewModel.IsConnected) {
                 ViewModel.SqlManager.DisconnnectFromDB();
                 ViewModel.IsConnected = false;
             }
@@ -50,8 +46,7 @@ namespace AccountingManager.Views
             deferral.Complete();
         }
 
-        private void SetWindowSize()
-        {
+        private void SetWindowSize() {
             // For compatibility with Windows content size options.
             double scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
 
@@ -60,8 +55,7 @@ namespace AccountingManager.Views
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500, 500));
         }
 
-        private void SetTitleBar()
-        {
+        private void SetTitleBar() {
             // Now this app doesn't have a title bar.
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.LayoutMetricsChanged += CustomTitleBarLayoutMetricsChanged;
@@ -79,8 +73,7 @@ namespace AccountingManager.Views
             appViewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
         }
 
-        private bool TryGoBack(Frame frame)
-        {
+        private bool TryGoBack(Frame frame) {
             if (frame == null || !frame.CanGoBack) return false;
 
             frame.GoBack();
@@ -88,16 +81,14 @@ namespace AccountingManager.Views
             return true;
         }
 
-        public void CustomTitleBarLayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
+        public void CustomTitleBarLayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args) {
             CoreApplicationViewTitleBar titleBar = sender as CoreApplicationViewTitleBar;
             if (titleBar == null) return;
 
             // Nothing to do right now...
         }
 
-        private async Task Initialize()
-        {
+        private async Task Initialize() {
             //
             // Initialization must be called first.
             //
@@ -107,8 +98,7 @@ namespace AccountingManager.Views
             // After intialization.
             //
             bool connectionResult = await ViewModel.SqlManager.ConnectToDBAsync(ViewModel.HostName, ViewModel.Port, ViewModel.UserId, ViewModel.Password);
-            if (!connectionResult)
-            {
+            if (!connectionResult) {
                 await Logger.ShowAlertDialog("DB 연결 실패");
                 return;
             }
@@ -118,23 +108,18 @@ namespace AccountingManager.Views
             if (!useResult) await Logger.ShowAlertDialog("DB 참조 실패");
         }
 
-        private async void RootPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            await Initialize();
-
+        private void RootPage_Loaded(object sender, RoutedEventArgs e) {
             ViewSelectionPageParams navParams = new ViewSelectionPageParams(ViewModel.SqlManager, ViewModel.DatabaseName);
 
             ContentFrame.Navigate(typeof(ViewSelectionPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
         }
 
-        private void RootPage_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
+        private void RootPage_SizeChanged(object sender, SizeChangedEventArgs e) {
             ViewModel.WindowWidth = e.NewSize.Width;
             ViewModel.WindowHeight = e.NewSize.Height;
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
             TryGoBack(ContentFrame);
         }
     }

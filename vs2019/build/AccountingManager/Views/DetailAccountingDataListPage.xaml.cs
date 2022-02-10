@@ -9,21 +9,16 @@ using AccountingManager.Core.Models;
 using AccountingManager.Helpers;
 using AccountingManager.ViewModels;
 
-namespace AccountingManager.Views
-{
-    public sealed partial class DetailAccountingDataListPage : Page
-    {
+namespace AccountingManager.Views {
+    public sealed partial class DetailAccountingDataListPage : Page {
         private DetailAccountingDataListViewModel ViewModel => DataContext as DetailAccountingDataListViewModel;
 
-        public DetailAccountingDataListPage()
-        {
+        public DetailAccountingDataListPage() {
             InitializeComponent();
         }
 
-        private void GenerateAccountingDataListBox(DetailAccountingDataListPageParams inNavParams)
-        {
-            foreach (AccountingData data in inNavParams.ParentViewModel.AccountingDataList)
-            {
+        private void GenerateAccountingDataListBox(DetailAccountingDataListPageParams inNavParams) {
+            foreach (AccountingData data in inNavParams.ParentViewModel.AccountingDataList) {
                 ColumnDefinition typeCol = new ColumnDefinition();
                 Binding typeColWidthBinding = BindingHelper.CreateBinding(inNavParams.ParentViewModel, "DataTypeColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged);
                 BindingOperations.SetBinding(typeCol, ColumnDefinition.WidthProperty, typeColWidthBinding);
@@ -155,11 +150,9 @@ namespace AccountingManager.Views
             }
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
             DetailAccountingDataListPageParams navParams = e.Parameter as DetailAccountingDataListPageParams;
-            if (navParams != null)
-            {
+            if (navParams != null) {
                 ViewModel.AccountingDataList_SelectionChagned = navParams.AccountingDataList_SelectionChagned;
 
                 GenerateAccountingDataListBox(navParams);
@@ -168,8 +161,7 @@ namespace AccountingManager.Views
             base.OnNavigatedTo(e);
         }
 
-        private void AccountingDataListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void AccountingDataListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ListBox listBox = sender as ListBox;
             Grid grid = listBox.SelectedItem as Grid;
 

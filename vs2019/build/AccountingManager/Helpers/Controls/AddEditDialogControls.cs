@@ -5,45 +5,31 @@ using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
-namespace AccountingManager.Helpers
-{
-    public class AddEditDialogControls
-    {
-        public AddEditDialogControls()
-        {
+namespace AccountingManager.Helpers {
+    public class AddEditDialogControls {
+        public AddEditDialogControls() {
             //
             // Generate ...
             //
             mMonthList = new List<List<int>>();
-            for (int month = 1; month <= 12; ++month)
-            {
+            for (int month = 1; month <= 12; ++month) {
                 int endDay;
 
-                if (month == 2)
-                {
+                if (month == 2) {
                     endDay = 28;
                 }
-                else if (month < 8)
-                {
+                else if (month < 8) {
                     if (month % 2 == 0)
-                    {
                         endDay = 30;
-                    }
                     else
-                    {
                         endDay = 31;
-                    }
                 }
                 else
                 {
                     if (month % 2 == 0)
-                    {
                         endDay = 31;
-                    }
                     else
-                    {
                         endDay = 30;
-                    }
                 }
 
                 List<int> dayList = new List<int>();
@@ -73,8 +59,7 @@ namespace AccountingManager.Helpers
             mInputMonth = new ComboBox();
             mInputDepositMonth = new ComboBox();
 
-            for (int i = 1; i <= 12; ++i)
-            {
+            for (int i = 1; i <= 12; ++i) {
                 InputMonth.Items.Add(i);
                 mInputDepositMonth.Items.Add(i);
             }
@@ -97,11 +82,9 @@ namespace AccountingManager.Helpers
             mInputDay = new ComboBox();
             mInputDepositDay = new ComboBox();
 
-            {
-                List<int> dayList = MonthList[monthIdx - 1];
-                mInputDay.ItemsSource = dayList;  
-                mInputDepositDay.ItemsSource = dayList;
-            }
+            List<int> thatDayList = MonthList[monthIdx - 1];
+            mInputDay.ItemsSource = thatDayList;
+            mInputDepositDay.ItemsSource = thatDayList;
 
             // Set SelectedIndex to the current day.
             string dayText = localDate.ToString("dd");
@@ -140,13 +123,11 @@ namespace AccountingManager.Helpers
         }
 
         //* Only input digits.
-        private void TextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
-        {
+        private void TextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args) {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
 
-        private void InputMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void InputMonth_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ComboBox comboBox = sender as ComboBox;
 
             int monthIndex = comboBox.SelectedIndex;
@@ -159,8 +140,7 @@ namespace AccountingManager.Helpers
             InputDay.SelectedIndex = prevIndex >= count ? count - 1 : prevIndex;
         }
 
-        private void InputDepositMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void InputDepositMonth_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ComboBox comboBox = sender as ComboBox;
 
             int monthIndex = comboBox.SelectedIndex;

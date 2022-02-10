@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AccountingManager.Helpers
-{
-    public class YearlyNavPageParams
-    {
-        public YearlyNavPageParams(List<int> inList, Action<string> inAction)
-        {
+namespace AccountingManager.Helpers {
+    public class YearlyNavPageParams {
+        public YearlyNavPageParams(List<int> inList, Action<int> inAction) {
             mYearList = inList;
             mYearList_SelectionChanged = inAction;
         }
@@ -14,7 +11,7 @@ namespace AccountingManager.Helpers
         private List<int> mYearList;
         public List<int> YearList { get => mYearList; }
 
-        private Action<string> mYearList_SelectionChanged;
-        public Action<string> YearList_SelectionChanged { get => mYearList_SelectionChanged; }
+        private Action<int> mYearList_SelectionChanged;
+        public Action<int> YearList_SelectionChanged { get => mYearList_SelectionChanged; }
     }
 }

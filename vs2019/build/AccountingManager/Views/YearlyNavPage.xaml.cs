@@ -4,46 +4,35 @@ using Windows.UI.Xaml.Navigation;
 using AccountingManager.ViewModels;
 using AccountingManager.Helpers;
 
-namespace AccountingManager.Views
-{
-    public sealed partial class YearlyNavPage : Page
-    {
+namespace AccountingManager.Views {
+    public sealed partial class YearlyNavPage : Page {
         private YearlyNavViewModel ViewModel => DataContext as YearlyNavViewModel;
 
-        public YearlyNavPage()
-        {
+        public YearlyNavPage() {
             InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
             YearlyNavPageParams navParams = e.Parameter as YearlyNavPageParams;
             if (navParams != null)
             {
                 ViewModel.YearList_SelectionChanged = navParams.YearList_SelectionChanged;
 
-                if (navParams.YearList != null)
-                {
+                if (navParams.YearList != null) {
                     foreach (int year in navParams.YearList)
-                        YearListBox.Items.Add(year.ToString());
+                        YearListBox.Items.Add(year);
                 }
             }
 
             base.OnNavigatedTo(e);
         }
 
-        private void YearListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void YearListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ListBox listBox = sender as ListBox;
             if (listBox == null) return;
 
-            if (ViewModel.YearList_SelectionChanged != null)
-                ViewModel.YearList_SelectionChanged(listBox.SelectedItem as string);
-        }
-
-        private void YearListBox_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-
+            if (ViewModel.YearList_SelectionChanged != null && listBox.SelectedItem is int)
+                ViewModel.YearList_SelectionChanged((int)listBox.SelectedItem);
         }
     }
 }

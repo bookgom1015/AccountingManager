@@ -1,10 +1,7 @@
 ﻿
-namespace AccountingManager.Core.Models
-{
-    public class AccountingData
-    {
-        public enum QueryKeys
-        {
+namespace AccountingManager.Core.Models {
+    public class AccountingData {
+        public enum QueryKeys {
             ENone           = 1 << 0,
             EClientName     = 1 << 1,
             EDate           = 1 << 2,
@@ -16,8 +13,7 @@ namespace AccountingManager.Core.Models
             EDepositDate    = 1 << 8
         }
 
-        public class QueryValues
-        {
+        public class QueryValues {
             public string ClientName { get; set; }
             public string Date { get; set; }
             public int SteelWeight { get; set; }
@@ -27,8 +23,7 @@ namespace AccountingManager.Core.Models
             public bool DepositConfirm { get; set; }
         }
 
-        public AccountingData(int id = -1, string clientName = "", string date = "", string depositDate = "", int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false)
-        {
+        public AccountingData(int id = -1, string clientName = "", string date = "", string depositDate = "", int steelWeight = 0, int supplyPrice = 0, int taxAmount = 0, bool dataType = false, bool depositConfirm = false) {
             Id = id;
             DataType = dataType;
             ClientName = clientName;

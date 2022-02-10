@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+    <Source>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</Source>
+    <SmallTileSource>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</SmallTileSource>
+    <MediumTileSource>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</MediumTileSource>
+    <WideTileSource>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</WideTileSource>
+    <LargeTileSource>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</LargeTileSource>
+    <AppIconSource>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</AppIconSource>
+    <SplashScreenSource>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</SplashScreenSource>
+    <PackageLogoSource>F:\Visual Studio Projects\Window Projects\AccountingManager\vs2019\build\AccountingManager.Renew\Assets\logo_44x44.png</PackageLogoSource>
+    <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
+    <AppxShowAllApps>False</AppxShowAllApps>
+    <AppxBuildConfigurationSelection>x86</AppxBuildConfigurationSelection>
+    <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
+  </PropertyGroup>
+</Project>

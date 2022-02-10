@@ -6,18 +6,14 @@ using Prism.Windows.Mvvm;
 
 using AccountingManager.Helpers;
 
-namespace AccountingManager.ViewModels
-{
-    public class MainViewModel : ViewModelBase
-    {
-        public MainViewModel()
-        {
+namespace AccountingManager.ViewModels {
+    public class MainViewModel : ViewModelBase {
+        public MainViewModel() {
             mSqlManager = new MariaDbManager();
             IsConnected = false;
         }
 
-        public void LoadSettings()
-        {
+        public void LoadSettings() {
             //
             // Load local settings for application.
             //
@@ -30,18 +26,14 @@ namespace AccountingManager.ViewModels
             WindowHeight = windowHeightObj == null ? DefaultWindowHeight : (double)windowHeightObj;
         }
 
-        public void SaveSettings()
-        {
+        public void SaveSettings() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values["WindowWidth"] = WindowWidth;
             localSettings.Values["WindowHeight"] = WindowHeight;
         }
 
         private MariaDbManager mSqlManager = null;
-        public MariaDbManager SqlManager
-        {
-            get => mSqlManager;
-        }
+        public MariaDbManager SqlManager { get => mSqlManager; }
 
         public bool IsConnected { get; set; }
 
@@ -49,15 +41,13 @@ namespace AccountingManager.ViewModels
         public double DefaultWindowHeight { get => 768; }
 
         private double mWindowWidth;
-        public double WindowWidth
-        {
+        public double WindowWidth {
             get => mWindowWidth;
             set => SetProperty(ref mWindowWidth, value);
         }
 
         private double mWindowHeight;
-        public double WindowHeight
-        {
+        public double WindowHeight {
             get => mWindowHeight;
             set => SetProperty(ref mWindowHeight, value);
         }
@@ -66,10 +56,9 @@ namespace AccountingManager.ViewModels
         public short Port { get => 5252; }
         public string UserId { get => "dw_user"; }
         public string Password { get => "@dbUSER901901@"; }
-        public string DatabaseName
-        {
+        public string DatabaseName {
 #if DEBUG
-            get => "Test";
+            get => "test_accounting_data";
 #else
             get => "AccountingData";
 #endif

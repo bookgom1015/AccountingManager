@@ -7,12 +7,9 @@ using AccountingManager.Helpers;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace AccountingManager.Dialogs
-{
-    public sealed partial class AddEditDataDialog : ContentDialog
-    {
-        public AddEditDataDialog(AddEditDialogControls controls)
-        {
+namespace AccountingManager.Dialogs {
+    public sealed partial class AddEditDataDialog : ContentDialog {
+        public AddEditDataDialog(AddEditDialogControls controls) {
             this.InitializeComponent();
 
             SolidColorBrush red = new SolidColorBrush(Colors.Red);
@@ -50,26 +47,21 @@ namespace AccountingManager.Dialogs
             DepositDatePanel.Children.Add(controls.InputDepositDay);
         }
 
-        private void CancelReturn(ContentDialogButtonClickEventArgs args, TextBox textBox, string msg)
-        {
+        private void CancelReturn(ContentDialogButtonClickEventArgs args, TextBox textBox, string msg) {
             args.Cancel = true;
             textBox.PlaceholderText = msg;
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
+        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
             if (mInputName.Text.Length == 0) CancelReturn(args, mInputName, "* 거래처명을 입력해주십시오.");
             else if (mInputWeight.Text.Length == 0) CancelReturn(args, mInputWeight, "* 중량을 입력해주십시오.");
             else if (mInputPrice.Text.Length == 0) CancelReturn(args, mInputPrice, "* 공급가격을 입력해주십시오.");
             else if (mInputTax.Text.Length == 0) CancelReturn(args, mInputTax, "* 세액을 입력해주십시오.");
         }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
+        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {}
 
-        private void IncreaseAmount(TextBox inTextBox, int inAmount)
-        {
+        private void IncreaseAmount(TextBox inTextBox, int inAmount) {
             int price;
             int.TryParse(inTextBox.Text, out price);
 
@@ -78,33 +70,27 @@ namespace AccountingManager.Dialogs
             inTextBox.Text = price.ToString();
         }
 
-        private void PriceHudred_Click(object sender, RoutedEventArgs e)
-        {
+        private void PriceHudred_Click(object sender, RoutedEventArgs e) {
             IncreaseAmount(mInputPrice, 1000000);
         }
 
-        private void PriceTen_Click(object sender, RoutedEventArgs e)
-        {
+        private void PriceTen_Click(object sender, RoutedEventArgs e) {
             IncreaseAmount(mInputPrice, 100000);
         }
 
-        private void PriceOne_Click(object sender, RoutedEventArgs e)
-        {
+        private void PriceOne_Click(object sender, RoutedEventArgs e) {
             IncreaseAmount(mInputPrice, 10000);
         }
 
-        private void TaxHundred_Click(object sender, RoutedEventArgs e)
-        {
+        private void TaxHundred_Click(object sender, RoutedEventArgs e) {
             IncreaseAmount(mInputTax, 1000000);
         }
 
-        private void TaxTen_Click(object sender, RoutedEventArgs e)
-        {
+        private void TaxTen_Click(object sender, RoutedEventArgs e) {
             IncreaseAmount(mInputTax, 100000);
         }
 
-        private void TaxOne_Click(object sender, RoutedEventArgs e)
-        {
+        private void TaxOne_Click(object sender, RoutedEventArgs e) {
             IncreaseAmount(mInputTax, 10000);
         }
 

@@ -1,10 +1,7 @@
 ﻿
-namespace AccountingManager.Helpers
-{
-    public class AccountingDataListPageParams
-    {
-        public AccountingDataListPageParams(MariaDbManager inSqlManager, string inDatabaseName)
-        {
+namespace AccountingManager.Helpers {
+    public class AccountingDataListPageParams {
+        public AccountingDataListPageParams(MariaDbManager inSqlManager, string inDatabaseName) {
             mSqlManager = inSqlManager;
             mDatabaseName = inDatabaseName;
         }

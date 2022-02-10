@@ -2,12 +2,9 @@
 
 using Windows.UI.Xaml.Controls;
 
-namespace AccountingManager.Helpers
-{
-    public class AddYearDialogControls
-    {
-        public AddYearDialogControls()
-        {
+namespace AccountingManager.Helpers {
+    public class AddYearDialogControls {
+        public AddYearDialogControls() {
             mInputYear = new ComboBox();
 
             for (int i = 2000; i < 2100; ++i)

@@ -1,10 +1,7 @@
 ﻿
-namespace AccountingManager.Helpers
-{
-    public class ViewSelectionPageParams
-    {
-        public ViewSelectionPageParams(MariaDbManager inSqlManager, string inDatabaseName)
-        {
+namespace AccountingManager.Helpers {
+    public class ViewSelectionPageParams {
+        public ViewSelectionPageParams(MariaDbManager inSqlManager, string inDatabaseName) {
             mSqlManager = inSqlManager;
             mDatabaseName = inDatabaseName;
         }

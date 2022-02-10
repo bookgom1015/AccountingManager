@@ -129,7 +129,6 @@
         <ListBox x:Name="YearListBox"
                  ItemContainerStyle="{StaticResource SimpleAnimListBoxItem}"
                  SelectionChanged="YearListBox_SelectionChanged"
-                 PointerPressed="YearListBox_PointerPressed"
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                  Background="Transparent">
         </ListBox>

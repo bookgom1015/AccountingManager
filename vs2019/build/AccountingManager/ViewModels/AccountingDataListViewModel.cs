@@ -1,37 +1,21 @@
-﻿using System;
+﻿using AccountingManager.Core.Models;
+using AccountingManager.Helpers;
+using Prism.Windows.Mvvm;
+using System;
 using System.Collections.Generic;
-
 using Windows.Storage;
 using Windows.UI.Xaml;
 
-using Prism.Windows.Mvvm;
-
-using AccountingManager.Core.Models;
-using AccountingManager.Helpers;
-
-namespace AccountingManager.ViewModels
-{
-    public class AccountingDataListViewModel : ViewModelBase
-    {
-        public AccountingDataListViewModel() { }
-
-        public void Initialize()
-        {
-            LoadSettings();
-
+namespace AccountingManager.ViewModels {
+    public class AccountingDataListViewModel : ViewModelBase {
+        public AccountingDataListViewModel() {
             mSelectedData = new AccountingData();
             AccountingDataList = new List<AccountingData>();
 
             CurrentComparision = Comparisions.CompareDate;
         }
 
-        public void CleanUp()
-        {
-            SaveSettings();
-        }
-
-        private void LoadSettings()
-        {
+        public void LoadSettings() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
             Object dataTypeWidthObj = localSettings.Values["DataTypeColumnWidth"];
@@ -62,8 +46,7 @@ namespace AccountingManager.ViewModels
             DepositDateColumnWidth = new GridLength(depositDateWidthObj == null ? DefaultColumnWidth : (double)depositDateWidthObj);
         }
 
-        private void SaveSettings()
-        {
+        public void SaveSettings() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values["DataTypeColumnWidth"] = DataTypeColumnWidth.Value;
             localSettings.Values["ClientNameColumnWidth"] = ClientNameColumnWidth.Value;
@@ -84,64 +67,55 @@ namespace AccountingManager.ViewModels
         public double DefaultMinColumnWidth { get => 100; }
 
         private GridLength mDataTypeColumnWidth;
-        public GridLength DataTypeColumnWidth
-        {
+        public GridLength DataTypeColumnWidth {
             get => mDataTypeColumnWidth;
             set => SetProperty(ref mDataTypeColumnWidth, value);
         }
 
         private GridLength mClientNameColumnWidth;
-        public GridLength ClientNameColumnWidth
-        {
+        public GridLength ClientNameColumnWidth {
             get => mClientNameColumnWidth;
             set => SetProperty(ref mClientNameColumnWidth, value);
         }
 
         private GridLength mDateColumnWidth;
-        public GridLength DateColumnWidth
-        {
+        public GridLength DateColumnWidth {
             get => mDateColumnWidth;
             set => SetProperty(ref mDateColumnWidth, value);
         }
 
         private GridLength mSteelWeightColumnWidth;
-        public GridLength SteelWeightColumnWidth
-        {
+        public GridLength SteelWeightColumnWidth {
             get => mSteelWeightColumnWidth;
             set => SetProperty(ref mSteelWeightColumnWidth, value);
         }
 
         private GridLength mSupplyPriceColumnWidth;
-        public GridLength SupplyPriceColumnWidth
-        {
+        public GridLength SupplyPriceColumnWidth {
             get => mSupplyPriceColumnWidth;
             set => SetProperty(ref mSupplyPriceColumnWidth, value);
         }
 
         private GridLength mTaxAmountColumnWidth;
-        public GridLength TaxAmountColumnWidth
-        {
+        public GridLength TaxAmountColumnWidth {
             get => mTaxAmountColumnWidth;
             set => SetProperty(ref mTaxAmountColumnWidth, value);
         }
 
         private GridLength mSumColumnWidth;
-        public GridLength SumColumnWidth
-        {
+        public GridLength SumColumnWidth {
             get => mSumColumnWidth;
             set => SetProperty(ref mSumColumnWidth, value);
         }
 
         private GridLength mDepositConfirmColumnWidth;
-        public GridLength DepositConfirmColumnWidth
-        {
+        public GridLength DepositConfirmColumnWidth {
             get => mDepositConfirmColumnWidth;
             set => SetProperty(ref mDepositConfirmColumnWidth, value);
         }
 
         private GridLength mDepositDateColumnWidth;
-        public GridLength DepositDateColumnWidth
-        {
+        public GridLength DepositDateColumnWidth {
             get => mDepositDateColumnWidth;
             set => SetProperty(ref mDepositDateColumnWidth, value);
         }
@@ -149,19 +123,15 @@ namespace AccountingManager.ViewModels
         public List<AccountingData> AccountingDataList { get; set; }
         public Comparison<AccountingData> CurrentComparision { get; set; }
 
-        public string SelectedYearText { get; set; }
+        public string SelectedTableName { get; set; }
 
         private bool mYearSelected = false;
-        public bool YearSelected
-        {
+        public bool YearSelected {
             get => mYearSelected;
             set => SetProperty(ref mYearSelected, value);
         }
 
         private AccountingData mSelectedData;
-        public AccountingData SelectedData
-        {
-            get => mSelectedData;
-        }
+        public AccountingData SelectedData { get => mSelectedData; }
     }
 }

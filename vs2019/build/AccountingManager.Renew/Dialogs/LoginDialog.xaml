@@ -1,0 +1,49 @@
+﻿<ContentDialog
+    x:Class="AccountingManager.Renew.Dialogs.LoginDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AccountingManager.Renew.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="로그인"
+    PrimaryButtonText="입력"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    CornerRadius="8">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="0, 0, 0, 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>   
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="아이디" />
+                <TextBox Grid.Column="1" x:Name="UserName" CornerRadius="4" />
+            </Grid>
+            <TextBlock Grid.Row="1" x:Name="UserNameStatus" VerticalAlignment="Center" Foreground="Red" KeyDown="Input_KeyDown" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="비밀번호" />
+                <PasswordBox Grid.Column="1" x:Name="Password" CornerRadius="4" />
+            </Grid>
+            <TextBlock Grid.Row="1" x:Name="PasswordStatus" VerticalAlignment="Center" Foreground="Red" KeyDown="Input_KeyDown" />
+        </Grid>
+    </Grid>
+</ContentDialog>
