@@ -25,7 +25,7 @@ namespace AccountingManager.Renew.Views {
                 ViewModel.NavParams = navParams;
 
                 IEnumerable<int> years;
-                Result result = ViewModel.GetDates(out years);
+                Result result = ViewModel.GetDates(out years, null, null, navParams.Receivable);
                 if (result.Status) {
                     foreach (int year in years)
                         YearListBox.Items.Add(year);
@@ -48,6 +48,7 @@ namespace AccountingManager.Renew.Views {
 
                 MonthlyNavParams newNavParams = new MonthlyNavParams {
                     DbManager = navParams.DbManager,
+                    Receivable = ViewModel.NavParams.Receivable,
                     SelectedYear = year,
                     SelectedMonthChanged = navParams.SelectedMonthChanged
                 };

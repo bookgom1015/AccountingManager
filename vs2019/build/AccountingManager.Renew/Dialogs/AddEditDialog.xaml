@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="TITLE"
+    Title="TITLE"    
     PrimaryButtonText="Button1"
     SecondaryButtonText="Button2"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
@@ -26,6 +26,13 @@
             <Setter Property="PlaceholderForeground" Value="Red" />
             <Setter Property="CornerRadius" Value="4" />
         </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="MinWidth" Value="240" />
+            <Setter Property="MaxWidth" Value="240" />
+            <Setter Property="YearFormat" Value="{}{year.full(4)}년" />
+            <Setter Property="MonthFormat" Value="{}{month.integer}월" />
+            <Setter Property="DayFormat" Value="{}{day.integer}일" />
+        </Style>
     </ContentDialog.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -43,7 +50,7 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="날짜" />
-            <DatePicker Grid.Column="1" x:Name="InputDate" />            
+            <DatePicker Grid.Column="1" x:Name="InputDate" Template="{StaticResource SimpleDatePicker}" />
         </Grid>
         <Grid Grid.Row="1" Style="{StaticResource FormGroup}">
             <Grid.ColumnDefinitions>
@@ -132,7 +139,8 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="입금 날짜" />
-            <DatePicker Grid.Column="1" x:Name="InputDepositDate" IsEnabled="{x:Bind Path=(x:Boolean)InputDepositConfirmed.IsChecked, Mode=OneWay}" />
+            <DatePicker Grid.Column="1" x:Name="InputDepositDate" Template="{StaticResource SimpleDatePicker}"
+                        IsEnabled="{x:Bind Path=(x:Boolean)InputDepositConfirmed.IsChecked, Mode=OneWay}" />
         </Grid>
     </Grid>
 </ContentDialog>

@@ -36,14 +36,19 @@ namespace AccountingManager.Renew.Dialogs {
             if (controls.AccountingData != null) {
                 AccountingData data = controls.AccountingData;
 
-                InputDate.Date = new DateTime(data.Year, data.Month, data.Day);
+                InputDate.Date = data.Date;
                 InputClientName.Text = data.ClientName;
                 InputSteelWeight.Text = data.SteelWeight.ToString();
                 InputSupplyPrice.Text = data.SupplyPrice.ToString();
                 InputTaxAmount.Text = data.TaxAmount.ToString();
                 InputDepositConfirmed.IsChecked = data.DepositConfirmed;
                 InputDataType.IsChecked = data.DataType;
-                InputDepositDate.Date = data.DepositConfirmed ? Convert.ToDateTime(data.DepositDate) : DateTime.Now;
+                InputDepositDate.Date = DateTime.Now;
+                if (data.DepositConfirmed) {
+                    DateTime dateTime;
+                    bool result = DateTime.TryParse(data.DepositDate, out dateTime);
+                    if (result) InputDepositDate.Date = dateTime;
+                }
             }
             else {
                 InputDate.Date = DateTimeOffset.Now;
@@ -83,13 +88,11 @@ namespace AccountingManager.Renew.Dialogs {
             bool dataType = (bool)InputDataType.IsChecked;
 
             bool depositConfirmed = (bool)InputDepositConfirmed.IsChecked;
-            string depositDate = depositConfirmed ? new DateTime(InputDepositDate.Date.Year, InputDepositDate.Date.Month, InputDepositDate.Date.Day).ToString("yyyy/MM/dd") : "";
+            string depositDate = depositConfirmed ? new DateTime(InputDepositDate.Date.Year, InputDepositDate.Date.Month, InputDepositDate.Date.Day).ToString("yyyy-MM-dd") : "";
 
             AccountingData data = new AccountingData {
                 ClientName = InputClientName.Text,
-                Year = date.Year,
-                Month = date.Month,
-                Day = date.Day,
+                Date = date,
                 SteelWeight = steelWeight,
                 SupplyPrice = supplyPrice,
                 TaxAmount = taxAmount,

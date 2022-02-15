@@ -9,13 +9,10 @@ namespace AccountingManager.Renew.Core.Helpers {
     public class AccountingDataComparisions {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int InlineCompareType(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) {
+            if (a.Date > b.Date) {
                 return 1;
             }
-            else if (dateA < dateB) {
+            else if (a.Date < b.Date) {
                 return -1;
             }
             else {
@@ -46,13 +43,10 @@ namespace AccountingManager.Renew.Core.Helpers {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int InlineCompareName(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) {
+            if (a.Date > b.Date) {
                 return 1;
             }
-            else if (dateA < dateB) {
+            else if (a.Date < b.Date) {
                 return -1;
             }
             else {
@@ -89,30 +83,21 @@ namespace AccountingManager.Renew.Core.Helpers {
         }
 
         public static int CompareDate(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) return 1;
-            else if (dateA < dateB) return -1;
+            if (a.Date > b.Date) return 1;
+            else if (a.Date < b.Date) return -1;
             else return InlineCompareDate(a, b);
         }
 
         public static int CompareDateReverse(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) return -1;
-            else if (dateA < dateB) return 1;
+            if (a.Date > b.Date) return -1;
+            else if (a.Date < b.Date) return 1;
             else return InlineCompareDate(a, b);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int InlineCompareWeight(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) return -1;
-            else if (dateA < dateB) return 1;
+            if (a.Date > b.Date) return -1;
+            else if (a.Date < b.Date) return 1;
             else return string.Compare(a.ClientName, b.ClientName);
         }
 
@@ -130,11 +115,8 @@ namespace AccountingManager.Renew.Core.Helpers {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int InlineComparePrice(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) return -1;
-            else if (dateA < dateB) return 1;
+            if (a.Date > b.Date) return -1;
+            else if (a.Date < b.Date) return 1;
             else return string.Compare(a.ClientName, b.ClientName);
         }
 
@@ -152,11 +134,8 @@ namespace AccountingManager.Renew.Core.Helpers {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int InlineCompareTax(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) return -1;
-            else if (dateA < dateB) return 1;
+            if (a.Date > b.Date) return -1;
+            else if (a.Date < b.Date) return 1;
             else return string.Compare(a.ClientName, b.ClientName);;
         }
 
@@ -174,11 +153,8 @@ namespace AccountingManager.Renew.Core.Helpers {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int InlineCompareSum(AccountingData a, AccountingData b) {
-            DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-            DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-            if (dateA > dateB) return -1;
-            else if (dateA < dateB) return 1;
+            if (a.Date > b.Date) return -1;
+            else if (a.Date < b.Date) return 1;
             else return string.Compare(a.ClientName, b.ClientName); ;
         }
 
@@ -208,11 +184,8 @@ namespace AccountingManager.Renew.Core.Helpers {
                 int nameCompResult = string.Compare(a.ClientName, b.ClientName);
 
                 if (nameCompResult == 0) {
-                    DateTime dateA = new DateTime(a.Year, a.Month, a.Day);
-                    DateTime dateB = new DateTime(b.Year, b.Month, b.Day);
-
-                    if (dateA > dateB) return 1;
-                    else if (dateA < dateB) return 1;
+                    if (a.Date > b.Date) return 1;
+                    else if (a.Date < b.Date) return 1;
                     else return 0;
                 }
                 else {

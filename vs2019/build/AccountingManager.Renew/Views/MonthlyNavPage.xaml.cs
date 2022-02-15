@@ -27,7 +27,7 @@ namespace AccountingManager.Renew.Views {
                 NavTitle.Text = string.Format("{0}년", navParams.SelectedYear.ToString());
 
                 IEnumerable<int> months;
-                Result result = navParams.DbManager.GetDates(out months, navParams.SelectedYear);
+                Result result = navParams.DbManager.GetDates(out months, navParams.SelectedYear, null, navParams.Receivable);
                 if (result.Status) {
                     foreach (int month in months)
                         MonthListBox.Items.Add(month);

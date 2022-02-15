@@ -18,10 +18,6 @@ namespace AccountingManager.Renew.Core.Concrete {
                 
                 connection.Open();
             }
-            catch (MySqlException e) {
-                connection = null;
-                return new Result { Status = false, ErrMsg = e.Message };
-            }
             catch (Exception e) {
                 connection = null;
                 return new Result { Status = false, ErrMsg = e.Message };
@@ -42,9 +38,6 @@ namespace AccountingManager.Renew.Core.Concrete {
                 int status = command.ExecuteNonQuery();
                 if (status == -1) return new Result { Status = false, ErrMsg = "Failed to execute non query command" };
             }
-            catch (MySqlException e) {
-                return new Result { Status = false, ErrMsg = e.Message };
-            }
             catch (Exception e) {
                 return new Result { Status = false, ErrMsg = e.Message };
             }
@@ -60,8 +53,8 @@ namespace AccountingManager.Renew.Core.Concrete {
 
         public Result Add(AccountingData data) {
             string cmdTxt = string.Format(
-                "INSERT INTO {0}(client_name, year, month, day, steel_weight, supply_price, tax_amount, data_type, deposit_confirmed, deposit_date, deleted) VALUES (\'{1}\', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, \'{10}\', 0);",
-                GlobalSettings.DataTableName, data.ClientName, data.Year, data.Month, data.Day, data.SteelWeight, data.SupplyPrice, data.TaxAmount, data.DataType ? 1 : 0, data.DepositConfirmed ? 1 : 0, data.DepositDate);
+                "INSERT INTO {0}(client_name, date, steel_weight, supply_price, tax_amount, data_type, deposit_confirmed, deposit_date, deleted) VALUES (\'{1}\', \'{2}\', {3}, {4}, {5}, {6}, {7}, \'{8}\', 0);",
+                GlobalSettings.DataTableName, data.ClientName, data.Date.ToString("yyyy-MM-dd"), data.SteelWeight, data.SupplyPrice, data.TaxAmount, data.DataType ? 1 : 0, data.DepositConfirmed ? 1 : 0, data.DepositDate);
 
             return ExecuteNonQuery(cmdTxt);
         }
@@ -73,9 +66,7 @@ namespace AccountingManager.Renew.Core.Concrete {
             cmdBuilder.AppendFormat("UPDATE {0} SET", GlobalSettings.DataTableName);
 
             if ((keys & AccountingDataQueryKeys.EClientName)        != 0) cmdBuilder.Append(string.Format(" client_name=\'{0}\',",    data.ClientName));
-            if ((keys & AccountingDataQueryKeys.EYear)              != 0) cmdBuilder.Append(string.Format(" year={0},",               data.Year));
-            if ((keys & AccountingDataQueryKeys.EMonth)             != 0) cmdBuilder.Append(string.Format(" month={0},",              data.Month));
-            if ((keys & AccountingDataQueryKeys.EDay)               != 0) cmdBuilder.Append(string.Format(" day={0},",                data.Day));
+            if ((keys & AccountingDataQueryKeys.EDate)              != 0) cmdBuilder.Append(string.Format(" date=\'{0}\',",           data.Date.ToString("yyyy-MM-dd")));
             if ((keys & AccountingDataQueryKeys.ESteelWeight)       != 0) cmdBuilder.Append(string.Format(" steel_weight={0},",       data.SteelWeight));
             if ((keys & AccountingDataQueryKeys.ESupplyPrice)       != 0) cmdBuilder.Append(string.Format(" supply_price={0},",       data.SupplyPrice));
             if ((keys & AccountingDataQueryKeys.ETaxAmount)         != 0) cmdBuilder.Append(string.Format(" tax_amount={0},",         data.TaxAmount));
@@ -95,12 +86,15 @@ namespace AccountingManager.Renew.Core.Concrete {
             return ExecuteNonQuery(cmdTxt);
         }
 
-        public Result GetDates(out IEnumerable<int> dates, int? year = null, int? month = null) {
-            string cmdTxt;
+        public Result GetDates(out IEnumerable<int> dates, int? year = null, int? month = null, bool receivable = false) {
+            StringBuilder whereBuilder = new StringBuilder();
+            whereBuilder.Append("deleted=0");
+            if (receivable) whereBuilder.Append(" AND deposit_confirmed=0");
 
-            if (month != null) cmdTxt = string.Format("SELECT DISTINCT day FROM {0} WHERE deleted=0 AND year={1} AND month={2} ORDER BY day;", GlobalSettings.DataTableName, year, month);
-            else if (year != null) cmdTxt = string.Format("SELECT DISTINCT month FROM {0} WHERE deleted=0 AND year={1} ORDER BY month;", GlobalSettings.DataTableName, year);
-            else cmdTxt = string.Format("SELECT DISTINCT year FROM {0} WHERE deleted=0 ORDER BY year;", GlobalSettings.DataTableName);
+            string cmdTxt;
+            if (month != null) cmdTxt = string.Format("SELECT DISTINCT DAY(date) FROM {0} WHERE {1} AND date LIKE \'{2}-{3:D2}-%\' ORDER BY DAY(date);", GlobalSettings.DataTableName, whereBuilder.ToString(), year, month);
+            else if (year != null) cmdTxt = string.Format("SELECT DISTINCT MONTH(date) FROM {0} WHERE {1} AND date LIKE \'{2}-%\' ORDER BY MONTH(date);", GlobalSettings.DataTableName, whereBuilder.ToString(), year);
+            else cmdTxt = string.Format("SELECT DISTINCT YEAR(date) FROM {0} WHERE {1} ORDER BY YEAR(date);", GlobalSettings.DataTableName, whereBuilder.ToString());
 
             MySqlDataReader dataInTable = null;
 
@@ -118,34 +112,29 @@ namespace AccountingManager.Renew.Core.Concrete {
 
                 if (month != null) {
                     while (dataInTable.Read()) {
-                        int clearDay = (int)dataInTable["day"];
+                        int clearDay = (int)dataInTable["DAY(date)"];
 
                         dateList.Add(clearDay);
                     }
                 }
                 else if (year != null) {
                     while (dataInTable.Read()) {
-                        int clearMonth = (int)dataInTable["month"];
+                        int clearMonth = (int)dataInTable["MONTH(date)"];
 
                         dateList.Add(clearMonth);
                     }
                 }
                 else {
                     while (dataInTable.Read()) {
-                        int clearYear = (int)dataInTable["year"];
-
+                        int clearYear = (int)dataInTable["YEAR(date)"];
+                        
                         dateList.Add(clearYear);
                     }
                 }
 
                 dates = dateList;
                 dataInTable.Close();
-            } 
-            catch (MySqlException e) {
-                dates = null;
-                if (dataInTable != null && !dataInTable.IsClosed) dataInTable.Close();
-                return new Result { Status = false, ErrMsg = e.Message };
-            } 
+            }
             catch (Exception e) {
                 dates = null;
                 if (dataInTable != null && !dataInTable.IsClosed) dataInTable.Close();
@@ -173,9 +162,7 @@ namespace AccountingManager.Renew.Core.Concrete {
                 while (dataInTable.Read()) {
                     uint uid = (uint)dataInTable["uid"];
                     string clientName = dataInTable["client_name"] as string;
-                    int clearYear = (int)dataInTable["year"];
-                    int clearMonth = (int)dataInTable["month"];
-                    int clearDay = (int)dataInTable["day"];
+                    DateTime date = (DateTime)dataInTable["date"];
                     float steelWeight = (float)dataInTable["steel_weight"];
                     uint supplyPrice = (uint)dataInTable["supply_price"];
                     uint taxAmount = (uint)dataInTable["tax_amount"];
@@ -186,9 +173,7 @@ namespace AccountingManager.Renew.Core.Concrete {
                     AccountingData newData = new AccountingData {
                         Uid = uid,
                         ClientName = clientName,
-                        Year = clearYear,
-                        Month = clearMonth,
-                        Day = clearDay,
+                        Date = date,
                         SteelWeight = steelWeight,
                         SupplyPrice = supplyPrice,
                         TaxAmount = taxAmount,
@@ -203,11 +188,6 @@ namespace AccountingManager.Renew.Core.Concrete {
                 data = dataList;
                 dataInTable.Close();
             }
-            catch (MySqlException e) {
-                data = null;
-                if (dataInTable != null && !dataInTable.IsClosed) dataInTable.Close();
-                return new Result { Status = false, ErrMsg = e.Message };
-            }
             catch (Exception e) {
                 data = null;
                 if (dataInTable != null && !dataInTable.IsClosed) dataInTable.Close();
@@ -217,22 +197,25 @@ namespace AccountingManager.Renew.Core.Concrete {
             return Result.Success;
         }
 
-        public Result GetData(out IEnumerable<AccountingData> data, int? year = null, int? month = null, int? day = null) {
+        public Result GetData(out IEnumerable<AccountingData> data, int? year = null, int? month = null, int? day = null, bool receivable = false) {
             StringBuilder cmdBuilder = new StringBuilder();
-            cmdBuilder.AppendFormat("SELECT * FROM {0} WHERE", GlobalSettings.DataTableName);
-            if (day != null) cmdBuilder.AppendFormat(" year={0} AND month={1} AND day={2} AND", year, month, day);
-            else if (month != null) cmdBuilder.AppendFormat(" year={0} AND month={1} AND", year, month);
-            else if (year != null) cmdBuilder.AppendFormat(" year={0} AND", year);
-            cmdBuilder.Append(" deleted=0 ORDER BY year, month, day;");
+            cmdBuilder.AppendFormat("SELECT * FROM {0} WHERE deleted=0", GlobalSettings.DataTableName);
+            if (receivable) cmdBuilder.AppendFormat(" AND deposit_confirmed=0");
+            if (day != null) cmdBuilder.AppendFormat(" AND date=\'{0}-{1:D2}-{2:D2}\'", year, month, day);
+            else if (month != null) cmdBuilder.AppendFormat(" AND date LIKE \'{0}-{1:D2}-%\'", year, month);
+            else if (year != null) cmdBuilder.AppendFormat(" AND date LIKE \'{0}-%\'", year);
+            cmdBuilder.Append(" ORDER BY date;");
 
             return GetData(out data, cmdBuilder.ToString());
         }
 
-        public Result GetData(out IEnumerable<AccountingData> data, DateTime begin, DateTime end, string clientName) {
-            string cmdTxt = string.Format("SELECT * FROM {0} WHERE deleted=0 AND client_name LIKE\'%{1}%\' AND year>={2} AND year<={3} AND month>={4} AND month<={5} AND day>={6} AND day<={7} ORDER BY year, month, day;", 
-                GlobalSettings.DataTableName, clientName, begin.Year, end.Year, begin.Month, end.Month, begin.Day, end.Day);
+        public Result GetData(out IEnumerable<AccountingData> data, DateTime begin, DateTime end, string clientName, bool receivable = false) {
+            StringBuilder cmdBuilder = new StringBuilder();
+            cmdBuilder.AppendFormat("SELECT * FROM {0} WHERE deleted=0", GlobalSettings.DataTableName);
+            if (receivable) cmdBuilder.Append(" AND deposit_confirmed=0");
+            cmdBuilder.AppendFormat(" AND client_name LIKE \'%{0}%\' AND date>=\'{1}\' AND date<=\'{2}\' ORDER BY date;", clientName, begin.ToString("yyyy-MM-dd"), end.ToString("yyyy-MM-dd"));
 
-            return GetData(out data, cmdTxt);
+            return GetData(out data, cmdBuilder.ToString());
         }
 
         private MySqlConnection connection;

@@ -10,8 +10,8 @@ namespace AccountingManager.Renew.ViewModels {
     public class MonthlyNavViewModel : ViewModelBase {
         public MonthlyNavViewModel() { }
 
-        public Result GetMonths(out IEnumerable<int> months, int year) {
-            return NavParams.DbManager.GetDates(out months, year);
+        public Result GetMonths(out IEnumerable<int> months, int? year = null, int? month = null, bool receivable = false) {
+            return NavParams.DbManager.GetDates(out months, year, month, receivable);
         }
 
         public MonthlyNavParams NavParams { get; set; }

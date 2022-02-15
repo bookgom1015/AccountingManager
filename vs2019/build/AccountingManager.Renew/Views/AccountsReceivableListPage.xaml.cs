@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Windows.ApplicationModel;
@@ -13,9 +13,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Animation;
 
-using AccountingManager.Renew.Core.Models;
 using AccountingManager.Renew.Core.Helpers;
 using AccountingManager.Renew.Core.Infrastructures;
+using AccountingManager.Renew.Core.Models;
 using AccountingManager.Renew.Dialogs;
 using AccountingManager.Renew.Dialogs.Controls;
 using AccountingManager.Renew.Helpers;
@@ -23,10 +23,10 @@ using AccountingManager.Renew.Helpers.NavParams;
 using AccountingManager.Renew.ViewModels;
 
 namespace AccountingManager.Renew.Views {
-    public sealed partial class AccountingDataListPage : Page {
-        private AccountingDataListViewModel ViewModel => DataContext as AccountingDataListViewModel;
+    public sealed partial class AccountsReceivableListPage : Page {
+        private AccountsReceivableListViewModel ViewModel => DataContext as AccountsReceivableListViewModel;
 
-        public AccountingDataListPage() {
+        public AccountsReceivableListPage() {
             InitializeComponent();
 
             Application.Current.EnteredBackground += OnEnteredBackground;
@@ -34,11 +34,7 @@ namespace AccountingManager.Renew.Views {
             ViewModel.ColumnDirIndicators.Add(DataTypeIndicator);
             ViewModel.ColumnDirIndicators.Add(ClientNameIndicator);
             ViewModel.ColumnDirIndicators.Add(DateIndicator);
-            ViewModel.ColumnDirIndicators.Add(SteelWeightIndicator);
-            ViewModel.ColumnDirIndicators.Add(SupplyPriceIndicator);
-            ViewModel.ColumnDirIndicators.Add(TaxAmountIndicator);
             ViewModel.ColumnDirIndicators.Add(SumIndicator);
-            ViewModel.ColumnDirIndicators.Add(DepositConfirmedIndicator);
         }
 
         private void OnEnteredBackground(Object sender, EnteredBackgroundEventArgs e) {
@@ -50,7 +46,7 @@ namespace AccountingManager.Renew.Views {
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e) {
-            AccountingDataListNavParams navParams = e.Parameter as AccountingDataListNavParams;
+            AccountsReceivableListNavParams navParams = e.Parameter as AccountsReceivableListNavParams;
             if (navParams != null) {
                 ViewModel.NavParams = navParams;
             }
@@ -89,71 +85,21 @@ namespace AccountingManager.Renew.Views {
             }
         }
 
-        private async void SearchButton_Click(object sender, RoutedEventArgs e) {
-            using (var btnLocker = new DoubleClickPreventer(sender)) {
-                await SearchData();
-            }
-        }
-
-        private async void AddButton_Click(object sender, RoutedEventArgs e) {
-            using (var btnLocker = new DoubleClickPreventer(sender)) {
-                AddEditControls controls = new AddEditControls();
-                AddEditDialog dialog = new AddEditDialog(controls) { Title = "자료 추가", PrimaryButtonText = "추가", SecondaryButtonText = "취소" };
-                ContentDialogResult dialogResult = await dialog.ShowAsync();
-
-                if (dialogResult == ContentDialogResult.Primary) {
-                    Result addResult = ViewModel.AddData(controls.AccountingData);
-                    if (!addResult.Status) {
-                        await Logger.MessageBox("오류", addResult.ErrMsg);
-                        return;
-                    }
-
-                    await ShowDataList(true, true);
-                    ShowDateNavs();
-                }
-            }
-        }
-
-        private async void EditButton_Click(object sender, RoutedEventArgs e) {
+        private async void ConfirmButton_Click(object sender, RoutedEventArgs e) {
             using (var btnLocker = new DoubleClickPreventer(sender)) {
                 if (!ViewModel.DataIsSelected) {
                     await Logger.MessageBox("경고", "수정할 자료를 선택해주십시오");
                     return;
                 }
 
-                AddEditControls controls = new AddEditControls { AccountingData = ViewModel.SelectedData };
-                AddEditDialog dialog = new AddEditDialog(controls) { Title = "자료 수정", PrimaryButtonText = "수정", SecondaryButtonText = "취소" };
+                DepositDateControls controls = new DepositDateControls { AccountingData = ViewModel.SelectedData };
+                DepositDateDialog dialog = new DepositDateDialog(controls);
                 ContentDialogResult dialogResult = await dialog.ShowAsync();
 
                 if (dialogResult == ContentDialogResult.Primary) {
                     Result updateResult = ViewModel.EditData(controls.AccountingData);
                     if (!updateResult.Status) {
                         await Logger.MessageBox("오류", updateResult.ErrMsg);
-                        return;
-                    }
-
-                    ViewModel.DataEditted = true;
-
-                    await ShowDataList(true, true);
-                    ShowDateNavs();
-                }
-            }
-        }
-
-        private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            using (var btnLocker = new DoubleClickPreventer(sender)) {
-                if (!ViewModel.DataIsSelected) {
-                    await Logger.MessageBox("경고", "삭제할 자료를 선택해주십시오");
-                    return;
-                }
-
-                DeleteDialog dialog = new DeleteDialog();
-                ContentDialogResult dialogResult = await dialog.ShowAsync();
-
-                if (dialogResult == ContentDialogResult.Primary) {
-                    Result deleteResult = ViewModel.RemoveData(ViewModel.SelectedData);
-                    if (!deleteResult.Status) {
-                        await Logger.MessageBox("오류", deleteResult.ErrMsg);
                         return;
                     }
 
@@ -213,54 +159,6 @@ namespace AccountingManager.Renew.Views {
             }
         }
 
-        private async void SteelWeightColumnButton_Click(object sender, RoutedEventArgs e) {
-            using (var btnLocker = new DoubleClickPreventer(sender)) {
-                if (ViewModel.CurrentComparision == AccountingDataComparisions.CompareWeight) {
-                    SteelWeightIndiRotation.Angle = 180;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.CompareWeightReverse;
-                }
-                else {
-                    SteelWeightIndiRotation.Angle = 0;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.CompareWeight;
-                }
-
-                ViewModel.ConfigureColumnDirIndicators(SteelWeightIndicator);
-                await ShowDataList(false, true);
-            }
-        }
-
-        private async void SupplyPriceColumnButton_Click(object sender, RoutedEventArgs e) {
-            using (var btnLocker = new DoubleClickPreventer(sender)) {
-                if (ViewModel.CurrentComparision == AccountingDataComparisions.ComparePrice) {
-                    SupplyPriceIndiRotation.Angle = 180;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.ComparePriceReverse;
-                }
-                else {
-                    SupplyPriceIndiRotation.Angle = 0;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.ComparePrice;
-                }
-
-                ViewModel.ConfigureColumnDirIndicators(SupplyPriceIndicator);
-                await ShowDataList(false, true);
-            }
-        }
-
-        private async void TaxAmountColumnButton_Click(object sender, RoutedEventArgs e) {
-            using (var btnLocker = new DoubleClickPreventer(sender)) {
-                if (ViewModel.CurrentComparision == AccountingDataComparisions.CompareTax) {
-                    TaxAmountIndiRotation.Angle = 180;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.CompareTaxReverse;
-                }
-                else {
-                    TaxAmountIndiRotation.Angle = 0;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.CompareTax;
-                }
-
-                ViewModel.ConfigureColumnDirIndicators(TaxAmountIndicator);
-                await ShowDataList(false, true);
-            }
-        }
-
         private async void SumColumnButton_Click(object sender, RoutedEventArgs e) {
             using (var btnLocker = new DoubleClickPreventer(sender)) {
                 if (ViewModel.CurrentComparision == AccountingDataComparisions.CompareSum) {
@@ -277,19 +175,9 @@ namespace AccountingManager.Renew.Views {
             }
         }
 
-        private async void DepositConfirmedColumnButton_Click(object sender, RoutedEventArgs e) {
+        private async void SearchButton_Click(object sender, RoutedEventArgs e) {
             using (var btnLocker = new DoubleClickPreventer(sender)) {
-                if (ViewModel.CurrentComparision == AccountingDataComparisions.CompareConfirm) {
-                    DepositConfirmedIndiRotation.Angle = 180;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.CompareConfirmReverse;
-                }
-                else {
-                    DepositConfirmedIndiRotation.Angle = 0;
-                    ViewModel.CurrentComparision = AccountingDataComparisions.CompareConfirm;
-                }
-
-                ViewModel.ConfigureColumnDirIndicators(DepositConfirmedIndicator);
-                await ShowDataList(false, true);
+                await SearchData();
             }
         }
 
@@ -319,8 +207,8 @@ namespace AccountingManager.Renew.Views {
         private async Task ShowDataList(bool needToUpdate = false, bool needToSort = false) {
             if (needToUpdate) {
                 IEnumerable<AccountingData> data;
-                if (ViewModel.IsForSearching) {                    
-                    Result result = ViewModel.GetData(out data, (DateTime)ViewModel.BeginDate, (DateTime)ViewModel.EndDate, ViewModel.LookingForClietnName, false);
+                if (ViewModel.IsForSearching) {
+                    Result result = ViewModel.GetData(out data, (DateTime)ViewModel.BeginDate, (DateTime)ViewModel.EndDate, ViewModel.LookingForClietnName, true);
                     if (!result.Status) {
                         await Logger.MessageBox("오류", result.ErrMsg);
                         return;
@@ -328,7 +216,7 @@ namespace AccountingManager.Renew.Views {
                 }
                 else {
                     if (ViewModel.SelectedYear == null) return;
-                    Result result = ViewModel.GetData(out data, ViewModel.SelectedYear, ViewModel.SelectedMonth, null, false);
+                    Result result = ViewModel.GetData(out data, ViewModel.SelectedYear, ViewModel.SelectedMonth, null, true);
                     if (!result.Status) {
                         await Logger.MessageBox("오류", result.ErrMsg);
                         return;
@@ -346,33 +234,28 @@ namespace AccountingManager.Renew.Views {
             ViewModel.DataEditted = false;
 
             if (needToSort) ViewModel.SortAccountingData();
-
+            
             ViewModel.SelectedData = null;
-
-            TotalSales.Text = string.Format("{0:#,##0}", ViewModel.AccountingDataList.Where(a => a.DataType == false).Sum(a => a.SupplyPrice + a.TaxAmount));
-            TotalPurchases.Text = string.Format("{0:#,##0}", ViewModel.AccountingDataList.Where(a => a.DataType == true).Sum(a => a.SupplyPrice + a.TaxAmount));
-            TotalWeight.Text = string.Format("{0:#,##0.##}", ViewModel.AccountingDataList.Where(a => a.DataType == false).Sum(a => a.SteelWeight));
-
-            DetailAccountingDataListNavParams navParams = new DetailAccountingDataListNavParams {           
+            
+            TotalSales.Text = string.Format("{0:#,##0}", ViewModel.AccountingDataList.Where(a => a.DataType == false).Sum(a => a.Sum));
+            TotalPurchases.Text = string.Format("{0:#,##0}", ViewModel.AccountingDataList.Where(a => a.DataType == true).Sum(a => a.Sum));
+            
+            DetailAccountsReceivableListNavParams navParams = new DetailAccountsReceivableListNavParams {
                 DataTypeColWidthBinding = BindingHelper.CreateBinding(ViewModel, "DataTypeColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
                 ClientNameColWidthBinding = BindingHelper.CreateBinding(ViewModel, "ClientNameColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
                 DateColWidthBinding = BindingHelper.CreateBinding(ViewModel, "DateColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
-                SteelWeightColWidthBinding = BindingHelper.CreateBinding(ViewModel, "SteelWeightColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
-                SupplyPriceColWidthBinding = BindingHelper.CreateBinding(ViewModel, "SupplyPriceColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
-                TaxAmountColWidthBinding = BindingHelper.CreateBinding(ViewModel, "TaxAmountColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
                 SumColWidthBinding = BindingHelper.CreateBinding(ViewModel, "SumColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
-                DepositConfirmedColWidthBinding = BindingHelper.CreateBinding(ViewModel, "DepositConfirmColumnWidth", BindingMode.OneWay, UpdateSourceTrigger.PropertyChanged),
                 AccountingData = ViewModel.AccountingDataList,
                 SelectedAccountingDataChanged = this.SelectedAccountingDataChanged
             };
-            DetailListFrame.Navigate(typeof(DetailAccountingDataListPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
-        }        
+            DetailListFrame.Navigate(typeof(DetailAccountsReceivableListPage), navParams, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+        }
 
         private void ShowDateNavs() {
             if (NavFrame.CurrentSourcePageType == typeof(MonthlyNavPage)) {
                 MonthlyNavParams navParams = new MonthlyNavParams {
                     DbManager = ViewModel.NavParams.DbManager,
-                    Receivable = false,
+                    Receivable = true,
                     SelectedYear = ViewModel.SelectedYear,
                     SelectedMonthChanged = this.SelectedMonthChanged
                 };
@@ -382,14 +265,14 @@ namespace AccountingManager.Renew.Views {
             else {
                 YearlyNavParams navParams = new YearlyNavParams {
                     DbManager = ViewModel.NavParams.DbManager,
-                    Receivable = false,
+                    Receivable = true,
                     SelectedYearChanged = this.SelectedYearChanged,
                     SelectedMonthChanged = this.SelectedMonthChanged
                 };
                 NavFrame.Navigate(typeof(YearlyNavPage), navParams, new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromLeft });
                 if (NavFrame.BackStackDepth > 0) NavFrame.BackStack.RemoveAt(NavFrame.BackStackDepth - 1);
             }
-        }        
+        }
 
         private async Task SearchData() {
             if (InputTextBox.Text.Length == 0) {
@@ -406,7 +289,7 @@ namespace AccountingManager.Renew.Views {
                 return;
             }
 
-            await ShowDataList(true);
+            await ShowDataList(true, true);
         }
     }
 }

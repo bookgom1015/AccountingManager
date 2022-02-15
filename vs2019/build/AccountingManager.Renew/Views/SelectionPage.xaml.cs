@@ -25,7 +25,22 @@ namespace AccountingManager.Renew.Views {
         public SelectionPage() {
             InitializeComponent();
 
+            Windows.ApplicationModel.Core.CoreApplication.LeavingBackground += OnLeavingBackground;
             Windows.ApplicationModel.Core.CoreApplication.EnteredBackground += OnEnteredBackground;
+        }
+
+        private async void OnLeavingBackground(Object sender, LeavingBackgroundEventArgs e) {
+            Deferral deferral = e.GetDeferral();
+
+            if (ViewModel.CanConnect && !ViewModel.IsConnected) {
+                Result result = ViewModel.ConnectToDb();
+                if (!result.Status) {
+                    MessageDialog msgDialog = new MessageDialog() { Title = "로그인 실패", Message = result.ErrMsg };
+                    await msgDialog.ShowAsync();
+                }
+            }
+
+            deferral.Complete();
         }
 
         private void OnEnteredBackground(Object sender, EnteredBackgroundEventArgs e) {
@@ -40,7 +55,7 @@ namespace AccountingManager.Renew.Views {
         protected override async  void OnNavigatedTo(NavigationEventArgs e) {
             ViewModel.LoadSettings();
 
-            if (ViewModel.CanConnect) {
+            if (!ViewModel.IsConnected && ViewModel.CanConnect) {
                 Result result = ViewModel.ConnectToDb();
                 if (!result.Status) {
                     MessageDialog msgDialog = new MessageDialog() { Title = "로그인 실패", Message = result.ErrMsg };
@@ -74,7 +89,10 @@ namespace AccountingManager.Renew.Views {
             this.Frame.Navigate(typeof(AccountingDataListPage), navParams, new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromBottom });
         }
 
-        private void AccountsReceivableViewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) { }
+        private void AccountsReceivableViewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            AccountsReceivableListNavParams navParams = new AccountsReceivableListNavParams { DbManager = ViewModel.DbManager };
+            this.Frame.Navigate(typeof(AccountsReceivableListPage), navParams, new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromBottom });
+        }
 
         private void SalesRankViewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) { }
     }

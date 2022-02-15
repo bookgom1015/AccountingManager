@@ -80,48 +80,55 @@
         </Style>
     </Page.Resources>
     <Grid x:Name="ContentArea">
-        <Grid Width="800" Height=" 320" Margin="0, 0, 0, 32">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <Button x:Name="AccountingDataViewButton" Style="{StaticResource SimpleButton}" Click="AccountingDataViewButton_Click">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="60" />
-                        </Grid.RowDefinitions>
-                        <BitmapIcon Height="160" Foreground="White" UriSource="ms-appx:///Assets/note_128x128.png" />
-                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="매출입" />
-                    </Grid>
-                </Button>
-            </Grid>
-            <Grid Grid.Column="1">
-                <Button x:Name="AccountsReceivableViewButton" Style="{StaticResource SimpleButton}" Click="AccountsReceivableViewButton_Click" IsEnabled="False">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="60" />
-                        </Grid.RowDefinitions>
-                        <Image Grid.Row="0" Source="/Assets/Square150x150Logo.scale-200.png" />
-                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="미수금" />
-                    </Grid>
-                </Button>
-            </Grid>
-            <Grid Grid.Column="2">
-                <Button x:Name="SalesRankViewButton" Style="{StaticResource SimpleButton}" Click="SalesRankViewButton_Click" IsEnabled="False">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="60" />
-                        </Grid.RowDefinitions>
-                        <Image Grid.Row="0" Source="/Assets/Square150x150Logo.scale-200.png" />
-                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="거래량" />
-                    </Grid>
-                </Button>
-            </Grid>
+        <Grid>
+            <GridView>
+                <GridViewItem>
+                    <Button x:Name="AccountingDataViewButton" Style="{StaticResource SimpleButton}" Click="AccountingDataViewButton_Click">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="160" />
+                                <RowDefinition Height="60" />
+                            </Grid.RowDefinitions>
+                            <Image Source="/Assets/note_128x128.png" />
+                            <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="매출입" />
+                        </Grid>
+                    </Button>
+                </GridViewItem>
+                <GridViewItem>
+                    <Button x:Name="AccountsReceivableViewButton" Style="{StaticResource SimpleButton}" Click="AccountsReceivableViewButton_Click">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="160" />
+                                <RowDefinition Height="60" />
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0" Source="/Assets/receivable_128x128.png" />
+                            <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="미수금" />
+                        </Grid>
+                    </Button>
+                </GridViewItem>
+                <GridViewItem>
+                    <Button x:Name="SalesRankViewButton" Style="{StaticResource SimpleButton}" Click="SalesRankViewButton_Click" IsEnabled="False">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="160" />
+                                <RowDefinition Height="60" />
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0" Source="/Assets/Square150x150Logo.scale-200.png" />
+                            <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="거래량" />
+                        </Grid>
+                    </Button>
+                </GridViewItem>
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="Margin" Value="20" />
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
         </Grid>
     </Grid>
 </Page>

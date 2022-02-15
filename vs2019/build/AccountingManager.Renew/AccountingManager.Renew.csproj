@@ -152,9 +152,13 @@
       <DependentUpon>AddEditDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Controls\AddEditControls.cs" />
+    <Compile Include="Dialogs\Controls\DepositDateControls.cs" />
     <Compile Include="Dialogs\Controls\LoginControls.cs" />
     <Compile Include="Dialogs\DeleteDialog.xaml.cs">
       <DependentUpon>DeleteDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\DepositDateDialog.xaml.cs">
+      <DependentUpon>DepositDateDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
@@ -163,17 +167,22 @@
       <DependentUpon>MessageDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BindingHelper.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\DoubleClickPreventer.cs" />
     <Compile Include="Helpers\FrameHelper.cs" />
     <Compile Include="Helpers\NavParams\AccountingDataListNavParams.cs" />
+    <Compile Include="Helpers\NavParams\AccountsReceivableListNavParams.cs" />
     <Compile Include="Helpers\NavParams\DetailAccountingDataListNavParams.cs" />
+    <Compile Include="Helpers\NavParams\DetailAccountsReceivableListNavParams.cs" />
     <Compile Include="Helpers\NavParams\MonthlyNavParams.cs" />
     <Compile Include="Helpers\NavParams\YearlyNavParams.cs" />
     <Compile Include="Helpers\NavParams\SelectionNavParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
     <Compile Include="ViewModels\AccountingDataListViewModel.cs" />
+    <Compile Include="ViewModels\AccountsReceivableListViewModel.cs" />
     <Compile Include="ViewModels\DetailAccountingDataListViewModel.cs" />
+    <Compile Include="ViewModels\DetailAccountsReceivableListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MonthlyNavViewModel.cs" />
     <Compile Include="ViewModels\SelectionViewModel.cs" />
@@ -181,8 +190,14 @@
     <Compile Include="Views\AccountingDataListPage.xaml.cs">
       <DependentUpon>AccountingDataListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AccountsReceivableListPage.xaml.cs">
+      <DependentUpon>AccountsReceivableListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DetailAccountingDataListPage.xaml.cs">
       <DependentUpon>DetailAccountingDataListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DetailAccountsReceivableListPage.xaml.cs">
+      <DependentUpon>DetailAccountsReceivableListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -206,11 +221,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\DepositDateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\LoginDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\MessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\MyStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -238,7 +261,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\AccountsReceivableListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\DetailAccountingDataListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DetailAccountsReceivableListPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -268,6 +299,7 @@
     <Compile Include="Helpers\ResourceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\arrow_64x64.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
@@ -278,6 +310,7 @@
     <Content Include="Assets\note_128x128.png" />
     <Content Include="Assets\pen_50x50.png" />
     <Content Include="Assets\plus_50x50.png" />
+    <Content Include="Assets\receivable_128x128.png" />
     <Content Include="Assets\refresh_256x256.png" />
     <Content Include="Assets\search_50x50.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />

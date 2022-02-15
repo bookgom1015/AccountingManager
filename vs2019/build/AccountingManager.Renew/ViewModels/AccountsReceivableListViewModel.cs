@@ -7,14 +7,14 @@ using Windows.UI.Xaml.Controls;
 
 using Prism.Windows.Mvvm;
 
-using AccountingManager.Renew.Core.Models;
 using AccountingManager.Renew.Core.Helpers;
 using AccountingManager.Renew.Core.Infrastructures;
+using AccountingManager.Renew.Core.Models;
 using AccountingManager.Renew.Helpers.NavParams;
 
 namespace AccountingManager.Renew.ViewModels {
-    public class AccountingDataListViewModel : ViewModelBase {
-        public AccountingDataListViewModel() {
+    public class AccountsReceivableListViewModel : ViewModelBase {
+        public AccountsReceivableListViewModel() {
             AccountingDataList = new List<AccountingData>();
 
             CurrentComparision = AccountingDataComparisions.CompareDate;
@@ -25,41 +25,25 @@ namespace AccountingManager.Renew.ViewModels {
         public void LoadSettings() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
-            Object dataTypeWidthObj = localSettings.Values["DataTypeColumnWidth"];
+            Object dataTypeWidthObj = localSettings.Values["RecvDataTypeColumnWidth"];
             DataTypeColumnWidth = new GridLength(dataTypeWidthObj == null ? DefaultColumnWidth : (double)dataTypeWidthObj);
 
-            Object clientNameWidthObj = localSettings.Values["ClientNameColumnWidth"];
+            Object clientNameWidthObj = localSettings.Values["RecvClientNameColumnWidth"];
             ClientNameColumnWidth = new GridLength(clientNameWidthObj == null ? DefaultColumnWidth : (double)clientNameWidthObj);
 
-            Object dateWidthObj = localSettings.Values["DateColumnWidth"];
+            Object dateWidthObj = localSettings.Values["RecvDateColumnWidth"];
             DateColumnWidth = new GridLength(dateWidthObj == null ? DefaultColumnWidth : (double)dateWidthObj);
 
-            Object steelWeightWidthObj = localSettings.Values["SteelWeightColumnWidth"];
-            SteelWeightColumnWidth = new GridLength(steelWeightWidthObj == null ? DefaultColumnWidth : (double)steelWeightWidthObj);
-
-            Object supplyPriceWidthObj = localSettings.Values["SupplyPriceColumnWidth"];
-            SupplyPriceColumnWidth = new GridLength(supplyPriceWidthObj == null ? DefaultColumnWidth : (double)supplyPriceWidthObj);
-
-            Object taxAmountWidthObj = localSettings.Values["TaxAmountColumnWidth"];
-            TaxAmountColumnWidth = new GridLength(taxAmountWidthObj == null ? DefaultColumnWidth : (double)taxAmountWidthObj);
-
-            Object sumWidthObj = localSettings.Values["SumColumnWidth"];
+            Object sumWidthObj = localSettings.Values["RecvSumColumnWidth"];
             SumColumnWidth = new GridLength(sumWidthObj == null ? DefaultColumnWidth : (double)sumWidthObj);
-
-            Object depositConfirmWidthObj = localSettings.Values["DepositConfirmColumnWidth"];
-            DepositConfirmColumnWidth = new GridLength(depositConfirmWidthObj == null ? DefaultColumnWidth : (double)depositConfirmWidthObj);
         }
 
         public void SaveSettings() {
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values["DataTypeColumnWidth"] = DataTypeColumnWidth.Value;
-            localSettings.Values["ClientNameColumnWidth"] = ClientNameColumnWidth.Value;
-            localSettings.Values["DateColumnWidth"] = DateColumnWidth.Value;
-            localSettings.Values["SteelWeightColumnWidth"] = SteelWeightColumnWidth.Value;
-            localSettings.Values["SupplyPriceColumnWidth"] = SupplyPriceColumnWidth.Value;
-            localSettings.Values["TaxAmountColumnWidth"] = TaxAmountColumnWidth.Value;
-            localSettings.Values["SumColumnWidth"] = SumColumnWidth.Value;
-            localSettings.Values["DepositConfirmColumnWidth"] = DepositConfirmColumnWidth.Value;
+            localSettings.Values["RecvDataTypeColumnWidth"] = DataTypeColumnWidth.Value;
+            localSettings.Values["RecvClientNameColumnWidth"] = ClientNameColumnWidth.Value;
+            localSettings.Values["RecvDateColumnWidth"] = DateColumnWidth.Value;
+            localSettings.Values["RecvSumColumnWidth"] = SumColumnWidth.Value;
         }
 
         public Result GetData(out IEnumerable<AccountingData> data, int? year = null, int? month = null, int? day = null, bool receivable = false) {
@@ -126,7 +110,7 @@ namespace AccountingManager.Renew.ViewModels {
                 indicator.Visibility = indicator == visibleIndicator ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public AccountingDataListNavParams NavParams { get; set; }
+        public AccountsReceivableListNavParams NavParams { get; set; }
 
         private double DefaultColumnWidth { get => 110; }
         public double DefaultMinColumnWidth { get => 100; }
@@ -149,34 +133,10 @@ namespace AccountingManager.Renew.ViewModels {
             set => SetProperty(ref dateColumnWidth, value);
         }
 
-        private GridLength steelWeightColumnWidth;
-        public GridLength SteelWeightColumnWidth {
-            get => steelWeightColumnWidth;
-            set => SetProperty(ref steelWeightColumnWidth, value);
-        }
-
-        private GridLength supplyPriceColumnWidth;
-        public GridLength SupplyPriceColumnWidth {
-            get => supplyPriceColumnWidth;
-            set => SetProperty(ref supplyPriceColumnWidth, value);
-        }
-
-        private GridLength taxAmountColumnWidth;
-        public GridLength TaxAmountColumnWidth {
-            get => taxAmountColumnWidth;
-            set => SetProperty(ref taxAmountColumnWidth, value);
-        }
-
         private GridLength sumColumnWidth;
         public GridLength SumColumnWidth {
             get => sumColumnWidth;
             set => SetProperty(ref sumColumnWidth, value);
-        }
-
-        private GridLength depositConfirmColumnWidth;
-        public GridLength DepositConfirmColumnWidth {
-            get => depositConfirmColumnWidth;
-            set => SetProperty(ref depositConfirmColumnWidth, value);
         }
 
         public AccountingData SelectedData { get; set; }

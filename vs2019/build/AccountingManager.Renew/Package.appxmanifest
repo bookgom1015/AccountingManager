@@ -10,7 +10,7 @@
   <Identity
     Name="AccountingManager"
     Publisher="CN=bookg"
-    Version="1.0.3.0" />
+    Version="1.0.14.0" />
 
   <mp:PhoneIdentity PhoneProductId="D772BACD-754E-4044-9E60-E3E7BCA2F635" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

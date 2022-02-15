@@ -13,9 +13,9 @@ namespace AccountingManager.Renew.Core.Abstract {
         Result Add(AccountingData data);
         Result Update(AccountingData data, AccountingDataQueryKeys keys);
         Result Delete(AccountingData data);
-        Result GetDates(out IEnumerable<int> dates, int? year = null, int? month = null);
-        Result GetData(out IEnumerable<AccountingData> data, int? year = null, int? month = null, int? day = null);
-        Result GetData(out IEnumerable<AccountingData> data, DateTime begin, DateTime end, string clientName);
+        Result GetDates(out IEnumerable<int> dates, int? year = null, int? month = null, bool receivable = false);
+        Result GetData(out IEnumerable<AccountingData> data, int? year = null, int? month = null, int? day = null, bool receivable = false);
+        Result GetData(out IEnumerable<AccountingData> data, DateTime begin, DateTime end, string clientName, bool receivable = false);
 
         bool IsConnected { get; }
     }

@@ -149,4 +149,12 @@
     <value>MonthlyNav</value>
     <comment>Page title for MonthlyNavPage</comment>
   </data>
+  <data name="AccountsReceivableList_Title.Text" xml:space="preserve">
+    <value>AccountsReceivableList</value>
+    <comment>Page title for AccountsReceivableListPage</comment>
+  </data>
+  <data name="DetailAccountsReceivableList_Title.Text" xml:space="preserve">
+    <value>DetailAccountsReceivableList</value>
+    <comment>Page title for DetailAccountsReceivableListPage</comment>
+  </data>
 </root>

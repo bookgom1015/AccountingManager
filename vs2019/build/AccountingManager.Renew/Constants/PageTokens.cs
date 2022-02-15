@@ -8,5 +8,7 @@
         public const string YearlyNavPage = "YearlyNav";
         public const string DetailAccountingDataListPage = "DetailAccountingDataList";
         public const string MonthlyNavPage = "MonthlyNav";
+        public const string AccountsReceivableListPage = "AccountsReceivableList";
+        public const string DetailAccountsReceivableListPage = "DetailAccountsReceivableList";
     }
 }
