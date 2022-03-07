@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -21,6 +26,9 @@ using AccountingManager.Renew.Dialogs.Controls;
 using AccountingManager.Renew.Helpers;
 using AccountingManager.Renew.Helpers.NavParams;
 using AccountingManager.Renew.ViewModels;
+
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace AccountingManager.Renew.Views {
     public sealed partial class AccountingDataListPage : Page {
@@ -92,6 +100,165 @@ namespace AccountingManager.Renew.Views {
         private async void SearchButton_Click(object sender, RoutedEventArgs e) {
             using (var btnLocker = new DoubleClickPreventer(sender)) {
                 await SearchData();
+            }
+        }
+
+        private async void ExportButton_Click(object sender, RoutedEventArgs e){
+            using (var btnLocker = new DoubleClickPreventer(sender)){
+                if (ViewModel.AccountingDataList.Count <= 0) {
+                    await Logger.MessageBox("경고", "저장할 자료가 없습니다");
+                    return;
+                }
+                var savePicker = new FileSavePicker();
+                savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                // Dropdown of file types the user can save the file as.
+                savePicker.FileTypeChoices.Add("엑셀 통합 파일(.xlsx)", new List<string>() { ".xlsx" });
+                savePicker.FileTypeChoices.Add("텍스트 파일(.txt)", new List<string>() { ".txt" });
+                // Default file name if the user does not type one in or select a file to replace.
+                savePicker.SuggestedFileName = "새 파일";
+
+                StorageFile file = await savePicker.PickSaveFileAsync();
+                if (file == null) {
+                    await Logger.MessageBox("오류", "저장을 실패했습니다");
+                    return;
+                }
+                // Prevent updates to the remote version of the file until
+                // we finish making changes and call CompleteUpdatesAsync.
+                CachedFileManager.DeferUpdates(file);
+                // Arrange the content.
+                using (ExcelPackage package = new ExcelPackage()) {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet");
+                    //
+                    // Data type
+                    //
+                    worksheet.Column(1).Width = 10.0;
+
+                    var dataTypeCell = worksheet.Cells[1, 1];
+                    dataTypeCell.Value = "매입/매출";
+                    dataTypeCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    
+                    var dataTypeCells = worksheet.Cells["A2:A65535"];
+                    dataTypeCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    //
+                    // Client name
+                    //
+                    worksheet.Column(2).Width = 18.0;
+
+                    var clientNameCell = worksheet.Cells[1, 2];
+                    clientNameCell.Value = "거래처";
+                    clientNameCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var clientNameCells = worksheet.Cells["B2:B65535"];
+                    clientNameCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    clientNameCells.Style.Indent = 1;
+                    //
+                    // Date
+                    //
+                    worksheet.Column(3).Width = 12.0;
+
+                    var dateCell = worksheet.Cells[1, 3];
+                    dateCell.Value = "날짜";
+                    dateCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var dateCells = worksheet.Cells["C2:C65535"];
+                    dateCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    //
+                    // Steel weight
+                    //
+                    var steelWeightCell = worksheet.Cells[1, 4];
+                    steelWeightCell.Value = "중량(t)";
+                    steelWeightCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var steelWeightCells = worksheet.Cells["D2:D65535"];
+                    steelWeightCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    steelWeightCells.Style.Numberformat.Format = "#,##0.0";
+                    steelWeightCells.Style.Indent = 1;
+                    //
+                    // Supply price
+                    //
+                    worksheet.Column(5).Width = 18.0;
+
+                    var supplyPriceCell = worksheet.Cells[1, 5];
+                    supplyPriceCell.Value = "공급가격";
+                    supplyPriceCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var supplyPriceCells = worksheet.Cells["E2:E65535"];
+                    supplyPriceCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    supplyPriceCells.Style.Numberformat.Format = "#,##0";
+                    supplyPriceCells.Style.Indent = 1;
+                    //
+                    // Tax amount
+                    //
+                    worksheet.Column(6).Width = 18.0;
+
+                    var taxAmountCell = worksheet.Cells[1, 6];
+                    taxAmountCell.Value = "세액";
+                    taxAmountCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var taxAmountCells = worksheet.Cells["F2:F65535"];
+                    taxAmountCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    taxAmountCells.Style.Numberformat.Format = "#,##0";
+                    taxAmountCells.Style.Indent = 1;
+                    //
+                    // Sum
+                    //
+                    worksheet.Column(7).Width = 18.0;
+
+                    var sumCell = worksheet.Cells[1, 7];
+                    sumCell.Value = "합계";
+                    sumCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var sumCells = worksheet.Cells["G2:G65535"];
+                    sumCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    sumCells.Style.Numberformat.Format = "#,##0";
+                    sumCells.Style.Indent = 1;
+                    //
+                    // Deposit confirmed
+                    //
+                    worksheet.Column(8).Width = 10.0;
+
+                    var depositConfirmedCell = worksheet.Cells[1, 8];
+                    depositConfirmedCell.Value = "입금확인";
+                    depositConfirmedCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var depositConfirmedCells = worksheet.Cells["H2:H65535"];
+                    depositConfirmedCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    //
+                    // Deposit date
+                    //
+                    worksheet.Column(9).Width = 12.0;
+
+                    var depositDate = worksheet.Cells[1, 9];
+                    depositDate.Value = "확인날짜";
+                    depositDate.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var depositDateCells = worksheet.Cells["I2:I65535"];
+                    depositDateCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    //
+                    // Insert each accounting data into each cell.
+                    //
+                    int row = 2;
+                    foreach(AccountingData data in ViewModel.AccountingDataList) {
+                        worksheet.Cells[row, 1].Value = data.DataType ? "매입" : "매출";
+                        worksheet.Cells[row, 2].Value = data.ClientName;
+                        worksheet.Cells[row, 3].Value = data.DateFormatting;
+                        worksheet.Cells[row, 4].Value = data.SteelWeight;
+                        worksheet.Cells[row, 5].Value = data.SupplyPrice;
+                        worksheet.Cells[row, 6].Value = data.TaxAmount;
+                        worksheet.Cells[row, 7].Value = data.Sum;
+                        worksheet.Cells[row, 8].Value = data.DepositConfirmed ? "확인됨" : "";
+                        worksheet.Cells[row, 9].Value = data.DepositDate;
+                        ++row;
+                    }
+                    // write to file.
+                    await FileIO.WriteBytesAsync(file, package.GetAsByteArray());
+                }
+                // Let Windows know that we're finished changing the file so
+                // the other app can update the remote version of the file.
+                // Completing updates may require Windows to ask for user input.
+                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                if (status == FileUpdateStatus.Complete)
+                    await Logger.MessageBox("알림", "저장을 완료했습니다");
             }
         }
 
