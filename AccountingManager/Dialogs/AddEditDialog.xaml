@@ -1,0 +1,146 @@
+﻿<ContentDialog
+    x:Class="AccountingManager.Dialogs.AddEditDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AccountingManager.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="TITLE"    
+    PrimaryButtonText="Button1"
+    SecondaryButtonText="Button2"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    CornerRadius="8">
+    <ContentDialog.Resources>
+        <Style TargetType="Grid" x:Key="FormGroup">
+            <Setter Property="Margin" Value="0, 0, 0, 10" />
+        </Style>
+        <Style TargetType="Button" x:Key="IncButton">
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Margin" Value="5, 0, 0, 0" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="CornerRadius" Value="2" />
+        </Style>
+        <Style TargetType="TextBox" x:Key="InputTextBox">
+            <Setter Property="PlaceholderForeground" Value="Red" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="MinWidth" Value="240" />
+            <Setter Property="MaxWidth" Value="240" />
+            <Setter Property="YearFormat" Value="{}{year.full(4)}년" />
+            <Setter Property="MonthFormat" Value="{}{month.integer}월" />
+            <Setter Property="DayFormat" Value="{}{day.integer}일" />
+        </Style>
+    </ContentDialog.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Style="{StaticResource FormGroup}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="날짜" />
+            <DatePicker Grid.Column="1" x:Name="InputDate" Template="{StaticResource SimpleDatePicker}" />
+        </Grid>
+        <Grid Grid.Row="1" Style="{StaticResource FormGroup}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="거래처" />
+            <TextBox Grid.Column="1" x:Name="InputClientName" Style="{StaticResource InputTextBox}" />
+        </Grid>
+        <Grid Grid.Row="2" Style="{StaticResource FormGroup}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="중량(t)" />
+            <TextBox Grid.Column="1" x:Name="InputSteelWeight" Style="{StaticResource InputTextBox}" BeforeTextChanging="OnlyRealNumberTextBox_BeforeTextChanging" />
+        </Grid>
+        <Grid Grid.Row="3" Style="{StaticResource FormGroup}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="공급가" />
+                <TextBox Grid.Column="1" x:Name="InputSupplyPrice" Style="{StaticResource InputTextBox}" BeforeTextChanging="OnlyDigitTextBox_BeforeTextChanging" />
+            </Grid>
+            <Grid Grid.Row="1" Margin="0, 5, 0, 0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource IncButton}" x:Name="IncSupplyPriceOneMillion" IsTabStop="False" Content="+100만" Click="IncSupplyPriceOneMillion_Click" />
+                    <Button Style="{StaticResource IncButton}" x:Name="IncSupplyPriceHundredThousand" IsTabStop="False" Content="+10만" Click="IncSupplyPriceHundredThousand_Click" />
+                    <Button Style="{StaticResource IncButton}" x:Name="IncSupplyPriceTenThousand" IsTabStop="False" Content="+1만" Click="IncSupplyPriceTenThousand_Click" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="4" Style="{StaticResource FormGroup}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="세액" />
+                <TextBox Grid.Column="1" x:Name="InputTaxAmount" Style="{StaticResource InputTextBox}" BeforeTextChanging="OnlyDigitTextBox_BeforeTextChanging" />
+            </Grid>
+            <Grid Grid.Row="1" Margin="0, 5, 0, 0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource IncButton}" x:Name="IncTaxAmountOneMillion" IsTabStop="False" Content="+100만" Click="IncTaxAmountOneMillion_Click" />
+                    <Button Style="{StaticResource IncButton}" x:Name="IncTaxAmountHundredenThousand" IsTabStop="False" Content="+10만" Click="IncTaxAmountHundredenThousand_Click" />
+                    <Button Style="{StaticResource IncButton}" x:Name="IncTaxAmountTenThousand" IsTabStop="False" Content="+1만" Click="IncTaxAmountTenThousand_Click" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="5" Style="{StaticResource FormGroup}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="입금 확인" />
+                <CheckBox Grid.Column="1" x:Name="InputDepositConfirmed" 
+                          VerticalAlignment="Center" Margin="0" Padding="0" MinWidth="0" />
+            </Grid>
+            <Grid Grid.Column="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="매입/매출" />
+                <CheckBox Grid.Column="1" x:Name="InputDataType" VerticalAlignment="Center" MinWidth="0" Click="InputDataType_Click" Content="매출" />
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="6" Style="{StaticResource FormGroup}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="입금 날짜" />
+            <DatePicker Grid.Column="1" x:Name="InputDepositDate" Template="{StaticResource SimpleDatePicker}"
+                        IsEnabled="{x:Bind Path=(x:Boolean)InputDepositConfirmed.IsChecked, Mode=OneWay}" />
+        </Grid>
+    </Grid>
+</ContentDialog>

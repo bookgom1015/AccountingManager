@@ -1,25 +1,15 @@
-# ignore binary files and subdirectories
-vs2019/bin/**/**
-vs2019/bin/**/*.*
+# ignore legacy files
+legacy/**
+legacy/*.*
 
-# ignore binary files and subdirectories in 'build/[ProjectName]/bin'
-vs2017/build/**/bin/**
-vs2017/build/**/bin/*.*
-vs2019/build/**/bin/**
-vs2019/build/**/bin/*.*
+# ignore binary files
+**/bin/**
+**/bin/*.*
 
-# ignore object files and subdirectories in 'build/[ProjectName]/obj'
-vs2017/build/**/obj/**
-vs2017/build/**/obj/*.*
-vs2019/build/**/obj/**
-vs2019/build/**/obj/*.*
+# ignore object files
+**/obj/**
+**/obj/*.*
 
-# ignore assets and subdirectories in 'build/[ProjectName]/Assets'
-vs2017/build/**/Assets/**
-vs2017/build/**/Assets/*.*
-vs2019/build/**/Assets/**
-vs2019/build/**/Assets/*.*
-
-# ignore bundle artifacts and subdirectories
-vs2019/build/**/BundleArtifacts/**
-vs2019/build/**/BundleArtifacts/*.*
+# ignore assets
+**/Assets/**
+**/Assets/*.*
