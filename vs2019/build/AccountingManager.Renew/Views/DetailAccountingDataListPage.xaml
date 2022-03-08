@@ -10,14 +10,16 @@
     mc:Ignorable="d"
     Background="Transparent">
     <Page.Resources>
-        <!-- CheckBox Disabled & Foreground -->
+        <!-- Disabled CheckBox Foreground -->
+        <SolidColorBrush x:Key="CheckBoxForegroundCheckedDisabled" Color="White" />
         <SolidColorBrush x:Key="CheckBoxForegroundUncheckedDisabled" Color="Black" />
-        <SolidColorBrush x:Key="CheckBoxForegroundCheckedDisabled" Color="Black" />
-        <!-- CheckBox Diabled & Checked-->
+        <!-- Disabled CheckBox Fill -->
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" Color="Black" />
+        <!-- Disabled CheckBox Storke -->
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="Black" />
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="Black" />
-        <!-- CheckBox Diabled & Unchecked-->
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="Black" />
+        <!-- Disabled CheckBox Glyph -->
+        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="White" />
         <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundUncheckedDisabled" Color="Black" />
     </Page.Resources>    
     <Grid x:Name="ContentArea" >
@@ -61,7 +63,7 @@
                         <TextBlock Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding TaxAmountFormatting}" />
                         <TextBlock Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding SumFormatting}" />
                         <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10, 0, 0, 0">
-                            <CheckBox IsChecked="{Binding DepositConfirmed}" MinWidth="0" />
+                            <CheckBox IsEnabled="False" IsChecked="{Binding DepositConfirmed}" MinWidth="0" />
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DepositDate}" />
                         </StackPanel>
                     </Grid>
