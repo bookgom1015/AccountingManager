@@ -232,8 +232,8 @@
                         <KeyboardAccelerator Modifiers="Control" Key="P" />
                     </Button.KeyboardAccelerators>
                     <StackPanel Orientation="Horizontal">
-                        <BitmapIcon UriSource="ms-appx:///Assets/plus_50x50.png" />
-                        <TextBlock Text="출력" />
+                        <Image Source="/Assets/printer_256x256.png" />
+                        <TextBlock Text="출력" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="2" x:Name="AddButton" Style="{StaticResource SimpleWhiteBorderButton}"
@@ -243,7 +243,7 @@
                     </Button.KeyboardAccelerators>
                     <StackPanel Orientation="Horizontal">
                         <BitmapIcon UriSource="ms-appx:///Assets/plus_50x50.png" />
-                        <TextBlock Text="추가" />
+                        <TextBlock Text="추가" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="3" x:Name="EditButton" Style="{StaticResource SimpleWhiteBorderButton}"
@@ -252,8 +252,8 @@
                         <KeyboardAccelerator Modifiers="Control" Key="E" />
                     </Button.KeyboardAccelerators>
                     <StackPanel Orientation="Horizontal">
-                        <BitmapIcon UriSource="ms-appx:///Assets/pen_50x50.png" />
-                        <TextBlock Text="수정" />
+                        <BitmapIcon UriSource="ms-appx:///Assets/pen_50x50.png" Height="25" />
+                        <TextBlock Text="수정" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="4" x:Name="DeleteButton" Style="{StaticResource SimpleWhiteBorderButton}"
@@ -263,7 +263,7 @@
                     </Button.KeyboardAccelerators>
                     <StackPanel Orientation="Horizontal">
                         <BitmapIcon UriSource="ms-appx:///Assets/minus_50x50.png" />
-                        <TextBlock Text="삭제" />
+                        <TextBlock Text="삭제" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
             </Grid>

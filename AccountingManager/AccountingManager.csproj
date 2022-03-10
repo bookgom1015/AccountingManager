@@ -290,10 +290,13 @@
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
     <Content Include="Assets\logo_44x44.png" />
+    <Content Include="Assets\magnifying_glass_256x256.png" />
     <Content Include="Assets\minus_50x50.png" />
     <Content Include="Assets\note_128x128.png" />
+    <Content Include="Assets\pen_120x200.png" />
     <Content Include="Assets\pen_50x50.png" />
     <Content Include="Assets\plus_50x50.png" />
+    <Content Include="Assets\printer_256x256.png" />
     <Content Include="Assets\receivable_128x128.png" />
     <Content Include="Assets\refresh_256x256.png" />
     <Content Include="Assets\search_50x50.png" />
