@@ -35,40 +35,41 @@
                 <ColumnDefinition x:Name="DummyDepositConfirmedColWidth" />
             </Grid.ColumnDefinitions>
         </Grid>
-        <ListBox x:Name="AccountingDataListBox"
+        <ScrollViewer HorizontalScrollMode="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <ListBox x:Name="AccountingDataListBox"
                  Background="Transparent"
                  SelectionChanged="AccountingDataListBox_SelectionChanged"
                  ItemsSource="{x:Bind Path=ViewModel.NavParams.AccountingData}"
-                 ItemContainerStyle="{StaticResource SimpleAnimListBoxItem}"
-                 ScrollViewer.HorizontalScrollMode="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid x:Name="MainGrid">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummyDataTypeColWidth}" />
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummyClientNameColWidth}" />
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummyDateColWidth}" />
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummySteelWeightColWidth}" />
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummySupplyPriceColWidth}" />
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummyTaxAmountColWidth}" />
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummySumColWidth}" />
-                            <ColumnDefinition Width="{Binding Width, ElementName=DummyDepositConfirmedColWidth}" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DataTypeFormatting}" />
-                        <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10, 0, 0, 0" Text="{Binding ClientName}" />
-                        <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DateFormatting}" />
-                        <TextBlock Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding SteeWeightFormatting}" />
-                        <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding SupplyPriceFormatting}" />
-                        <TextBlock Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding TaxAmountFormatting}" />
-                        <TextBlock Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding SumFormatting}" />
-                        <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10, 0, 0, 0">
-                            <CheckBox IsEnabled="False" IsChecked="{Binding DepositConfirmed}" MinWidth="0" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DepositDate}" />
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                 ItemContainerStyle="{StaticResource SimpleAnimListBoxItem}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid x:Name="MainGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummyDataTypeColWidth}" />
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummyClientNameColWidth}" />
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummyDateColWidth}" />
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummySteelWeightColWidth}" />
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummySupplyPriceColWidth}" />
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummyTaxAmountColWidth}" />
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummySumColWidth}" />
+                                <ColumnDefinition Width="{Binding Width, ElementName=DummyDepositConfirmedColWidth}" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DataTypeFormatting}" />
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10, 0, 0, 0" Text="{Binding ClientName}" />
+                            <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DateFormatting}" />
+                            <TextBlock Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding SteeWeightFormatting}" />
+                            <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding SupplyPriceFormatting}" />
+                            <TextBlock Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding TaxAmountFormatting}" />
+                            <TextBlock Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 10, 0" Text="{Binding SumFormatting}" />
+                            <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10, 0, 0, 0">
+                                <CheckBox IsEnabled="False" IsChecked="{Binding DepositConfirmed}" MinWidth="0" />
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DepositDate}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
     </Grid>
 </Page>

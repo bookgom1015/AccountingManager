@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 using AccountingManager.Core.Abstract;
 using AccountingManager.Core.Infrastructures;
@@ -12,7 +12,7 @@ namespace AccountingManager.Core.Concrete {
     public class MariaDbManager : IDbManager {
         public Result Connect(string address, Int16 port, string uid, string pwd) {
             string cmdTxt = string.Format("Server={0};Port={1};Uid={2};Pwd={3};", address, port, uid, pwd);
-
+            
             try {
                 connection = new MySqlConnection(cmdTxt);
                 

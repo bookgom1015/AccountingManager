@@ -1,0 +1,2 @@
+MainPackage=D:\OneDrive\Visual Studio Projects\AccountingManager\AccountingManager\bin\x86\Release\AccountingManager_1.0.1.0_x86.msix
+SymbolPackage=D:\OneDrive\Visual Studio Projects\AccountingManager\AccountingManager\obj\x86\Release\Symbols\AccountingManager_1.0.1.0_x86.appxsym

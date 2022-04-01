@@ -10,7 +10,7 @@
   <Identity
     Name="AccountingManager"
     Publisher="CN=bookg"
-    Version="1.0.0.0" />
+    Version="1.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="117B8E86-FEA0-4060-8C2B-C078F5B77F75" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -51,7 +51,9 @@
   </Applications>
 
   <Capabilities>
-    <Capability Name="internetClient" />
+    <Capability Name="internetClientServer"/>
+    <Capability Name="privateNetworkClientServer"/>
+    <uap:Capability Name="enterpriseAuthentication"/>
   </Capabilities>
 
   <genTemplate:Metadata>

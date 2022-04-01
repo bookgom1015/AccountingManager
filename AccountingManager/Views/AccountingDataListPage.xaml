@@ -128,7 +128,6 @@
                 <RowDefinition Height="80" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="50" />
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -267,79 +266,87 @@
                     </StackPanel>
                 </Button>
             </Grid>
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.DataTypeColumnWidth, Mode=TwoWay}"
+            <ScrollViewer Grid.Row="3" x:Name="ColumnButtonScrollViewer"
+                          HorizontalScrollMode="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.DataTypeColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.ClientNameColumnWidth, Mode=TwoWay}"
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.ClientNameColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.DateColumnWidth, Mode=TwoWay}"
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.DateColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.SteelWeightColumnWidth, Mode=TwoWay}"
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.SteelWeightColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.SupplyPriceColumnWidth, Mode=TwoWay}"
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.SupplyPriceColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.TaxAmountColumnWidth, Mode=TwoWay}"
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.TaxAmountColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.SumColumnWidth, Mode=TwoWay}"
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.SumColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="{x:Bind Path=ViewModel.DepositConfirmColumnWidth, Mode=TwoWay}"
+                            <ColumnDefinition Width="{x:Bind Path=ViewModel.DepositConfirmColumnWidth, Mode=TwoWay}"
                                       MinWidth="{x:Bind Path=ViewModel.DefaultMinColumnWidth, Mode=OneTime}" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <Style x:Key="SimpleGridSplitter" TargetType="controls:GridSplitter">
-                        <Setter Property="IsTabStop" Value="False" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate>
-                                    <Grid x:Name="RootGrid">
-                                        <Rectangle Fill="Transparent" Width="{TemplateBinding Width}" />
-                                    </Grid>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Grid.Resources>
-                <!-- Column button for data type -->
-                <Grid Grid.Column="0">
-                    <Button x:Name="DataTypeColumnButton"
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style x:Key="SimpleGridSplitter" TargetType="controls:GridSplitter">
+                                <Setter Property="IsTabStop" Value="False" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Grid x:Name="RootGrid">
+                                                <Rectangle Fill="Transparent" Width="{TemplateBinding Width}" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
+                        <!-- Column button for data type -->
+                        <Grid Grid.Column="0">
+                            <Button x:Name="DataTypeColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="DataTypeColumnButton_Click"
                             Content="매입/매출"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="DataTypeIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="DataTypeIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="DataTypeIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <!-- Column button for client name -->
-                <Grid Grid.Column="1">
-                    <Button x:Name="ClientNameColumnButton"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="DataTypeIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <!-- Column button for client name -->
+                        <Grid Grid.Column="1">
+                            <Button x:Name="ClientNameColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="ClientNameColumnButton_Click"
                             Content="거래처"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="ClientNameIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="ClientNameIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="ClientNameIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="ClientNameIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="1"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -347,30 +354,30 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-                <!-- Column button for date -->
-                <Grid Grid.Column="2">
-                    <Button x:Name="DateColumnButton"
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                        <!-- Column button for date -->
+                        <Grid Grid.Column="2">
+                            <Button x:Name="DateColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="DateColumnButton_Click"
                             Content="날짜"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="DateIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="DateIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="DateIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="DateIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="2"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -378,30 +385,30 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-                <!-- Column button for steel weight -->
-                <Grid Grid.Column="3">
-                    <Button x:Name="SteelWeightColumnButton"
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                        <!-- Column button for steel weight -->
+                        <Grid Grid.Column="3">
+                            <Button x:Name="SteelWeightColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="SteelWeightColumnButton_Click"
                             Content="중량(t)"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="SteelWeightIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="SteelWeightIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="SteelWeightIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="SteelWeightIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="3"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -409,30 +416,30 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-                <!-- Column button for supply price -->
-                <Grid Grid.Column="4">
-                    <Button x:Name="SupplyPriceColumnButton"
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                        <!-- Column button for supply price -->
+                        <Grid Grid.Column="4">
+                            <Button x:Name="SupplyPriceColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="SupplyPriceColumnButton_Click"
                             Content="공급가격"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="SupplyPriceIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="SupplyPriceIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="SupplyPriceIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="SupplyPriceIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="4"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -440,30 +447,30 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-                <!-- Column button for tax amount -->
-                <Grid Grid.Column="5">
-                    <Button x:Name="TaxAmountColumnButton"
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                        <!-- Column button for tax amount -->
+                        <Grid Grid.Column="5">
+                            <Button x:Name="TaxAmountColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="TaxAmountColumnButton_Click"
                             Content="세액"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="TaxAmountIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="TaxAmountIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="TaxAmountIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="TaxAmountIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="5"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -471,30 +478,30 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-                <!-- Column button for sum -->
-                <Grid Grid.Column="6">
-                    <Button x:Name="SumColumnButton"
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                        <!-- Column button for sum -->
+                        <Grid Grid.Column="6">
+                            <Button x:Name="SumColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="SumColumnButton_Click"
                             Content="합계"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="SumIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="SumIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="SumIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="SumIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="6"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -502,30 +509,30 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-                <!-- Column button for deposit confirm -->
-                <Grid Grid.Column="7">
-                    <Button x:Name="DepositConfirmedColumnButton"
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                        <!-- Column button for deposit confirm -->
+                        <Grid Grid.Column="7">
+                            <Button x:Name="DepositConfirmedColumnButton"
                             Style="{StaticResource SimpleWhiteBorderButton}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Click="DepositConfirmedColumnButton_Click"
                             Content="입금확인"
                             IsTabStop="False" />
-                    <BitmapIcon x:Name="DepositConfirmedIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
+                            <BitmapIcon x:Name="DepositConfirmedIndicator" UriSource="ms-appx:///Assets/arrow_64x64.png" RenderTransformOrigin="0.5, 0.5"
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-                        <BitmapIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                <RotateTransform x:Name="DepositConfirmedIndiRotation" Angle="0" />
-                                <TranslateTransform X="0" Y="1" />
-                            </TransformGroup>
-                        </BitmapIcon.RenderTransform>
-                    </BitmapIcon>
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                                <BitmapIcon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                        <RotateTransform x:Name="DepositConfirmedIndiRotation" Angle="0" />
+                                        <TranslateTransform X="0" Y="1" />
+                                    </TransformGroup>
+                                </BitmapIcon.RenderTransform>
+                            </BitmapIcon>
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="7"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -533,15 +540,15 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-                <!-- Blank column -->
-                <Grid Grid.Column="8">
-                    <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource SimpleWhiteBorderButton}" />
-                </Grid>
-                <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                        <!-- Blank column -->
+                        <Grid Grid.Column="8">
+                            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource SimpleWhiteBorderButton}" />
+                        </Grid>
+                        <controls:GridSplitter Style="{StaticResource SimpleGridSplitter}"
                                        Grid.Column="8"
                                        Width="8"
                                        HorizontalAlignment="Left"
@@ -549,15 +556,17 @@
                                        ResizeDirection="Columns"
                                        ResizeBehavior="BasedOnAlignment"
                                        CursorBehavior="ChangeOnSplitterHover">
-                    <controls:GridSplitter.RenderTransform>
-                        <TranslateTransform X="-8" />
-                    </controls:GridSplitter.RenderTransform>
-                </controls:GridSplitter>
-            </Grid>
-            <Grid Grid.Row="4" Margin="0, 0, 0, 5">
-                <Frame x:Name="DetailListFrame" />
-            </Grid>
-            <Grid Grid.Row="5" Margin="0, 0, 10, 5">
+                            <controls:GridSplitter.RenderTransform>
+                                <TranslateTransform X="-8" />
+                            </controls:GridSplitter.RenderTransform>
+                        </controls:GridSplitter>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0, 0, 0, 5">
+                        <Frame x:Name="DetailListFrame" />
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+            <Grid Grid.Row="4" Margin="0, 0, 10, 5">
                 <Grid.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="Width" Value="50" />
